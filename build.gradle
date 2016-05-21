@@ -3,17 +3,20 @@ buildscript {
         mavenLocal()
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath "com.moowork.gradle:gradle-node-plugin:0.12"
     }
 }
 
 allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
+    apply plugin: 'com.moowork.node'
 
-    version = '1.0'
+    version = '0.1.0'
     ext {
         appName = "chain-gang-chase"
         gdxVersion = '1.9.3'
@@ -23,11 +26,25 @@ allprojects {
         aiVersion = '1.8.0'
     }
 
+    node {
+      version = '5.0.0'
+      npmVersion = '3.3.6'
+      download = true
+
+      distBaseUrl = 'https://nodejs.org/dist'
+      workDir = file("${project.buildDir}/nodejs")
+      nodeModulesDir = file("${project.projectDir}")
+    }
+
     repositories {
         mavenLocal()
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+    }
+
+    dependencies {
+        npm_install
     }
 }
 

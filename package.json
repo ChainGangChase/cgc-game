@@ -1,0 +1,30 @@
+{
+  "name": "game",
+  "version": "0.1.0",
+  "description": "Source code for Chain Gang Chase.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChainGangChase/game.git"
+  },
+  "keywords": [
+    "chain",
+    "gang",
+    "chase",
+    "video",
+    "game",
+    "couch",
+    "co-op",
+    "prisoners",
+    "cops",
+    "train"
+  ],
+  "author": "Percipient24",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/ChainGangChase/game/issues"
+  },
+  "homepage": "https://github.com/ChainGangChase/game#readme",
+  "dependencies": {
+    "cgc-art": "git@github.com:ChainGangChase/cgc-art.git#0.1.0"
+  }
+}
