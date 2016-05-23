@@ -109,3 +109,11 @@ project(":core") {
 tasks.eclipse.doLast {
     delete ".project"
 }
+
+task updateTextures {
+    npm_install
+    copy {
+        from ('node_modules/cgc-art/package/assets')
+        into 'android/assets'
+    }
+}
