@@ -8,6 +8,8 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
         classpath "com.moowork.gradle:gradle-node-plugin:0.12"
+        classpath 'com.android.tools.build:gradle:0.12.+'
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
     }
 }
 
@@ -65,9 +67,15 @@ project(":desktop") {
 }
 
 project(":android") {
+    apply plugin: 'android-sdk-manager'
+    apply plugin: 'com.android.application'
     apply plugin: "android"
 
     configurations { natives }
+
+    sdkManager {
+        emulatorVersion 'android-19'
+    }
 
     dependencies {
         compile project(":core")
