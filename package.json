@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/ChainGangChase/game#readme",
   "dependencies": {
-    "cgc-art": "git@github.com:ChainGangChase/cgc-art.git#0.1.0"
+    "cgc-art": "git@github.com:ChainGangChase/cgc-art.git#0.1.0",
+    "cgc-sound": "git@github.com:ChainGangChase/cgc-sound.git#0.1.0"
   }
 }
