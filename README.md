@@ -1,6 +1,6 @@
 # cgc-game
 _____
-This repo contains the source code for Chain Gang Chase (Well, eventually anyway. See [Issue #1](https://github.com/ChainGangChase/cgc-game/issues/1)). Once development gets rolling again, pull requests are welcome!
+This repo contains the source code for Chain Gang Chase.
 
 ### Project Overview
 ```
