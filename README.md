@@ -27,7 +27,7 @@ There are two options here, depending on how you decided to do the Installation.
 The art assets for this game are stored in the [cgc-art](https://github.com/ChainGangChase/cgc-art) repository. When updated, cgc-art will get a new release tag. You can include those changes by updating the version number to match in `package.json`, and then running `gradlew updateTextures`.
 
 ###### Running the Project
-Currently, the project is the default libGDX test application (until [Issue #1](https://github.com/ChainGangChase/cgc-game/issues/1) is resolved). It can be run with the command `gradlew desktop:run`, which will result in a red screen with the BAD Logic Games logo in the lower left corner. Yep, seriously, that's all it does this instant.
+The can be run with the command `./gradlew desktop:run` (mac | linux) or `gradlew desktop:run` (windows). Android support coming soon.
 
 ### Contribution Guidelines
 Pull requests should be submitted from branches that follow the convention `feature/feature-name`, and have been rebased so they can be merged automatically. Please include any changes to `.gitignore` needed to ensure files specific to your IDE of choice are not included.
