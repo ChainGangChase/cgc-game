@@ -73,10 +73,6 @@ project(":android") {
 
     configurations { natives }
 
-    sdkManager {
-        emulatorVersion 'android-19'
-    }
-
     dependencies {
         compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
@@ -99,6 +95,7 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion"
+        compile fileTree(dir: '../libs', include: '*.jar')
     }
 }
 
@@ -111,6 +108,7 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+        compile fileTree(dir: '../libs', include: '*.jar')
     }
 }
 
