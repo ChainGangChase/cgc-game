@@ -15,6 +15,8 @@ import java.io.IOException;
 
 import javax.swing.SwingUtilities;
 
+import java.util.Locale;
+
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.percipient24.enums.Platform;
@@ -44,8 +46,8 @@ public class Main
 			{
 				br.close();
 				Launcher l = new Launcher();
-		        // Schedules the application to be run at the correct time in the event queue.
-		        SwingUtilities.invokeLater(l);
+				// Schedules the application to be run at the correct time in the event queue.
+				SwingUtilities.invokeLater(l);
 			}
 			else
 			{
@@ -60,7 +62,9 @@ public class Main
 				cfg.fullscreen = Boolean.parseBoolean(br.readLine());
 				br.close();
 
-				new LwjglApplication(new ChaseApp(Platform.DESKTOP), cfg)
+				// TODO : make this changeable
+				Locale locale = new Locale("en");
+				new LwjglApplication(new ChaseApp(Platform.DESKTOP, locale), cfg)
 				{
 					public void exit()
 					{
@@ -83,8 +87,8 @@ public class Main
 		//If something goes wrong (file doesn't exist, bad value), just launch the launcher
 		catch (Exception e) {
 			Launcher l = new Launcher();
-	        // Schedules the application to be run at the correct time in the event queue.
-	        SwingUtilities.invokeLater(l);
+			// Schedules the application to be run at the correct time in the event queue.
+			SwingUtilities.invokeLater(l);
 		}
 	}
 } // End class

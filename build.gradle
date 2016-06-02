@@ -122,4 +122,12 @@ task updateTextures {
         from ('node_modules/cgc-art/package/assets')
         into 'android/assets'
     }
+    copy {
+        from ('node_modules/cgc-sound/package/assets')
+        into 'android/assets'
+    }
+    copy {
+        from ('node_modules/cgc-i18n/package/assets')
+        into 'android/assets'
+    }
 }

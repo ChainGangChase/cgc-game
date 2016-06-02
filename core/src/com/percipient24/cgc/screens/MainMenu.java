@@ -13,6 +13,7 @@ import com.percipient24.cgc.screens.helpers.ControllerDrawer;
 import com.percipient24.cgc.screens.helpers.MenuTextureRegion;
 import com.percipient24.enums.ControlType;
 import com.percipient24.input.ControlAdapter;
+import com.percipient24.b2helpers.LanguageKeys;
 
 /*
  * Contains the data for the Main Menu screen
@@ -37,7 +38,7 @@ public class MainMenu extends CGCScreen
 	public MainMenu(ChaseApp app)
 	{
 		super(app);
-		title = "Main Menu";
+		title = ChaseApp.lang.get(LanguageKeys.main_menu);
 		titleLayout.updateText(title);
 
 		items.add("Start a Game");

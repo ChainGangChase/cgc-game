@@ -8,6 +8,11 @@ package com.percipient24.cgc;
 
 import aurelienribon.tweenengine.TweenManager;
 
+
+import com.badlogic.gdx.files.FileHandle;
+import java.util.Locale;
+import com.badlogic.gdx.utils.I18NBundle;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Files;
@@ -85,6 +90,8 @@ public class ChaseApp extends Game
 	// System variables
 	public static Platform platform;
 	public static String os;
+	public static Locale locale;
+	public static I18NBundle lang;
 	
 	// Text colors
 	public static Color selectedOrange = new Color(.953f, .643f, .027f, 1.0f);
@@ -169,10 +176,11 @@ public class ChaseApp extends Game
 	 * @param p						The platform this app is running on
 	 * @param purchaser				The purchaser to use for map purchases
 	 */
-	public ChaseApp(Platform p)
+	public ChaseApp(Platform p, Locale l)
 	{
 		platform = p;
 		self = this;
+		locale = l;
 	}
 
 	/*
@@ -260,6 +268,11 @@ public class ChaseApp extends Game
 		sBatch = new SpriteBatch(1625);
 		shapes = new ShapeRenderer();
 		tManager = new TweenManager();
+
+		FileHandle baseFileHandle = Gdx.files.internal("i18n/CGCLang");
+		I18NBundle myBundle = I18NBundle.createBundle(baseFileHandle, locale);
+
+		lang = myBundle;
 	}
 	
 	/*
