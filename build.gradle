@@ -131,3 +131,26 @@ task updateTextures {
         into 'android/assets'
     }
 }
+
+task sideloadLanguages {
+    copy {
+        from ('../cgc-i18n/package/assets')
+        into 'android/assets'
+    }
+}
+
+
+task sideloadArt {
+    copy {
+        from ('../cgc-art/package/assets')
+        into 'android/assets'
+    }
+}
+
+
+task sideloadSound {
+    copy {
+        from ('../cgc-sound/package/assets')
+        into 'android/assets'
+    }
+}
