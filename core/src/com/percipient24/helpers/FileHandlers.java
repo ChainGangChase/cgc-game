@@ -4,7 +4,7 @@
  * Copyright 2014, MAGIC Spell Studios, LLC
  */
 
-package com.percipient24.b2dhelpers;
+package com.percipient24.helpers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.percipient24.cgc.ChaseApp;

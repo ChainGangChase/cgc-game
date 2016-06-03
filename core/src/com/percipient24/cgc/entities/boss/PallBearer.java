@@ -15,8 +15,8 @@ import com.percipient24.cgc.BossFight;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.cgc.entities.players.CarrierCop;
 import com.percipient24.cgc.entities.players.Player;
-import com.percipient24.b2dhelpers.BodyFactory;
-import com.percipient24.b2dhelpers.LayerHandler;
+import com.percipient24.helpers.BodyFactory;
+import com.percipient24.helpers.LayerHandler;
 import com.percipient24.enums.EntityType;
 
 /*
@@ -100,7 +100,7 @@ public class PallBearer extends Boss
 	}
 	
 	/*
-	 * @see com.percipient24.cgc.entities.GameEntity#addToWorldLayers(com.percipient24.b2dhelpers.BodyFactory)
+	 * @see com.percipient24.cgc.entities.GameEntity#addToWorldLayers(com.percipient24.helpers.BodyFactory)
 	 */
 	public void addToWorldLayers(LayerHandler lh) 
 	{
@@ -110,7 +110,7 @@ public class PallBearer extends Boss
 	}
 
 	/*
-	 * @see com.percipient24.cgc.entities.GameEntity#removeFromWorldLayers(com.percipient24.b2dhelpers.BodyFactory)
+	 * @see com.percipient24.cgc.entities.GameEntity#removeFromWorldLayers(com.percipient24.helpers.BodyFactory)
 	 */
 	public void removeFromWorldLayers(LayerHandler lh) 
 	{

@@ -32,8 +32,8 @@ import com.badlogic.gdx.utils.Array;
 
 // CGC Imports
 import com.percipient24.cgc.ChaseApp;
-import com.percipient24.b2dhelpers.BodyFactory;
-import com.percipient24.b2dhelpers.LayerHandler;
+import com.percipient24.helpers.BodyFactory;
+import com.percipient24.helpers.LayerHandler;
 import com.percipient24.cgc.entities.ChainLink;
 import com.percipient24.cgc.entities.GameEntity;
 import com.percipient24.cgc.entities.Gate;

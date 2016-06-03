@@ -8,7 +8,7 @@ package com.percipient24.cgc.entities;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.percipient24.b2dhelpers.LayerHandler;
+import com.percipient24.helpers.LayerHandler;
 import com.percipient24.cgc.Camera;
 import com.percipient24.enums.EntityType;
 
@@ -95,7 +95,7 @@ public class Spotlight extends Targeter
 	}
 
 	/*
-	 * @see com.percipient24.cgc.entities.Targeter#addToWorldLayers(com.percipient24.b2dhelpers.LayerHandler)
+	 * @see com.percipient24.cgc.entities.Targeter#addToWorldLayers(com.percipient24.helpers.LayerHandler)
 	 */
 	public void addToWorldLayers(LayerHandler lh) 
 	{
@@ -103,7 +103,7 @@ public class Spotlight extends Targeter
 	}
 
 	/*
-	 * @see com.percipient24.cgc.entities.Targeter#removeFromWorldLayers(com.percipient24.b2dhelpers.LayerHandler)
+	 * @see com.percipient24.cgc.entities.Targeter#removeFromWorldLayers(com.percipient24.helpers.LayerHandler)
 	 */
 	public void removeFromWorldLayers(LayerHandler lh) 
 	{

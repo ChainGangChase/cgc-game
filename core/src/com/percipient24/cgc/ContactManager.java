@@ -11,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.percipient24.b2dhelpers.BodyFactory;
+import com.percipient24.helpers.BodyFactory;
 import com.percipient24.cgc.entities.ChainLink;
 import com.percipient24.cgc.entities.GameEntity;
 import com.percipient24.cgc.entities.GuardTower;

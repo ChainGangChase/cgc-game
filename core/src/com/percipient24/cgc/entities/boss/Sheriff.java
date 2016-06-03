@@ -11,8 +11,8 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Timer;
-import com.percipient24.b2dhelpers.BodyFactory;
-import com.percipient24.b2dhelpers.LayerHandler;
+import com.percipient24.helpers.BodyFactory;
+import com.percipient24.helpers.LayerHandler;
 import com.percipient24.cgc.AnimationManager;
 import com.percipient24.cgc.CGCTimer;
 import com.percipient24.cgc.CGCWorld;
@@ -167,7 +167,7 @@ public class Sheriff extends RotatableEntity {
 	}
 
 	/*
-	 * @see com.percipient24.cgc.entities.GameEntity#addToWorldLayers(com.percipient24.b2dhelpers.LayerHandler)
+	 * @see com.percipient24.cgc.entities.GameEntity#addToWorldLayers(com.percipient24.helpers.LayerHandler)
 	 */
 	public void addToWorldLayers(LayerHandler lh) 
 	{
@@ -175,7 +175,7 @@ public class Sheriff extends RotatableEntity {
 	}
 
 	/*
-	 * @see com.percipient24.cgc.entities.GameEntity#removeFromWorldLayers(com.percipient24.b2dhelpers.LayerHandler)
+	 * @see com.percipient24.cgc.entities.GameEntity#removeFromWorldLayers(com.percipient24.helpers.LayerHandler)
 	 */
 	public void removeFromWorldLayers(LayerHandler lh) 
 	{

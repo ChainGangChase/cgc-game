@@ -10,8 +10,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.percipient24.b2dhelpers.BodyFactory;
-import com.percipient24.b2dhelpers.LayerHandler;
+import com.percipient24.helpers.BodyFactory;
+import com.percipient24.helpers.LayerHandler;
 import com.percipient24.cgc.AnimationManager;
 import com.percipient24.cgc.BossFight;
 import com.percipient24.cgc.CGCWorld;
@@ -152,7 +152,7 @@ public class TankShell extends Projectile
 	}
 
 	/*
-	 * @see com.percipient24.cgc.entities.GameEntity#addToWorldLayers(com.percipient24.b2dhelpers.BodyFactory)
+	 * @see com.percipient24.cgc.entities.GameEntity#addToWorldLayers(com.percipient24.helpers.BodyFactory)
 	 */
 	public void addToWorldLayers(LayerHandler lh) 
 	{
@@ -160,7 +160,7 @@ public class TankShell extends Projectile
 	}
 	
 	/*
-	 * @see com.percipient24.cgc.entities.GameEntity#removeFromWorldLayers(com.percipient24.b2dhelpers.BodyFactory)
+	 * @see com.percipient24.cgc.entities.GameEntity#removeFromWorldLayers(com.percipient24.helpers.BodyFactory)
 	 */
 	public void removeFromWorldLayers(LayerHandler lh) 
 	{

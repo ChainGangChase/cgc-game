@@ -11,6 +11,7 @@ import com.percipient24.cgc.ChaseApp;
 import com.percipient24.enums.ControlType;
 //import com.percipient24.input.GenericController;
 import com.percipient24.input.ControlAdapter;
+import com.percipient24.cgc.screens.helpers.LanguageKeys;
 
 /*
  * Contains the data for the Exit Game screen
@@ -28,11 +29,11 @@ public class Exit extends CGCScreen
 	public Exit(ChaseApp app)
 	{
 		super(app);
-		title = "Exit Game?";
+		title = ChaseApp.lang.get(LanguageKeys.exit_menu);
 		titleLayout.updateText(title);
 		
-		items.add("I'm still running");
-		items.add("I want to be free");
+		items.add(ChaseApp.lang.get(LanguageKeys.exit_no));
+		items.add(ChaseApp.lang.get(LanguageKeys.exit_yes));
 		
 		prevScreen = ChaseApp.mainMenu;
 	}

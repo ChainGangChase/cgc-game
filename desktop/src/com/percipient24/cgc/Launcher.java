@@ -664,7 +664,7 @@ public class Launcher implements Runnable {
 		cfg.fullscreen = b;
 		
 				// TODO : make this changeable
-				Locale locale = new Locale("en");
+				Locale locale = new Locale("pi");
 		new LwjglApplication(new ChaseApp(Platform.DESKTOP, locale), cfg)
 		{	
 			public void exit()

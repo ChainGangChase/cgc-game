@@ -25,7 +25,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-import com.percipient24.b2dhelpers.FileHandlers;
+import com.percipient24.helpers.FileHandlers;
 import com.percipient24.cgc.net.CGCStats;
 import com.percipient24.cgc.screens.*;
 import com.percipient24.cgc.screens.helpers.MenuTextureRegion;

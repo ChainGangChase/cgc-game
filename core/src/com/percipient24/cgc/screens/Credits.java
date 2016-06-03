@@ -18,6 +18,7 @@ import com.percipient24.cgc.Data;
 import com.percipient24.cgc.TimerManager;
 import com.percipient24.cgc.screens.helpers.ControllerDrawer;
 import com.percipient24.cgc.screens.helpers.MenuTextureRegion;
+import com.percipient24.cgc.screens.helpers.LanguageKeys;
 //import com.percipient24.cgc.screens.helpers.MenuTextureRegion;
 import com.percipient24.enums.ControlType;
 import com.percipient24.input.ControlAdapter;
@@ -104,11 +105,11 @@ public class Credits extends CGCScreen
 		yDisplacement = 0;
 		
 		navigation = new ControllerDrawer(MenuTextureRegion.LOWER_RIGHT, MenuTextureRegion.LOWER_RIGHT);
-		navigation.setMessage("Scroll", -50, 20, Align.right);
+		navigation.setMessage(ChaseApp.lang.get(LanguageKeys.scroll), -50, 20, Align.right);
 		downButton = new ControllerDrawer(MenuTextureRegion.LOWER_RIGHT, MenuTextureRegion.LOWER_RIGHT);
-		downButton.setMessage("Back", -50, 20, Align.right);
+		downButton.setMessage(ChaseApp.lang.get(LanguageKeys.back), -50, 20, Align.right);
 		rightButton = new ControllerDrawer(MenuTextureRegion.LOWER_RIGHT, MenuTextureRegion.LOWER_RIGHT);
-		rightButton.setMessage("Back", -50, 20, Align.right);
+		rightButton.setMessage(ChaseApp.lang.get(LanguageKeys.back), -50, 20, Align.right);
 
 		layout = new StringLayout("", ChaseApp.menuFont);
 	}
@@ -468,33 +469,33 @@ public class Credits extends CGCScreen
 	public void setUpNames()
 	{
 		headers = new Array<String>();
-		headers.add("Developers");
-		headers.add("Staff");
-		headers.add("Backers");
-		headers.add("Special Thanks");
+		headers.add(ChaseApp.lang.get(LanguageKeys.developers));
+		headers.add(ChaseApp.lang.get(LanguageKeys.staff));
+		headers.add(ChaseApp.lang.get(LanguageKeys.backers));
+		headers.add(ChaseApp.lang.get(LanguageKeys.special_thanks));
 		
 		developers = new Array<String>();
 		developerRoles = new Array<String>();
 		
-		developers.add("Joe Pietruch");		developerRoles.add("Originator"); // TODO 24601*
-		developers.add("Nate Perry");		developerRoles.add("Lead Web Developer"); // TODO 24601*
-		developers.add("William Ziegler");	developerRoles.add("Game Developer"); // TODO Rookie Cop*
-		developers.add("Chris Rider");		developerRoles.add("Game Developer"); // TODO 24601*
-		developers.add("Jeffery Kelly");	developerRoles.add("Game Developer"); // TODO 24601*
-		developers.add("Kurt Venezuela");	developerRoles.add("Lead Artist & Audio"); // TODO 24601*
-		developers.add("Forrest Shooster");	developerRoles.add("Audio Production"); // TODO 24601*
-		developers.add("Cathy Razim");		developerRoles.add("Character Artist"); // TODO 24601*
-		developers.add("Michael Wega");		developerRoles.add("UI Designer"); // TODO 24601
-		developers.add("Clayton Andrews");	developerRoles.add("Supporting Game Developer"); // TODO 24601*
+		developers.add("Joe Pietruch");		developerRoles.add(ChaseApp.lang.get(LanguageKeys.originator)); // TODO 24601*
+		developers.add("Nate Perry");		developerRoles.add(ChaseApp.lang.get(LanguageKeys.lead_web)); // TODO 24601*
+		developers.add("William Ziegler");	developerRoles.add(ChaseApp.lang.get(LanguageKeys.game_developer)); // TODO Rookie Cop*
+		developers.add("Chris Rider");		developerRoles.add(ChaseApp.lang.get(LanguageKeys.game_developer)); // TODO 24601*
+		developers.add("Jeffery Kelly");	developerRoles.add(ChaseApp.lang.get(LanguageKeys.game_developer)); // TODO 24601*
+		developers.add("Kurt Venezuela");	developerRoles.add(ChaseApp.lang.get(LanguageKeys.lead_artist)); // TODO 24601*
+		developers.add("Forrest Shooster");	developerRoles.add(ChaseApp.lang.get(LanguageKeys.audio_production)); // TODO 24601*
+		developers.add("Cathy Razim");		developerRoles.add(ChaseApp.lang.get(LanguageKeys.character_artist)); // TODO 24601*
+		developers.add("Michael Wega");		developerRoles.add(ChaseApp.lang.get(LanguageKeys.ui_designer)); // TODO 24601
+		developers.add("Clayton Andrews");	developerRoles.add(ChaseApp.lang.get(LanguageKeys.supporting_game_dev)); // TODO 24601*
 	
 		staff = new Array<String>();
 		staffRoles = new Array<String>();
 		
-		staff.add("Andy Phelps");			staffRoles.add("Dark Lord of MAGIC"); // TODO Rookie Cop
-		staff.add("Brenda Schlageter");		staffRoles.add("Operations");
-		staff.add("Jennifer Hinton");		staffRoles.add("Assistant Director");
-		staff.add("Gary Scarborough");		staffRoles.add("Lab Manager");
-		staff.add("Chris Egert");			staffRoles.add("Associate Director"); // TODO The Sheriff
+		staff.add("Andy Phelps");			staffRoles.add(ChaseApp.lang.get(LanguageKeys.dark_lord)); // TODO Rookie Cop
+		staff.add("Brenda Schlageter");		staffRoles.add(ChaseApp.lang.get(LanguageKeys.operations));
+		staff.add("Jennifer Hinton");		staffRoles.add(ChaseApp.lang.get(LanguageKeys.assistant_director));
+		staff.add("Gary Scarborough");		staffRoles.add(ChaseApp.lang.get(LanguageKeys.lab_manager));
+		staff.add("Chris Egert");			staffRoles.add(ChaseApp.lang.get(LanguageKeys.associate_director)); // TODO The Sheriff
 	
 		backers = new Array<String>();
 		backers.add("Aaron Wolfrom");
@@ -731,18 +732,18 @@ public class Credits extends CGCScreen
 		
 		//TODO Get special thanks messages from everybody
 		specialThanks = new Array<String>();
-		specialThanks.add("Funded with Kickstarter");
-		specialThanks.add("#FreeTheGames");
-		specialThanks.add("OUYA, Inc");
-		specialThanks.add("Patrick Steele - Logo Design");
-		specialThanks.add("Alberto Camacho - Kickstarter Planning");
-		specialThanks.add("Dustin Kochensparger & Blake Gross - Players & Deavors Podcast");
-		specialThanks.add("Joel Lim - Kickstarter Advice");
+		specialThanks.add(ChaseApp.lang.get(LanguageKeys.funded_kickstarter));
+		specialThanks.add(ChaseApp.lang.get(LanguageKeys.hashtag_ftg));
+		specialThanks.add(ChaseApp.lang.get(LanguageKeys.ouya_inc));
+		specialThanks.add(ChaseApp.lang.get(LanguageKeys.logo_design));
+		specialThanks.add(ChaseApp.lang.get(LanguageKeys.kickstarter_planning));
+		specialThanks.add(ChaseApp.lang.get(LanguageKeys.players_deavors));
+		specialThanks.add(ChaseApp.lang.get(LanguageKeys.advice));
 		//TODO Get a huge list of blog credits
-		specialThanks.add("Family and Friends");
-		specialThanks.add("Mud");
-		specialThanks.add("Huge thanks to my parents for supporting my career choice! - Will Z.");
-		specialThanks.add("My family, for helping me get here, and Lexa, for making sure I stay sane! - Chris R.");
+		specialThanks.add(ChaseApp.lang.get(LanguageKeys.family));
+		specialThanks.add(ChaseApp.lang.get(LanguageKeys.mud));
+		specialThanks.add(ChaseApp.lang.get(LanguageKeys.will_z));
+		specialThanks.add(ChaseApp.lang.get(LanguageKeys.chris_r));
 	}
 	
 } // End class
