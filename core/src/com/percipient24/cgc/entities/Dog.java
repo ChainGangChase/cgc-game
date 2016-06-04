@@ -2,7 +2,7 @@ package com.percipient24.cgc.entities;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.percipient24.b2dhelpers.LayerHandler;
+import com.percipient24.helpers.LayerHandler;
 import com.percipient24.enums.EntityType;
 
 public class Dog extends RotatableEntity {

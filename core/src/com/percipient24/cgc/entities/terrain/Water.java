@@ -8,7 +8,7 @@ package com.percipient24.cgc.entities.terrain;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.percipient24.b2dhelpers.LayerHandler;
+import com.percipient24.helpers.LayerHandler;
 import com.percipient24.cgc.AnimationManager;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.enums.EntityType;
@@ -138,14 +138,14 @@ public class Water extends Terrain
 	}
 
 	/*
-	 * @see com.percipient24.cgc.entities.GameEntity#addToWorldLayers(com.percipient24.b2dhelpers.BodyFactory)
+	 * @see com.percipient24.cgc.entities.GameEntity#addToWorldLayers(com.percipient24.helpers.BodyFactory)
 	 */
 	public void addToWorldLayers(LayerHandler lh) 
 	{
 	}
 
 	/*
-	 * @see com.percipient24.cgc.entities.GameEntity#removeFromWorldLayers(com.percipient24.b2dhelpers.BodyFactory)
+	 * @see com.percipient24.cgc.entities.GameEntity#removeFromWorldLayers(com.percipient24.helpers.BodyFactory)
 	 */
 	public void removeFromWorldLayers(LayerHandler lh) 
 	{

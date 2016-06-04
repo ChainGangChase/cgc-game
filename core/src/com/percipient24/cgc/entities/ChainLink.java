@@ -8,7 +8,7 @@ package com.percipient24.cgc.entities;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.percipient24.b2dhelpers.LayerHandler;
+import com.percipient24.helpers.LayerHandler;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.cgc.Data;
 import com.percipient24.cgc.entities.boss.SteelHorse;
@@ -215,7 +215,7 @@ public class ChainLink extends RotatableEntity
 	}
 
 	/*
-	 * @see com.percipient24.cgc.entities.GameEntity#addToWorldLayers(com.percipient24.b2dhelpers.BodyFactory)
+	 * @see com.percipient24.cgc.entities.GameEntity#addToWorldLayers(com.percipient24.helpers.BodyFactory)
 	 */
 	public void addToWorldLayers(LayerHandler lh) 
 	{
@@ -223,7 +223,7 @@ public class ChainLink extends RotatableEntity
 	}
 	
 	/*
-	 * @see com.percipient24.cgc.entities.GameEntity#removeFromWorldLayers(com.percipient24.b2dhelpers.BodyFactory)
+	 * @see com.percipient24.cgc.entities.GameEntity#removeFromWorldLayers(com.percipient24.helpers.BodyFactory)
 	 */
 	public void removeFromWorldLayers(LayerHandler lh) 
 	{

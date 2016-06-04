@@ -12,7 +12,7 @@ import java.util.Queue;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
-import com.percipient24.b2dhelpers.LayerHandler;
+import com.percipient24.helpers.LayerHandler;
 import com.percipient24.cgc.AnimationManager;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.cgc.entities.Track;
@@ -392,7 +392,7 @@ public class Conductor extends Boss
 	
 
 	/**
-	 * @see com.percipient24.cgc.entities.GameEntity#addToWorldLayers(com.percipient24.b2dhelpers.BodyFactory)
+	 * @see com.percipient24.cgc.entities.GameEntity#addToWorldLayers(com.percipient24.helpers.BodyFactory)
 	 */
 	@Override
 	public void addToWorldLayers(LayerHandler lh)
@@ -402,7 +402,7 @@ public class Conductor extends Boss
 	}
 
 	/**
-	 * @see com.percipient24.cgc.entities.GameEntity#removeFromWorldLayers(com.percipient24.b2dhelpers.BodyFactory)
+	 * @see com.percipient24.cgc.entities.GameEntity#removeFromWorldLayers(com.percipient24.helpers.BodyFactory)
 	 */
 	@Override
 	public void removeFromWorldLayers(LayerHandler lh)

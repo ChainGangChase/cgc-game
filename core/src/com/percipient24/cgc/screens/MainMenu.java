@@ -13,7 +13,7 @@ import com.percipient24.cgc.screens.helpers.ControllerDrawer;
 import com.percipient24.cgc.screens.helpers.MenuTextureRegion;
 import com.percipient24.enums.ControlType;
 import com.percipient24.input.ControlAdapter;
-import com.percipient24.b2helpers.LanguageKeys;
+import com.percipient24.cgc.screens.helpers.LanguageKeys;
 
 /*
  * Contains the data for the Main Menu screen
@@ -28,7 +28,7 @@ public class MainMenu extends CGCScreen
 	
 	private MenuTextureRegion betaBadge;
 	
-	private String messageText = "Now with public GitHub!";
+	private String messageText;
 	
 	/*
 	 * Creates a MainMenu object
@@ -41,19 +41,21 @@ public class MainMenu extends CGCScreen
 		title = ChaseApp.lang.get(LanguageKeys.main_menu);
 		titleLayout.updateText(title);
 
-		items.add("Start a Game");
-		items.add("How to Play");
-		items.add("Options");
-		items.add("Credits");
-		items.add("Title");
-		items.add("Exit");
+		messageText = ChaseApp.lang.get(LanguageKeys.main_message);
+
+		items.add(ChaseApp.lang.get(LanguageKeys.start_game));
+		items.add(ChaseApp.lang.get(LanguageKeys.how_play));
+		items.add(ChaseApp.lang.get(LanguageKeys.options));
+		items.add(ChaseApp.lang.get(LanguageKeys.credits));
+		items.add(ChaseApp.lang.get(LanguageKeys.title));
+		items.add(ChaseApp.lang.get(LanguageKeys.exit));
 		//items.add("_ResTest");
 		
 		navigation = new ControllerDrawer(MenuTextureRegion.LOWER_RIGHT, MenuTextureRegion.MID_RIGHT);
-		navigation.setMessage("Change Item", -40, 20, Align.right);
+		navigation.setMessage(ChaseApp.lang.get(LanguageKeys.change_item), -40, 20, Align.right);
 		
 		accept = new ControllerDrawer(MenuTextureRegion.LOWER_RIGHT, MenuTextureRegion.MID_RIGHT);
-		accept.setMessage("Select", -40, 20, Align.right);
+		accept.setMessage(ChaseApp.lang.get(LanguageKeys.select), -40, 20, Align.right);
 		
 	}
 	

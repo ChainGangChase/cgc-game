@@ -7,7 +7,7 @@ package com.percipient24.cgc.boss;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.percipient24.b2dhelpers.BodyFactory;
+import com.percipient24.helpers.BodyFactory;
 import com.percipient24.cgc.AnimationManager;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.cgc.entities.GameEntity;

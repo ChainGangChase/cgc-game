@@ -48,7 +48,27 @@ import com.percipient24.enums.Platform;
  */
 public class Launcher implements Runnable {
 
-	private String[] resolutions = {"640 x 480", "720 x 480", "800 x 600", "1024 x 768", "1152 x 720", "1280 x 720", "1280 x 800", "1344 x 840", "1440 x 900", "1920 x 1080", "1920 x 1200"};
+	private String[] resolutions = {
+		"640 x 480",
+		"720 x 480",
+		"800 x 600",
+		"1024 x 768",
+		"1152 x 720",
+		"1280 x 720",
+		"1280 x 800",
+		"1344 x 840",
+		"1440 x 900",
+		"1920 x 1080",
+		"1920 x 1200"
+	};
+	private String[] languages = {
+		"English US",
+		"Igpay Atinlay"
+	};
+	private String[] locales = {
+		"en",
+		"pi"
+	};
 	private Color backgroundColor = new Color(.13f, .066f, 0.0f, 1.0f);
 	private Color fontColor = new Color(.96f, .64f, .07f, 1.0f);
 	private final JFrame myFrame = new JFrame("Chain Gang Chase Launcher");
@@ -88,6 +108,7 @@ public class Launcher implements Runnable {
 
 	//A combo box with all the default resolutions as options
 	private final JComboBox resolutionSelect = new JComboBox(resolutions);
+	private final JComboBox languageSelect = new JComboBox(languages);
 
 	/*
 	 * Creates the Launcher for Chain Gang Chase
@@ -251,8 +272,10 @@ public class Launcher implements Runnable {
 				wBox.setText(res[0]);
 				hBox.setText(res[1]);
 			}
-			
 		});
+
+		languageSelect.setMaximumSize(new Dimension(135, 31));
+		languageSelect.setMinimumSize(new Dimension(135, 31));
 		
 		//Creates the check box for Full Screen
 		fullScreenBox.setBackground(backgroundColor);
@@ -528,6 +551,7 @@ public class Launcher implements Runnable {
 		
 		ltr.addComponent(wTag);
 		
+		vrow.addComponent(languageSelect);
 		vrow.addComponent(wWarning);
 		vrow.addComponent(wBox);
 		vrow.addGap(5);
@@ -566,13 +590,17 @@ public class Launcher implements Runnable {
 		
 		//Organizes the Lower Panel's components vertically
 		GroupLayout.SequentialGroup ttb = lowerLayout.createSequentialGroup();
-		GroupLayout.ParallelGroup hrow = lowerLayout.createParallelGroup();
+		GroupLayout.ParallelGroup hrow0 = lowerLayout.createParallelGroup();
+		GroupLayout.ParallelGroup hrow1 = lowerLayout.createParallelGroup();
 		GroupLayout.ParallelGroup hrow2 = lowerLayout.createParallelGroup();
 		GroupLayout.ParallelGroup hrow3 = lowerLayout.createParallelGroup();
 	  
-		hrow.addComponent(wWarning);
-		hrow.addComponent(hWarning);
-		ttb.addGroup(hrow);
+		hrow0.addComponent(languageSelect);
+		ttb.addGroup(hrow0);
+
+		hrow1.addComponent(wWarning);
+		hrow1.addComponent(hWarning);
+		ttb.addGroup(hrow1);
 		
 		hrow2.addComponent(wTag);
 		hrow2.addComponent(wBox);
@@ -663,8 +691,9 @@ public class Launcher implements Runnable {
 		
 		cfg.fullscreen = b;
 		
-				// TODO : make this changeable
-				Locale locale = new Locale("en");
+		String localeString = locales[languageSelect.getSelectedIndex()];
+		Locale locale = new Locale(localeString);
+
 		new LwjglApplication(new ChaseApp(Platform.DESKTOP, locale), cfg)
 		{	
 			public void exit()
@@ -682,7 +711,6 @@ public class Launcher implements Runnable {
 				});
 			}
 		};
-		
 	}
 	
 	/*

@@ -16,8 +16,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
-import com.percipient24.b2dhelpers.BodyFactory;
-import com.percipient24.b2dhelpers.LayerHandler;
+import com.percipient24.helpers.BodyFactory;
+import com.percipient24.helpers.LayerHandler;
 import com.percipient24.cgc.entities.GameEntity;
 import com.percipient24.cgc.entities.boss.Boss;
 import com.percipient24.cgc.entities.players.Player;
@@ -30,7 +30,7 @@ import com.percipient24.cgc.screens.Options;
 import com.percipient24.enums.BossType;
 import com.percipient24.enums.ControlType;
 import com.percipient24.input.ControlAdapter;
-import com.percipient24.b2dhelpers.Patcher;
+import com.percipient24.helpers.Patcher;
 
 /*
  * Contains the logic to run and render a level in Chain Gang Chase

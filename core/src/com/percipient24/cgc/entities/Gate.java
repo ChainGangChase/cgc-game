@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
-import com.percipient24.b2dhelpers.LayerHandler;
+import com.percipient24.helpers.LayerHandler;
 import com.percipient24.cgc.Data;
 import com.percipient24.cgc.entities.players.Player;
 import com.percipient24.cgc.entities.players.Prisoner;
@@ -229,7 +229,7 @@ public class Gate extends RotatableEntity
 	}
 
 	/*
-	 * @see com.percipient24.cgc.entities.GameEntity#addToWorldLayers(com.percipient24.b2dhelpers.BodyFactory)
+	 * @see com.percipient24.cgc.entities.GameEntity#addToWorldLayers(com.percipient24.helpers.BodyFactory)
 	 */
 	public void addToWorldLayers(LayerHandler lh) 
 	{
@@ -239,7 +239,7 @@ public class Gate extends RotatableEntity
 	}
 	
 	/*
-	 * @see com.percipient24.cgc.entities.GameEntity#removeFromWorldLayers(com.percipient24.b2dhelpers.BodyFactory)
+	 * @see com.percipient24.cgc.entities.GameEntity#removeFromWorldLayers(com.percipient24.helpers.BodyFactory)
 	 */
 	public void removeFromWorldLayers(LayerHandler lh) 
 	{

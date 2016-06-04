@@ -3,7 +3,7 @@
  * 
  * Copyright 2014, MAGIC Spell Studios, LLC
  */
-package com.percipient24.b2dhelpers;
+package com.percipient24.helpers;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;

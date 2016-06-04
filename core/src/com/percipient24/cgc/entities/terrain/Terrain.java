@@ -7,7 +7,7 @@ package com.percipient24.cgc.entities.terrain;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.percipient24.b2dhelpers.BodyFactory;
+import com.percipient24.helpers.BodyFactory;
 import com.percipient24.cgc.entities.GameEntity;
 import com.percipient24.enums.EntityType;
 
@@ -235,7 +235,7 @@ public abstract class Terrain extends GameEntity
 	}
 
 	/*
-	 * @see com.percipient24.cgc.entities.GameEntity#addToWorldLayers(com.percipient24.b2dhelpers.BodyFactory)
+	 * @see com.percipient24.cgc.entities.GameEntity#addToWorldLayers(com.percipient24.helpers.BodyFactory)
 	 */
 	public void addToWorldLayers(BodyFactory bf) 
 	{
@@ -243,7 +243,7 @@ public abstract class Terrain extends GameEntity
 	}
 
 	/*
-	 * @see com.percipient24.cgc.entities.GameEntity#removeFromWorldLayers(com.percipient24.b2dhelpers.BodyFactory)
+	 * @see com.percipient24.cgc.entities.GameEntity#removeFromWorldLayers(com.percipient24.helpers.BodyFactory)
 	 */
 	public void removeFromWorldLayers(BodyFactory bf) 
 	{

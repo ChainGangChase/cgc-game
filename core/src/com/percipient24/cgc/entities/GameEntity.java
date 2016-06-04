@@ -8,7 +8,7 @@ package com.percipient24.cgc.entities;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.percipient24.b2dhelpers.LayerHandler;
+import com.percipient24.helpers.LayerHandler;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.cgc.Camera;
 import com.percipient24.cgc.Data;
