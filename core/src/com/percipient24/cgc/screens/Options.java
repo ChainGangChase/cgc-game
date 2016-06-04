@@ -12,6 +12,7 @@ import com.percipient24.cgc.ChaseApp;
 import com.percipient24.cgc.Data;
 import com.percipient24.cgc.SoundManager;
 import com.percipient24.cgc.screens.helpers.MenuTextureRegion;
+import com.percipient24.cgc.screens.helpers.LanguageKeys;
 import com.percipient24.enums.ControlType;
 import com.percipient24.input.ControlAdapter;
 
@@ -27,8 +28,13 @@ public class Options extends CGCScreen
 	private String[] items = new String[11];
 	
 	private String[] messages = new String[11];
-	private String[] difficultyLabels = {"Minimum Security", "Medium Security", 
-			"High Security", "Maximum Security", "Supermax Security"};
+	private String[] difficultyLabels = {
+		ChaseApp.lang.get(LanguageKeys.difficulty_1),
+		ChaseApp.lang.get(LanguageKeys.difficulty_2),
+		ChaseApp.lang.get(LanguageKeys.difficulty_3),
+		ChaseApp.lang.get(LanguageKeys.difficulty_4),
+		ChaseApp.lang.get(LanguageKeys.difficulty_5)};
+
 	private String[] keyboardTypes = { "QWERTY", "DVORAK", "AZERTY" };
 	
 	private boolean isOuya;
@@ -76,7 +82,7 @@ public class Options extends CGCScreen
 	public Options(ChaseApp app)
 	{
 		super(app);
-		title = "Options";
+		title = ChaseApp.lang.get(LanguageKeys.options);
 		titleLayout.updateText(title);
 		
 		isOuya = (ChaseApp.os == "OUYA");
@@ -87,51 +93,50 @@ public class Options extends CGCScreen
 			messages = new String[12];
 		}
 		
-		items[0] = "Master Volume";
-		items[1] = "Music Volume";
-		items[2] = "Effects Volume";
-		items[3] = "In-Game Stats Tracking";
-		items[4] = "Connected Sensor Symbols";
-		items[5] = "Change Handicap";
-		items[6] = "Keyboard Layout";
-		items[7] = "Parallax Graphics";
-		
-		
-		if(!isOuya)
-		{
-			items[8] = "Show Launcher";
-			items[9] = "Accept Changes";
-			items[10] = "Restore Defaults";
-			items[11] = "Back";
-		}
-		else
-		{
-			items[8] = "Accept Changes";
-			items[9] = "Restore Defaults";
-			items[10] = "Back";
-		}
-		
-		messages[0] = "Adjust overall volume of the\ngame";
-		messages[1] = "Adjust the volume of the music";
-		messages[2] = "Adjust the volume of sound\neffects";
-		messages[3] = "Enable/Disable sending game\nstats to Chain Gang Chase servers";
-		messages[4] = "Enable/Disable drawing\nsymbols on connected Sensors";
-		messages[5] = "Change the handicap to\nfavor a team";
-		messages[6] = "Change the keyboard controls\nto match your keyboard";
-		messages[7] = "Give most 2D graphics a 3D\nlook";
+		items[0] = ChaseApp.lang.get(LanguageKeys.master_volume);
+		items[1] = ChaseApp.lang.get(LanguageKeys.music_volume);
+		items[2] = ChaseApp.lang.get(LanguageKeys.effects_volume);
+		items[3] = ChaseApp.lang.get(LanguageKeys.stats_tracking);
+		items[4] = ChaseApp.lang.get(LanguageKeys.sensor_symbols);
+		items[5] = ChaseApp.lang.get(LanguageKeys.change_balance);
+		items[6] = ChaseApp.lang.get(LanguageKeys.keyboard_layout);
+		items[7] = ChaseApp.lang.get(LanguageKeys.parallax_graphics);
 		
 		if(!isOuya)
 		{
-			messages[8] = "Enable/Disable the launcher\nwhen the game is started";
-			messages[9] = "Apply the current settings to\nthe game";
-			messages[10] = "Revert back to the default\nsettings";
-			messages[11] = "Return to the main menu\nwithout applying changes";
+			items[8] = ChaseApp.lang.get(LanguageKeys.show_launcher);
+			items[9] = ChaseApp.lang.get(LanguageKeys.accept_changes);
+			items[10] = ChaseApp.lang.get(LanguageKeys.restore_defaults);
+			items[11] = ChaseApp.lang.get(LanguageKeys.back);
 		}
 		else
 		{
-			messages[8] = "Apply the current settings to\nthe game";
-			messages[9] = "Revert back to the default\nsettings";
-			messages[10] = "Return to the main menu\nwithout applying changes";
+			items[8] = ChaseApp.lang.get(LanguageKeys.accept_changes);
+			items[9] = ChaseApp.lang.get(LanguageKeys.restore_defaults);
+			items[10] = ChaseApp.lang.get(LanguageKeys.back);
+		}
+		
+		messages[0] = ChaseApp.lang.get(LanguageKeys.master_volume_message);
+		messages[1] = ChaseApp.lang.get(LanguageKeys.music_volume_message);
+		messages[2] = ChaseApp.lang.get(LanguageKeys.effects_volume_message);
+		messages[3] = ChaseApp.lang.get(LanguageKeys.stats_message);
+		messages[4] = ChaseApp.lang.get(LanguageKeys.symbols_message);
+		messages[5] = ChaseApp.lang.get(LanguageKeys.balance_message);
+		messages[6] = ChaseApp.lang.get(LanguageKeys.keyboard_message);
+		messages[7] = ChaseApp.lang.get(LanguageKeys.parallax_message);
+		
+		if(!isOuya)
+		{
+			messages[8] = ChaseApp.lang.get(LanguageKeys.launcher_message);
+			messages[9] = ChaseApp.lang.get(LanguageKeys.apply_message);
+			messages[10] = ChaseApp.lang.get(LanguageKeys.revert_message);
+			messages[11] = ChaseApp.lang.get(LanguageKeys.back_message);
+		}
+		else
+		{
+			messages[8] = ChaseApp.lang.get(LanguageKeys.apply_message);
+			messages[9] = ChaseApp.lang.get(LanguageKeys.revert_message);
+			messages[10] = ChaseApp.lang.get(LanguageKeys.back_message);
 		}
 		
 		slideBar = new MenuTextureRegion(ChaseApp.atlas.findRegion("sliderbar"), 
@@ -637,7 +642,7 @@ public class Options extends CGCScreen
 				ChaseApp.menuFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 			}
 		}
-		ChaseApp.menuFont.draw(sBatch, "On", slideBar.getX() + slideBar.getRegionWidth()
+		ChaseApp.menuFont.draw(sBatch, ChaseApp.lang.get(LanguageKeys.on), slideBar.getX() + slideBar.getRegionWidth()
 				* slideBar.getScaleX() + toggleOnX,
 				(int)MenuTextureRegion.MENU_ANCHORS[MenuTextureRegion.UPPER_LEFT].y - 120
     			- (55 * 3) + ChaseApp.menuFont.getLineHeight()/2f);
@@ -662,7 +667,7 @@ public class Options extends CGCScreen
 				ChaseApp.menuFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 			}
 		}
-		ChaseApp.menuFont.draw(sBatch, "Off", slideBar.getX() + slideBar.getRegionWidth()
+		ChaseApp.menuFont.draw(sBatch, ChaseApp.lang.get(LanguageKeys.off), slideBar.getX() + slideBar.getRegionWidth()
 				* slideBar.getScaleX() + toggleOffX, 
 				(int)MenuTextureRegion.MENU_ANCHORS[MenuTextureRegion.UPPER_LEFT].y - 120
     			- (55 * 3) + ChaseApp.menuFont.getLineHeight()/2f);
@@ -686,7 +691,7 @@ public class Options extends CGCScreen
 				ChaseApp.menuFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 			}
 		}
-		ChaseApp.menuFont.draw(sBatch, "On", slideBar.getX() + slideBar.getRegionWidth()
+		ChaseApp.menuFont.draw(sBatch, ChaseApp.lang.get(LanguageKeys.on), slideBar.getX() + slideBar.getRegionWidth()
 				* slideBar.getScaleX() + toggleOnX,
 				(int)MenuTextureRegion.MENU_ANCHORS[MenuTextureRegion.UPPER_LEFT].y - 120
     			- (55 * 4) + ChaseApp.menuFont.getLineHeight()/2f);
@@ -711,7 +716,7 @@ public class Options extends CGCScreen
 				ChaseApp.menuFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 			}
 		}
-		ChaseApp.menuFont.draw(sBatch, "Off", slideBar.getX() + slideBar.getRegionWidth()
+		ChaseApp.menuFont.draw(sBatch, ChaseApp.lang.get(LanguageKeys.off), slideBar.getX() + slideBar.getRegionWidth()
 				* slideBar.getScaleX() + toggleOffX, 
 				(int)MenuTextureRegion.MENU_ANCHORS[MenuTextureRegion.UPPER_LEFT].y - 120
     			- (55 * 4) + ChaseApp.menuFont.getLineHeight()/2f);
@@ -752,7 +757,7 @@ public class Options extends CGCScreen
 					ChaseApp.menuFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 				}
 			}
-			ChaseApp.menuFont.draw(sBatch, "On", slideBar.getX() + slideBar.getRegionWidth()
+			ChaseApp.menuFont.draw(sBatch, ChaseApp.lang.get(LanguageKeys.on), slideBar.getX() + slideBar.getRegionWidth()
 					* slideBar.getScaleX() + toggleOnX, 
 					(int)MenuTextureRegion.MENU_ANCHORS[MenuTextureRegion.UPPER_LEFT].y - 120
 	    			- (55 * 7) + ChaseApp.menuFont.getLineHeight()/2f);
@@ -777,7 +782,7 @@ public class Options extends CGCScreen
 					ChaseApp.menuFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 				}
 			}
-			ChaseApp.menuFont.draw(sBatch, "Off", slideBar.getX() + slideBar.getRegionWidth()
+			ChaseApp.menuFont.draw(sBatch, ChaseApp.lang.get(LanguageKeys.off), slideBar.getX() + slideBar.getRegionWidth()
 					* slideBar.getScaleX() + toggleOffX, 
 					(int)MenuTextureRegion.MENU_ANCHORS[MenuTextureRegion.UPPER_LEFT].y - 120
 	    			- (55 * 7) + ChaseApp.menuFont.getLineHeight()/2f);
@@ -801,7 +806,7 @@ public class Options extends CGCScreen
 					ChaseApp.menuFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 				}
 			}
-			ChaseApp.menuFont.draw(sBatch, "On", slideBar.getX() + slideBar.getRegionWidth()
+			ChaseApp.menuFont.draw(sBatch, ChaseApp.lang.get(LanguageKeys.on), slideBar.getX() + slideBar.getRegionWidth()
 					* slideBar.getScaleX() + toggleOnX, 
 					(int)MenuTextureRegion.MENU_ANCHORS[MenuTextureRegion.UPPER_LEFT].y - 120
 	    			- (55 * 8) + ChaseApp.menuFont.getLineHeight()/2f);
@@ -826,7 +831,7 @@ public class Options extends CGCScreen
 					ChaseApp.menuFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 				}
 			}
-			ChaseApp.menuFont.draw(sBatch, "Off", slideBar.getX() + slideBar.getRegionWidth()
+			ChaseApp.menuFont.draw(sBatch, ChaseApp.lang.get(LanguageKeys.off), slideBar.getX() + slideBar.getRegionWidth()
 					* slideBar.getScaleX() + toggleOffX, 
 					(int)MenuTextureRegion.MENU_ANCHORS[MenuTextureRegion.UPPER_LEFT].y - 120
 	    			- (55 * 8) + ChaseApp.menuFont.getLineHeight()/2f);
@@ -921,7 +926,7 @@ public class Options extends CGCScreen
 		
 		if (!ChaseApp.fileHandler.writeFile("preferences.bin", toSave))
 		{
-			ChaseApp.overlay = new Overlay(myApp, this, "No free local memory to save preferences");
+			ChaseApp.overlay = new Overlay(myApp, this, ChaseApp.lang.get(LanguageKeys.no_memory));
 			myApp.setScreen(ChaseApp.overlay);
 		}
 		
@@ -937,7 +942,7 @@ public class Options extends CGCScreen
 			
 			if(!ChaseApp.fileHandler.writeFile("resolutionPreferences.bin", resSave))
 			{
-				ChaseApp.overlay = new Overlay(myApp, this, "No free local memory to save preferences");
+				ChaseApp.overlay = new Overlay(myApp, this, ChaseApp.lang.get(LanguageKeys.no_memory));
 				myApp.setScreen(ChaseApp.overlay);
 			}
 		}
