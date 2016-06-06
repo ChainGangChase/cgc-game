@@ -15,6 +15,7 @@ import com.percipient24.cgc.Data;
 import com.percipient24.cgc.TimerManager;
 import com.percipient24.cgc.screens.helpers.ControllerDrawer;
 import com.percipient24.cgc.screens.helpers.MenuTextureRegion;
+import com.percipient24.cgc.screens.helpers.LanguageKeys;
 import com.percipient24.enums.ControlType;
 import com.percipient24.input.ControlAdapter;
 
@@ -36,35 +37,30 @@ public class HowPlay extends CGCScreen
 	private ShapeRenderer shapes;
 	
 	private String[] messages = {
-			"*The menu only takes input from one\ncontroller half on most screens.",
-			"Change Left Selection",
-			"Change Right Selection",
-			"Confirm Right Selection",
-			"Previous Menu (Right)",
-			"Confirm Left Selection",
-			"Previous Menu (Left)",
-			"Confirm Left Character Choice",
-			"Confirm Right Character Choice",
-			"*Cops can grab convicts by\nrunning into them. " +
-			"Mash punch\nto tie them up! " + 
-			"Capture convicts by\ndragging them to guard towers.",
-			"*Convicts can punch cops to\nfree their teammates. " +
-			"They can\nalso punch to untie teammates\n" +
-			"and knock people around.",
-			"*Convicts can break free of grabs\nand being tied up by mashing\npunch. " +
-			"Don't give up if you get\ncaught!",
-			"*Cops will not punch other people;\nthey're officers of the law.",
-			"*Stuck in a corner? Try punching a tree.",
-			"Pause",
-			"Move Left Player",
-			"Move Right Player",
-			"Left Player Punch",
-			"Right Player Punch",
-			"Left Player Jump",
-			"Right Player Jump",
-			"(Press) Left Player Callout",
-			"(Press) Right Player Callout"
-			};
+		ChaseApp.lang.get(LanguageKeys.half_input),
+		ChaseApp.lang.get(LanguageKeys.change_left),
+		ChaseApp.lang.get(LanguageKeys.change_right),
+		ChaseApp.lang.get(LanguageKeys.confirm_right),
+		ChaseApp.lang.get(LanguageKeys.previous_right),
+		ChaseApp.lang.get(LanguageKeys.confirm_left),
+		ChaseApp.lang.get(LanguageKeys.previous_left),
+		ChaseApp.lang.get(LanguageKeys.confirm_left),
+		ChaseApp.lang.get(LanguageKeys.confirm_right),
+		ChaseApp.lang.get(LanguageKeys.cops_punch_grab),
+		ChaseApp.lang.get(LanguageKeys.convicts_punch_grab),
+		ChaseApp.lang.get(LanguageKeys.convicts_mash),
+		ChaseApp.lang.get(LanguageKeys.cops_punch),
+		ChaseApp.lang.get(LanguageKeys.tree_punch),
+		ChaseApp.lang.get(LanguageKeys.pause),
+		ChaseApp.lang.get(LanguageKeys.move_left),
+		ChaseApp.lang.get(LanguageKeys.move_right),
+		ChaseApp.lang.get(LanguageKeys.punch_left),
+		ChaseApp.lang.get(LanguageKeys.punch_right),
+		ChaseApp.lang.get(LanguageKeys.jump_left),
+		ChaseApp.lang.get(LanguageKeys.jump_right),
+		ChaseApp.lang.get(LanguageKeys.callout_left),
+		ChaseApp.lang.get(LanguageKeys.callout_right)
+	};
 	
 	//Timer variables
 	private boolean showAlternateTips;
@@ -83,13 +79,13 @@ public class HowPlay extends CGCScreen
 	public HowPlay(ChaseApp app)
 	{
 		super(app);
-		title = "How to Play";
+		title = ChaseApp.lang.get(LanguageKeys.how_play);
 		titleLayout.updateText(title);
 		
 		prevScreen = ChaseApp.mainMenu;
 		
-		items[TUTORIAL] = "Tutorial";
-		items[BACK] = "Back";
+		items[TUTORIAL] = ChaseApp.lang.get(LanguageKeys.tutorial);
+		items[BACK] = ChaseApp.lang.get(LanguageKeys.back);
 		
 		selected = 0;
 		shapes = app.getShapes();
@@ -270,7 +266,7 @@ public class HowPlay extends CGCScreen
 			leftMove.showAnimation(ControllerDrawer.STICK_ROTATE);
 			leftMove.setWiggle(col1_left_x, row1_y);
 			
-			leftMove.setMessage("Make Moves, Son!", 0, 110, Align.center);
+			leftMove.setMessage(ChaseApp.lang.get(LanguageKeys.make_moves_son), 0, 110, Align.center);
 			
 			rightMove = new ControllerDrawer(MenuTextureRegion.MID_CENTER, MenuTextureRegion.MID_CENTER);
 			rightMove.showWing(false);
@@ -282,7 +278,7 @@ public class HowPlay extends CGCScreen
 			leftPunch.showAnimation(ControllerDrawer.DPAD_ANY_BLINK);
 			leftPunch.setWiggle(col2_left_x, row1_y);
 			
-			leftPunch.setMessage("Punch: Players, Trees, Trains!?\nMash to Struggle/Grab", 0, 120, Align.center);
+			leftPunch.setMessage(ChaseApp.lang.get(LanguageKeys.punch), 0, 120, Align.center);
 			
 			rightPunch = new ControllerDrawer(MenuTextureRegion.MID_CENTER, MenuTextureRegion.MID_CENTER);
 			rightPunch.showWing(false);
@@ -294,7 +290,7 @@ public class HowPlay extends CGCScreen
 			leftJump.showAnimation(ControllerDrawer.L_BUMPER);
 			leftJump.setWiggle(col1_left_x, row2_y);
 
-			leftJump.setMessage("Jump over Mud, Water", 0, 110, Align.center);
+			leftJump.setMessage(ChaseApp.lang.get(LanguageKeys.jump), 0, 110, Align.center);
 			
 			rightJump = new ControllerDrawer(MenuTextureRegion.MID_CENTER, MenuTextureRegion.MID_CENTER);
 			rightJump.showWing(false);
@@ -306,7 +302,7 @@ public class HowPlay extends CGCScreen
 			leftWho.showAnimation(ControllerDrawer.STICK_3_BLINK);
 			leftWho.setWiggle(col2_left_x, row2_y);
 			
-			leftWho.setMessage("Who Am I?", 0, 110, Align.center);
+			leftWho.setMessage(ChaseApp.lang.get(LanguageKeys.who_am_i), 0, 110, Align.center);
 			
 			rightWho = new ControllerDrawer(MenuTextureRegion.MID_CENTER, MenuTextureRegion.MID_CENTER);
 			rightWho.showWing(false);

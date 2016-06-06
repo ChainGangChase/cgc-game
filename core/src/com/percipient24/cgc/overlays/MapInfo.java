@@ -13,6 +13,8 @@ import com.percipient24.cgc.CGCWorld;
 import com.percipient24.cgc.ChaseApp;
 import com.percipient24.cgc.Data;
 import com.percipient24.cgc.screens.helpers.MenuTextureRegion;
+import com.percipient24.cgc.screens.helpers.LanguageKeys;
+
 
 /*
  * Contains the logic for the map info HUD element
@@ -47,22 +49,22 @@ public class MapInfo extends CGCOverlay
 		if (tutorial)
 		{
 			messageList.clear();
-			messageList.put(0, "Time to get back to work in the chain gang. Use the joystick to move around.");
-			messageList.put(11, "Those chains aren't too heavy, are they? They'll keep you together at least.");
-			messageList.put(33, "Aren't the trees great this time of year? At least your chains can't go over them.");
-			messageList.put(66, "The forests can get pretty hard to navigate. Single file, convicts!");
-			messageList.put(85, "The mud in this area is pretty deep, so it'll slow you down quite a bit.");
-			messageList.put(96, "The water ain't bad, just wade on through.");
-			messageList.put(107, "Watch the current, convicts! Don't get washed away.");
-			messageList.put(116, "Oh come on. Just jump over the water with the bumper.");
-			messageList.put(127, "Alright, you can't jump in the mud, so just go over the bridge there.");
-			messageList.put(148, "That box on the ground ain't just pretty, convicts. It'll open up nearby gates.");
-			messageList.put(164, "Calm down, just hit all the sensors with the same icons to open the gate.");
-			messageList.put(176, "Some of these can only be used by one of you convicts.");
-		    messageList.put(185, "Go find the right one, and maybe I'll help your parole next time.");
-			messageList.put(196, "Ah, just kidding. Just go head back to the guard towers there to come back.");
-			messageList.put(206, "Hey! Where are you going? Get back here! Don't you know there's a train coming?!");
-			messageList.put(212, "The prisoners are escaping! After them, boys!");
+			messageList.put(0, ChaseApp.lang.get(LanguageKeys.tutorial_move));
+			messageList.put(11, ChaseApp.lang.get(LanguageKeys.tutorial_chains));
+			messageList.put(33, ChaseApp.lang.get(LanguageKeys.tutorial_trees));
+			messageList.put(66, ChaseApp.lang.get(LanguageKeys.tutorial_forest));
+			messageList.put(85, ChaseApp.lang.get(LanguageKeys.tutorial_mud));
+			messageList.put(96, ChaseApp.lang.get(LanguageKeys.tutorial_water));
+			messageList.put(107, ChaseApp.lang.get(LanguageKeys.tutorial_current));
+			messageList.put(116, ChaseApp.lang.get(LanguageKeys.tutorial_jump));
+			messageList.put(127, ChaseApp.lang.get(LanguageKeys.tutorial_bridge));
+			messageList.put(148, ChaseApp.lang.get(LanguageKeys.tutorial_sensor));
+			messageList.put(164, ChaseApp.lang.get(LanguageKeys.tutorial_icons));
+			messageList.put(176, ChaseApp.lang.get(LanguageKeys.tutorial_special));
+		    messageList.put(185, ChaseApp.lang.get(LanguageKeys.tutorial_correct));
+			messageList.put(196, ChaseApp.lang.get(LanguageKeys.tutorial_guard));
+			messageList.put(206, ChaseApp.lang.get(LanguageKeys.tutorial_train));
+			messageList.put(212, ChaseApp.lang.get(LanguageKeys.tutorial_escape));
 		}
 	}
 

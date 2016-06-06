@@ -20,6 +20,7 @@ import com.percipient24.cgc.overlays.Transition;
 import com.percipient24.enums.ControlType;
 import com.percipient24.input.ControlAdapter;
 import com.percipient24.tweens.TransitionAccessor;
+import com.percipient24.cgc.screens.helpers.LanguageKeys;
 
 /*
  * Contains the data for the Win screen
@@ -42,16 +43,16 @@ public class Win extends CGCScreen
 	{
 		super(app);
 		
-		title = "The Convicts Escaped!";
+		title = ChaseApp.lang.get(LanguageKeys.convicts_escaped);
 		titleLayout.updateText(title);
 		
 		tManager = ChaseApp.tManager;
 		
-		items.add("Favorite A Map");
-		items.add("Play Last Chase Again");
-		items.add("Character Select");
-		items.add("Map Select");
-		items.add("Main Menu");
+		items.add(ChaseApp.lang.get(LanguageKeys.favorite_map));
+		items.add(ChaseApp.lang.get(LanguageKeys.play_again));
+		items.add(ChaseApp.lang.get(LanguageKeys.character_select));
+		items.add(ChaseApp.lang.get(LanguageKeys.map_select));
+		items.add(ChaseApp.lang.get(LanguageKeys.main_menu));
 		
 		prevScreen = ChaseApp.mainMenu;
 	}

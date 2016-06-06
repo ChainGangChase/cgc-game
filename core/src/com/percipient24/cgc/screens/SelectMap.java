@@ -20,8 +20,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Align;
 
-import com.percipient24.b2helpers.MapHelper;
-import com.percipient24.b2helpers.StringLayout;
+import com.percipient24.helpers.MapHelper;
+import com.percipient24.helpers.StringLayout;
 import com.percipient24.cgc.ChainGame;
 import com.percipient24.cgc.ChaseApp;
 import com.percipient24.cgc.Data;
@@ -31,6 +31,7 @@ import com.percipient24.cgc.net.MapVO;
 import com.percipient24.cgc.overlays.Transition;
 import com.percipient24.cgc.screens.helpers.ControllerDrawer;
 import com.percipient24.cgc.screens.helpers.MenuTextureRegion;
+import com.percipient24.cgc.screens.helpers.LanguageKeys;
 import com.percipient24.enums.ControlType;
 import com.percipient24.enums.SortType;
 import com.percipient24.input.ControlAdapter;
@@ -68,7 +69,6 @@ public class SelectMap extends CGCScreen
 	private int maxTimesAround;
 	private boolean comingToAStop;
 	private float decelTime = 4.0f;
-	private ArrayList<String> morals;
 	
 	private MapVO lastMap;
 	
@@ -91,10 +91,10 @@ public class SelectMap extends CGCScreen
 	public SelectMap(ChaseApp app)
 	{
 		super(app);
-		title = "Select a Map";
+		title = ChaseApp.lang.get(LanguageKeys.select_map);
 		titleLayout.updateText(title);
 
-		message = "Fetching maps...";
+		message = ChaseApp.lang.get(LanguageKeys.fetch_map);
 
 		layout = new StringLayout("", ChaseApp.menuFont);
 
@@ -105,23 +105,6 @@ public class SelectMap extends CGCScreen
 		maxTimesAround = 0;
 		
 		prevScreen = ChaseApp.characterSelect;
-		morals = new ArrayList<String>();
-		String[] myMorals;
-		
-		try
-		{
-			myMorals = ChaseApp.fileHandler.readFile("wom.txt").split("\n");
-		}
-		catch (Exception e)
-		{
-			String[] myMoralsTemp = { "Error", "Where are you?", "Are you still there?" };
-			myMorals = myMoralsTemp;
-		}
-		
-		for(int i = 0; i < myMorals.length; i++)
-		{
-			morals.add(myMorals[i]);
-		}
 		
 		tManager = ChaseApp.tManager;
 		Tween.registerAccessor(Transition.class, new TransitionAccessor());
@@ -169,7 +152,7 @@ public class SelectMap extends CGCScreen
 		{
 			if (maps == null)
 			{
-				message = "No maps available";
+				message = ChaseApp.lang.get(LanguageKeys.no_maps);
 				display = false;
 			}
 			else if (maps.size() > 0 && !randoming)
@@ -273,7 +256,7 @@ public class SelectMap extends CGCScreen
 					}
 					else if (maps.size() <= 0)
 					{
-						message = "No maps to choose from";
+						message = ChaseApp.lang.get(LanguageKeys.no_maps_choose);
 						display = false;
 					}
 				}
@@ -298,7 +281,6 @@ public class SelectMap extends CGCScreen
 					maxDirChanges = 1 + r.nextInt(2);
 					acc = 20.0f * Math.signum(speed);
 					maxTimesAround = r.nextInt(2)+1;
-					myApp.alert("Wheel of Morality, turn, turn, turn.", "Tell us the lesson that we should learn.");
 				}
 			}
 			
@@ -498,26 +480,26 @@ public class SelectMap extends CGCScreen
 				
 				float sortMenuStartY = MenuTextureRegion.MENU_ANCHORS[MenuTextureRegion.UPPER_RIGHT].y;
 				float sortMenuX = MenuTextureRegion.MENU_ANCHORS[MenuTextureRegion.UPPER_RIGHT].x;
-				String sortText = "Primary Sort: ";
+				String sortText = ChaseApp.lang.get(LanguageKeys.primary_sort) + " ";
 				
 				switch (selectedPrimary)
 				{
-					case SORT_BY_ID: sortText += "ID"; break;
-					case SORT_BY_MAP: sortText += "Map Name"; break;
-					case SORT_BY_CREATOR: sortText += "Creator"; break;
-					case SORT_BY_SIZE: sortText += "Size"; break;
-					case SORT_BY_RATING: sortText += "Rating"; break;
-					case FILTER_BY_FAVORITE: sortText = "Viewing Favorites"; break;
+					case SORT_BY_ID: sortText += ChaseApp.lang.get(LanguageKeys.sort_id); break;
+					case SORT_BY_MAP: sortText += ChaseApp.lang.get(LanguageKeys.sort_name); break;
+					case SORT_BY_CREATOR: sortText += ChaseApp.lang.get(LanguageKeys.sort_creator); break;
+					case SORT_BY_SIZE: sortText += ChaseApp.lang.get(LanguageKeys.sort_size); break;
+					case SORT_BY_RATING: sortText += ChaseApp.lang.get(LanguageKeys.sort_rating); break;
+					case FILTER_BY_FAVORITE: sortText = ChaseApp.lang.get(LanguageKeys.sort_favorites); break;
 					case FILTER_BY_SELF: 
 						if (maps.size() > 0)
 						{
-							sortText = "Viewing own maps"; break;
+							sortText = ChaseApp.lang.get(LanguageKeys.sort_own); break;
 						}
 						else
 						{
-							sortText = "Synch your account!"; break; // TODO Convey this better (Could also be no maps made)
+							sortText = ChaseApp.lang.get(LanguageKeys.sort_sync); break; // TODO Convey this better (Could also be no maps made)
 						}
-					default: sortText += "None"; break;
+					default: sortText += ChaseApp.lang.get(LanguageKeys.sort_none); break;
 				}
 				
 				layout.updateText(sortText);
@@ -527,26 +509,26 @@ public class SelectMap extends CGCScreen
 					sortMenuX - layout.getLayout().width, 
 					(sortMenuStartY + ChaseApp.menuFont.getLineHeight()/2f));
 				
-				sortText = "Secondary Sort: ";
+				sortText = ChaseApp.lang.get(LanguageKeys.secondary_sort) + " ";
 				
 				switch(selectedSecondary)
 				{
-					case SORT_BY_ID: sortText += "ID"; break;
-					case SORT_BY_MAP: sortText += "Map Name"; break;
-					case SORT_BY_CREATOR: sortText += "Creator"; break;
-					case SORT_BY_SIZE: sortText += "Size"; break;
-					case SORT_BY_RATING: sortText += "Rating"; break;
-					case FILTER_BY_FAVORITE: sortText = ""; break;
+					case SORT_BY_ID: sortText += ChaseApp.lang.get(LanguageKeys.sort_id); break;
+					case SORT_BY_MAP: sortText += ChaseApp.lang.get(LanguageKeys.sort_name); break;
+					case SORT_BY_CREATOR: sortText += ChaseApp.lang.get(LanguageKeys.sort_creator); break;
+					case SORT_BY_SIZE: sortText += ChaseApp.lang.get(LanguageKeys.sort_size); break;
+					case SORT_BY_RATING: sortText += ChaseApp.lang.get(LanguageKeys.sort_rating); break;
+					case FILTER_BY_FAVORITE: sortText = ChaseApp.lang.get(LanguageKeys.sort_favorites); break;
 					case FILTER_BY_SELF: 
 					if (maps.size() > 0)
 					{
-						sortText = "Viewing own maps"; break;
+						sortText = ChaseApp.lang.get(LanguageKeys.sort_own); break;
 					}
 					else
 					{
-						sortText = "Synch your account!"; break;
+						sortText = ChaseApp.lang.get(LanguageKeys.sort_sync); break;
 					}
-					default: sortText += "None"; break;
+					default: sortText += ChaseApp.lang.get(LanguageKeys.sort_none); break;
 				}
 				
 				layout.updateText(sortText);
@@ -591,7 +573,6 @@ public class SelectMap extends CGCScreen
 					speed = 0.0f;
 					randoming = false;
 					comingToAStop = false;
-					myApp.alert("And the moral of today's story is", morals.get((int)Math.floor(Math.random()*morals.size())));
 					selected = displaySelected;
 				}
 				
@@ -643,26 +624,26 @@ public class SelectMap extends CGCScreen
 	 */
 	public String parseNumPlayers(MapVO map)
 	{
-		String output = "";
+		String output;
 		if(map.minPlayers == 0 && map.maxPlayers == 8) // For any number of players
 		{
-			output = "for any # of players";
+			output = ChaseApp.lang.get(LanguageKeys.players_any);
 		}
 		else if(map.minPlayers == map.maxPlayers) // Exactly x players
 		{
-			output = "for exactly "+map.minPlayers+" players";
+			output = ChaseApp.lang.format(LanguageKeys.players_exactly, map.minPlayers);
 		}
 		else if(map.maxPlayers == 8) // At least x players
 		{
-			output = "for at least "+map.minPlayers+" players";
+			output = ChaseApp.lang.format(LanguageKeys.players_least, map.minPlayers);
 		}
 		else if(map.minPlayers == 0) // At most x players
 		{
-			output = "for at most "+map.maxPlayers+" players";
+			output = ChaseApp.lang.format(LanguageKeys.players_most, map.maxPlayers);
 		}
 		else // For low-high players
 		{
-			output = "for "+map.minPlayers+"-"+map.maxPlayers+" players";
+			output = ChaseApp.lang.format(LanguageKeys.players_range, map.minPlayers, map.maxPlayers);
 		}
 		return output;
 	}
@@ -707,9 +688,9 @@ public class SelectMap extends CGCScreen
 	 */
 	public void show() 
 	{
-		title = "Select a Map";
+		title = ChaseApp.lang.get(LanguageKeys.select_map);
 		titleLayout.updateText(title);
-		message = "Getting Map List...";
+		message = ChaseApp.lang.get(LanguageKeys.get_maps);
 
 		String mapInfo = "";
 		
@@ -726,11 +707,11 @@ public class SelectMap extends CGCScreen
 		{
 			if (mapInfo.equals(""))
 			{
-				title = "No saved maps detected. Using default maps";
+				title = ChaseApp.lang.get(LanguageKeys.no_saved_maps);
 			}
 			else if (mapInfo.equals("-1"))
 			{
-				title = "Saved map format may have been changed. Redownload maps";
+				title = ChaseApp.lang.get(LanguageKeys.format_changed);
 			}
 			
 			createMapCacheFromPreset();
@@ -742,7 +723,7 @@ public class SelectMap extends CGCScreen
 		
 		if (mapCache == null)
 		{
-			title = "Unauthorized map data. Try downloading again";
+			title = ChaseApp.lang.get(LanguageKeys.unauthorized);
 			createMapCacheFromPreset();
 		}
 		
@@ -785,13 +766,13 @@ public class SelectMap extends CGCScreen
 				select.showAnimation(ControllerDrawer.FACE_DOWN);
 			}
 			
-			primarySort.setMessage("Primary\nSort", -50,
+			primarySort.setMessage(ChaseApp.lang.get(LanguageKeys.primary_sort), -50,
 					120, Align.center);
-			secondarySort.setMessage("Secondary\nSort", -50,
+			secondarySort.setMessage(ChaseApp.lang.get(LanguageKeys.secondary_sort), -50,
 					120, Align.center);
-			back.setMessage("Back", -50,
+			back.setMessage(ChaseApp.lang.get(LanguageKeys.back), -50,
 					90, Align.center);
-			select.setMessage("Select", -50,
+			select.setMessage(ChaseApp.lang.get(LanguageKeys.select), -50,
 					90, Align.center);
 			
 			primarySort.setWiggle(-Data.MENU_WIDTH * .05f, 200);

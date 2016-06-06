@@ -23,7 +23,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.percipient24.tweens.*;
 import com.badlogic.gdx.utils.Array;
-import com.percipient24.b2helpers.StringLayout;
+import com.percipient24.helpers.StringLayout;
 import com.percipient24.cgc.ChainGame;
 import com.percipient24.cgc.ChaseApp;
 import com.percipient24.cgc.Data;
@@ -33,6 +33,7 @@ import com.percipient24.cgc.screens.helpers.ControllerDrawer;
 import com.percipient24.cgc.screens.helpers.MenuTextureRegion;
 import com.percipient24.cgc.screens.helpers.MenuTextureRegionComparator;
 import com.percipient24.cgc.screens.helpers.PlayerCard;
+import com.percipient24.cgc.screens.helpers.LanguageKeys;
 import com.percipient24.enums.ControlType;
 import com.percipient24.input.ControlAdapter;
 
@@ -112,7 +113,7 @@ public class CharacterSelect extends CGCScreen
 	public CharacterSelect(ChaseApp app)
 	{
 		super(app);
-		title = "Select Convicts/Cops";
+		title = ChaseApp.lang.get(LanguageKeys.select_con_cop);
 		titleLayout.updateText(title);
 
 		layout = new StringLayout("", ChaseApp.menuFont);
@@ -171,43 +172,43 @@ public class CharacterSelect extends CGCScreen
 		leftJoin.showWing(true);
 		leftJoin.showAnimation(ControllerDrawer.L_BUMPER);
 		leftJoin.setWiggle(23, 0);
-		leftJoin.setMessage("Join\nDrop", -25, 40, Align.left);
+		leftJoin.setMessage(ChaseApp.lang.get(LanguageKeys.join_drop), -25, 40, Align.left);
 		
 		rightJoin = new ControllerDrawer(MenuTextureRegion.MID_RIGHT, MenuTextureRegion.MID_RIGHT);
 		rightJoin.showWing(false);
 		rightJoin.showAnimation(ControllerDrawer.R_BUMPER);
 		rightJoin.setWiggle(-23, 0);
-		rightJoin.setMessage("Join\nDrop", 25, 40, Align.right);
+		rightJoin.setMessage(ChaseApp.lang.get(LanguageKeys.join_drop), 25, 40, Align.right);
 		
 		leftSelect = new ControllerDrawer(MenuTextureRegion.MID_LEFT, MenuTextureRegion.MID_LEFT);
 		leftSelect.showAnimation(ControllerDrawer.DPAD_DOWN);
 		leftSelect.setWiggle(23, -180);
-		leftSelect.setMessage("Select", -20, 80, Align.left);
+		leftSelect.setMessage(ChaseApp.lang.get(LanguageKeys.select), -20, 80, Align.left);
 		
 		rightSelect = new ControllerDrawer(MenuTextureRegion.MID_RIGHT, MenuTextureRegion.MID_RIGHT);
 		rightSelect.showAnimation(ControllerDrawer.FACE_DOWN);
 		rightSelect.setWiggle(-23, -180);
-		rightSelect.setMessage("Select", 20, 80, Align.right);
+		rightSelect.setMessage(ChaseApp.lang.get(LanguageKeys.select), 20, 80, Align.right);
 		
 		leftCancel = new ControllerDrawer(MenuTextureRegion.MID_LEFT, MenuTextureRegion.MID_LEFT);
 		leftCancel.showAnimation(ControllerDrawer.DPAD_RIGHT);
 		leftCancel.setWiggle(23, -320);
-		leftCancel.setMessage("Cancel", -20, 80, Align.left);
+		leftCancel.setMessage(ChaseApp.lang.get(LanguageKeys.cancel), -20, 80, Align.left);
 		
 		rightCancel = new ControllerDrawer(MenuTextureRegion.MID_RIGHT, MenuTextureRegion.MID_RIGHT);
 		rightCancel.showAnimation(ControllerDrawer.FACE_RIGHT);
 		rightCancel.setWiggle(-23, -320);
-		rightCancel.setMessage("Cancel", 20, 80, Align.right);
+		rightCancel.setMessage(ChaseApp.lang.get(LanguageKeys.cancel), 20, 80, Align.right);
 		
 		leftWho = new ControllerDrawer(MenuTextureRegion.MID_LEFT, MenuTextureRegion.MID_LEFT);
 		leftWho.showAnimation(ControllerDrawer.STICK_3_BLINK);
 		leftWho.setWiggle(23, -440);
-		leftWho.setMessage("Who's me?", -20, 60, Align.left);
+		leftWho.setMessage(ChaseApp.lang.get(LanguageKeys.who_me), -20, 60, Align.left);
 		
 		rightWho = new ControllerDrawer(MenuTextureRegion.MID_RIGHT, MenuTextureRegion.MID_RIGHT);
 		rightWho.showAnimation(ControllerDrawer.STICK_3_BLINK);
 		rightWho.setWiggle(-23, -440);
-		rightWho.setMessage("Who's me?", 20, 60, Align.right);
+		rightWho.setMessage(ChaseApp.lang.get(LanguageKeys.who_me), 20, 60, Align.right);
 		
 		advanceScreen = new ControllerDrawer(MenuTextureRegion.MID_CENTER, MenuTextureRegion.MID_CENTER);
 		advanceScreen.setWiggle(0, 270);
@@ -727,8 +728,8 @@ public class CharacterSelect extends CGCScreen
 		ChaseApp.menuFont.setColor(ChaseApp.selectedOrange);
 		if (noneUsed())
 		{
-			upperString = "No Controllers Set Up!";
-			lowerString = "Press LB/RB to set up controllers.";
+			upperString = ChaseApp.lang.get(LanguageKeys.no_controllers);
+			lowerString = ChaseApp.lang.get(LanguageKeys.setup_controllers);
 			
 			// Draws the info banner on the screen - Width of screen, height is arbitrary
 			shapes.begin(ShapeType.Filled);
@@ -782,8 +783,8 @@ public class CharacterSelect extends CGCScreen
 			
 			if (!bossConnected())
 			{
-				upperString = "No Start Controller!";
-				lowerString = "The start controller must be set up to play.";
+				upperString = ChaseApp.lang.get(LanguageKeys.no_start);
+				lowerString = ChaseApp.lang.get(LanguageKeys.setup_start);
 				
 				sBatch.begin();
 
@@ -810,8 +811,8 @@ public class CharacterSelect extends CGCScreen
 			}
 			else
 			{
-				upperString = "All Players Ready!";
-				lowerString = "to continue.";
+				upperString = ChaseApp.lang.get(LanguageKeys.players_ready);
+				lowerString = ChaseApp.lang.get(LanguageKeys.to_continue);
 				
 				sBatch.begin();
 				ChaseApp.menuFont.getData().setScale(CGCScreen.FONT_MAIN);
@@ -1587,7 +1588,7 @@ public class CharacterSelect extends CGCScreen
 	 */
 	private void startTransition()
 	{
-		transition = new Transition(sBatch, "Now entering Tutorial level", "Created by me,", "your loving sheriff", myApp);
+		transition = new Transition(sBatch, ChaseApp.lang.get(LanguageKeys.now_entering), ChaseApp.lang.get(LanguageKeys.created_by), ChaseApp.lang.get(LanguageKeys.loving_sheriff), myApp);
 		transition.setXPosition(Data.ACTUAL_WIDTH * 1.5f);
 		transition.setShow(true);
 		transitioning = true;
@@ -1614,7 +1615,7 @@ public class CharacterSelect extends CGCScreen
 			tutorialVO.maxPlayers = 8;
 			tutorialVO.minPlayers = 1;
 			tutorialVO.mid = 0;
-			tutorialVO.mname = "Tutorial";
+			tutorialVO.mname = ChaseApp.lang.get(LanguageKeys.tutorial);
 			tutorialVO.msize = 18;
 			tutorialVO.uname = "CGC Dev";
 			tutorialVO.mrating = 5.0f;
