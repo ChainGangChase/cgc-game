@@ -8,7 +8,7 @@ package com.percipient24.cgc.screens;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.percipient24.b2helpers.StringLayout;
+import com.percipient24.helpers.StringLayout;
 import com.percipient24.cgc.ChaseApp;
 import com.percipient24.cgc.Data;
 import com.percipient24.cgc.screens.helpers.ControllerDrawer;

@@ -3,7 +3,7 @@
  * 
  * Copyright 2016, MAGIC Spell Studios, LLC
  */
-package com.percipient24.b2helpers;
+package com.percipient24.helpers;
 
 /*
  * Static helper methods for computing Map attributes.

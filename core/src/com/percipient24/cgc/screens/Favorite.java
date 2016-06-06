@@ -22,6 +22,7 @@ import com.percipient24.cgc.overlays.Transition;
 import com.percipient24.enums.ControlType;
 import com.percipient24.input.ControlAdapter;
 import com.percipient24.tweens.TransitionAccessor;
+import com.percipient24.cgc.screens.helpers.LanguageKeys;
 
 /*
  * Contains the data for the Favorite screen
@@ -52,9 +53,9 @@ public class Favorite extends CGCScreen
 		mapsPlayed = new Array<MapVO>();
 		readFavorites();
 		
-		title = "Did you like this map?";
+		title = ChaseApp.lang.get(LanguageKeys.did_you_like);
 		titleLayout.updateText(title);
-		message = "Map has been favorited!";
+		message = ChaseApp.lang.get(LanguageKeys.map_favorited);
 		
 		tManager = ChaseApp.tManager;
 		
@@ -261,12 +262,12 @@ public class Favorite extends CGCScreen
 		
 		for (int i = 0; i < mapsPlayed.size; i++)
 		{
-			items.add("Favorite " + mapsPlayed.get(i).mname);
+			items.add(ChaseApp.lang.format(LanguageKeys.favorite, mapsPlayed.get(i).mname));
 		}
-		items.add("Play Last Chase Again");
-		items.add("Character Select");
-		items.add("Map Select");
-		items.add("Main Menu");
+		items.add(ChaseApp.lang.get(LanguageKeys.play_again));
+		items.add(ChaseApp.lang.get(LanguageKeys.character_select));
+		items.add(ChaseApp.lang.get(LanguageKeys.map_select));
+		items.add(ChaseApp.lang.get(LanguageKeys.main_menu));
 		
 		shouldDrawBackground = true;
 		
@@ -316,7 +317,7 @@ public class Favorite extends CGCScreen
 			{
 				if (!ChaseApp.fileHandler.writeFile("favorites.bin", "")) // Erase the save file because it's corrupted
 				{
-					ChaseApp.overlay = new Overlay(myApp, this, "No free local memory");
+					ChaseApp.overlay = new Overlay(myApp, this, ChaseApp.lang.get(LanguageKeys.no_memory));
 					myApp.setScreen(ChaseApp.overlay);
 				}
 			}
@@ -332,21 +333,21 @@ public class Favorite extends CGCScreen
 	{
 		if (mapsPlayed.size < index+1)
 		{
-			message = "You didn't play enough maps";
+			message = ChaseApp.lang.get(LanguageKeys.not_enough_maps);
 			return;
 		}
 		for (int i = 0; i < favoriteMapIds.size; i++)
 		{
 			if (favoriteMapIds.get(i) == mapsPlayed.get(index).mid)
 			{
-				message = "This map has already been favorited!";
+				message = ChaseApp.lang.get(LanguageKeys.already_favorited);
 				return;
 			}
 		}
 		
 		favoriteMapIds.add(mapsPlayed.get(index).mid);
 		writeFavoritesFile();
-		message = "Map has been favorited!";
+		message = ChaseApp.lang.get(LanguageKeys.map_favorited);
 	}
 	
 	/*
@@ -363,7 +364,7 @@ public class Favorite extends CGCScreen
 		
 		if (!ChaseApp.fileHandler.writeFile("favorites.bin", toSave))
 		{
-			ChaseApp.overlay = new Overlay(myApp, this, "No free local memory to save favorite maps");
+			ChaseApp.overlay = new Overlay(myApp, this, ChaseApp.lang.get(LanguageKeys.no_memory));
 			myApp.setScreen(ChaseApp.overlay);
 		}
 	}

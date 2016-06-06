@@ -13,7 +13,7 @@ import aurelienribon.tweenengine.equations.Quad;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.percipient24.b2helpers.StringLayout;
+import com.percipient24.helpers.StringLayout;
 import com.percipient24.cgc.ChaseApp;
 import com.percipient24.cgc.Data;
 import com.percipient24.cgc.TimerManager;

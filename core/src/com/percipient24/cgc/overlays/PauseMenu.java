@@ -19,7 +19,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Array;
-import com.percipient24.b2helpers.StringLayout;
+import com.percipient24.helpers.StringLayout;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.cgc.ChainGame;
 import com.percipient24.cgc.ChaseApp;
@@ -34,6 +34,7 @@ import com.percipient24.cgc.screens.Overlay;
 import com.percipient24.enums.ControlType;
 import com.percipient24.input.ControlAdapter;
 import com.percipient24.tweens.TransitionAccessor;
+import com.percipient24.cgc.screens.helpers.LanguageKeys;
 
 /*
  * Contains the logic for the pause menu
@@ -123,35 +124,35 @@ public class PauseMenu extends CGCOverlay
 		shapes = myApp.getShapes();
 		selected = 0;
 		
-		items[0] = "Resume Game";
-		items[1] = "Settings";
-		items[2] = "Restart Chase";
-		items[3] = "Select Characters";
-		items[4] = "Select Map";
-		items[5] = "Main Menu";
+		items[0] = ChaseApp.lang.get(LanguageKeys.resume_game);
+		items[1] = ChaseApp.lang.get(LanguageKeys.settings);
+		items[2] = ChaseApp.lang.get(LanguageKeys.restart_chase);
+		items[3] = ChaseApp.lang.get(LanguageKeys.select_characters);
+		items[4] = ChaseApp.lang.get(LanguageKeys.select_map);
+		items[5] = ChaseApp.lang.get(LanguageKeys.main_menu);
 		
-		settingsItems[0] = "Master Volume";
-		settingsItems[1] = "Music Volume";
-		settingsItems[2] = "Effects Volume";
-		settingsItems[3] = "Connected Sensor Symbols";
-		settingsItems[4] = "Parallax Graphics";
-		settingsItems[5] = "Accept Changes";
-		settingsItems[6] = "Restore Defaults";
-		settingsItems[7] = "Back";
+		settingsItems[0] = ChaseApp.lang.get(LanguageKeys.master_volume);
+		settingsItems[1] = ChaseApp.lang.get(LanguageKeys.music_volume);
+		settingsItems[2] = ChaseApp.lang.get(LanguageKeys.effects_volume);
+		settingsItems[3] = ChaseApp.lang.get(LanguageKeys.sensor_symbols);
+		settingsItems[4] = ChaseApp.lang.get(LanguageKeys.parallax_graphics);
+		settingsItems[5] = ChaseApp.lang.get(LanguageKeys.accept_changes);
+		settingsItems[6] = ChaseApp.lang.get(LanguageKeys.restore_defaults);
+		settingsItems[7] = ChaseApp.lang.get(LanguageKeys.back);
 		
-		settingsMessages[0] = "Adjust overall volume of the game";
-		settingsMessages[1] = "Adjust the volume of the music";
-		settingsMessages[2] = "Adjust the volume of sound effects";
-		settingsMessages[3] = "Draw matching symbols on\nconnected Sensors";
-		settingsMessages[4] = "Give most 2D graphics a 3D look\n";
-		settingsMessages[5] = "Apply the current settings to the\ngame";
-		settingsMessages[6] = "Revert these settings back to their\ndefault values";
-		settingsMessages[7] = "Return to the pause menu without\napplying changes";
+		settingsMessages[0] = ChaseApp.lang.get(LanguageKeys.master_volume_message);
+		settingsMessages[1] = ChaseApp.lang.get(LanguageKeys.music_volume_message);
+		settingsMessages[2] = ChaseApp.lang.get(LanguageKeys.effects_volume_message);
+		settingsMessages[3] = ChaseApp.lang.get(LanguageKeys.symbols_message);
+		settingsMessages[4] = ChaseApp.lang.get(LanguageKeys.parallax_message);
+		settingsMessages[5] = ChaseApp.lang.get(LanguageKeys.apply_message);
+		settingsMessages[6] = ChaseApp.lang.get(LanguageKeys.revert_message);
+		settingsMessages[7] = ChaseApp.lang.get(LanguageKeys.back_message);
 		
-		confirmMessages[0] = "Restart this chase?";
-		confirmMessages[1] = "Return to character select?";
-		confirmMessages[2] = "Return to map select?";
-		confirmMessages[3] = "Return to the main menu?";
+		confirmMessages[0] = ChaseApp.lang.get(LanguageKeys.restart_prompt);
+		confirmMessages[1] = ChaseApp.lang.get(LanguageKeys.character_prompt);
+		confirmMessages[2] = ChaseApp.lang.get(LanguageKeys.map_prompt);
+		confirmMessages[3] = ChaseApp.lang.get(LanguageKeys.main_prompt);
 		
 		ChaseApp.menuFont.getData().setScale(CGCScreen.FONT_MAIN);
 		
@@ -704,7 +705,7 @@ public class PauseMenu extends CGCOverlay
 			ChaseApp.menuFont.setColor(ChaseApp.selectedOrange);
 		}
 
-		layout.updateText("Yes");
+		layout.updateText(ChaseApp.lang.get(LanguageKeys.yes));
 		ChaseApp.menuFont.draw(
 			sBatch,
 			layout.getLayout(),
@@ -720,7 +721,7 @@ public class PauseMenu extends CGCOverlay
 			ChaseApp.menuFont.getData().setScale(CGCScreen.FONT_MAIN * resizeFontScale);
 			ChaseApp.menuFont.setColor(ChaseApp.selectedOrange);
 		}
-		layout.updateText("No");
+		layout.updateText(ChaseApp.lang.get(LanguageKeys.no));
 		ChaseApp.menuFont.draw(
 			sBatch,
 			layout.getLayout(),
@@ -865,7 +866,7 @@ public class PauseMenu extends CGCOverlay
 				ChaseApp.menuFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 			}
 		}
-		ChaseApp.menuFont.draw(sBatch, "On", volumeBar.getX() 
+		ChaseApp.menuFont.draw(sBatch, ChaseApp.lang.get(LanguageKeys.on), volumeBar.getX() 
 				+ volumeBar.getWidth() * volumeBar.getScaleX() - 30, 
 				(Data.ACTUAL_HEIGHT / 2 + pauseSettingsHeight / 2) 
 				- ((pauseSettingsHeight / (effectiveLength)) 
@@ -891,7 +892,7 @@ public class PauseMenu extends CGCOverlay
 				ChaseApp.menuFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 			}
 		}
-		ChaseApp.menuFont.draw(sBatch, "Off", volumeBar.getX() 
+		ChaseApp.menuFont.draw(sBatch, ChaseApp.lang.get(LanguageKeys.off), volumeBar.getX() 
 				+ volumeBar.getWidth() * volumeBar.getScaleX() + 45, 
 				(Data.ACTUAL_HEIGHT / 2 + pauseSettingsHeight / 2) 
 				- ((pauseSettingsHeight / (effectiveLength)) 
@@ -918,7 +919,7 @@ public class PauseMenu extends CGCOverlay
 					ChaseApp.menuFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 				}
 			}
-			ChaseApp.menuFont.draw(sBatch, "On", volumeBar.getX() 
+			ChaseApp.menuFont.draw(sBatch, ChaseApp.lang.get(LanguageKeys.on), volumeBar.getX() 
 					+ volumeBar.getWidth() * volumeBar.getScaleX() - 30, 
 					(Data.ACTUAL_HEIGHT / 2 + pauseSettingsHeight / 2) 
 					- ((pauseSettingsHeight / (effectiveLength)) 
@@ -944,7 +945,7 @@ public class PauseMenu extends CGCOverlay
 					ChaseApp.menuFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 				}
 			}
-			ChaseApp.menuFont.draw(sBatch, "Off", volumeBar.getX() 
+			ChaseApp.menuFont.draw(sBatch, ChaseApp.lang.get(LanguageKeys.off), volumeBar.getX() 
 					+ volumeBar.getWidth() * volumeBar.getScaleX() + 45, 
 					(Data.ACTUAL_HEIGHT / 2 + pauseSettingsHeight / 2) 
 					- ((pauseSettingsHeight / (effectiveLength)) 
@@ -964,7 +965,7 @@ public class PauseMenu extends CGCOverlay
 	{
 		if (owner instanceof CGCWorld && ((CGCWorld)owner).isTutorial())
 		{
-			transition = new Transition(sBatch, "Now entering Tutorial level", "Created by me,", "your loving sheriff", myApp);
+			transition = new Transition(sBatch, ChaseApp.lang.get(LanguageKeys.now_entering), ChaseApp.lang.get(LanguageKeys.created_by), ChaseApp.lang.get(LanguageKeys.loving_sheriff), myApp);
 			transition.setXPosition(Data.ACTUAL_WIDTH * 1.5f);
 			transition.setShow(true);
 			transitioning = true;
@@ -1229,7 +1230,7 @@ public class PauseMenu extends CGCOverlay
 		
 		if (!ChaseApp.fileHandler.writeFile("preferences.bin", toSave))
 		{
-			ChaseApp.overlay = new Overlay(myApp, owner, "No free local memory to save preferences");
+			ChaseApp.overlay = new Overlay(myApp, owner, ChaseApp.lang.get(LanguageKeys.no_memory));
 			myApp.setScreen(ChaseApp.overlay);
 		}
 	}

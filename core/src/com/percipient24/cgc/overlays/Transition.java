@@ -10,11 +10,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
-import com.percipient24.b2helpers.StringLayout;
+import com.percipient24.helpers.StringLayout;
 import com.percipient24.cgc.ChaseApp;
 import com.percipient24.cgc.Data;
 import com.percipient24.cgc.net.MapVO;
 import com.percipient24.enums.BossType;
+import com.percipient24.cgc.screens.helpers.LanguageKeys;
 
 /*
  * Contains the logic for the transition to the game screen
@@ -53,9 +54,9 @@ public class Transition extends CGCOverlay
 		super(newBatch);
 		shapes = app.getShapes();
 		
-		topMessage = "Now Entering";
+		topMessage = ChaseApp.lang.get(LanguageKeys.entering_map);
 		midMessage = mapData.mname;
-		botMessage = "by " + mapData.uname;
+		botMessage = ChaseApp.lang.format(LanguageKeys.by_x, mapData.uname);
 
 		topLayout = new StringLayout(topMessage, ChaseApp.menuFont);
 		midLayout = new StringLayout(midMessage, ChaseApp.menuFont);
@@ -83,30 +84,30 @@ public class Transition extends CGCOverlay
 			case NONE:
 				break;
 			case PALL_BEARER:
-				topMessage = "Pull the cops away";
-				midMessage = "Let's make the sheriff fall down";
-				botMessage = "Try not to get hit!";
+				topMessage = ChaseApp.lang.get(LanguageKeys.pall_top);
+				midMessage = ChaseApp.lang.get(LanguageKeys.pall_mid);
+				botMessage = ChaseApp.lang.get(LanguageKeys.pall_bot);
 				break;
 			case STEEL_HORSE:
-				topMessage = "Trip bike with your chains";
-				midMessage = "Dodge the bike when it charges";
-				botMessage = "Go punch the sheriff!";
+				topMessage = ChaseApp.lang.get(LanguageKeys.steel_top);
+				midMessage = ChaseApp.lang.get(LanguageKeys.steel_mid);
+				botMessage = ChaseApp.lang.get(LanguageKeys.steel_bot);
 				break;
 			case TANK:
 			case TANK_AI:
-				topMessage = "Do you hear that sound?";
-				midMessage = "Is that giant thing a tank?";
-				botMessage = "We should run faster!!!";
+				topMessage = ChaseApp.lang.get(LanguageKeys.tank_top);
+				midMessage = ChaseApp.lang.get(LanguageKeys.tank_mid);
+				botMessage = ChaseApp.lang.get(LanguageKeys.tank_bot);
 				break;
 			case TRAIN_RUSH:
-				topMessage = "Look at all these tracks";
-				midMessage = "The guy inside lied to us";
-				botMessage = "This is a train yard!";
+				topMessage = ChaseApp.lang.get(LanguageKeys.train_top);
+				midMessage = ChaseApp.lang.get(LanguageKeys.train_mid);
+				botMessage = ChaseApp.lang.get(LanguageKeys.train_bot);
 				break;
 			case TRENCH_RUN:
-				topMessage = "Careful of spotlight";
-				midMessage = "We need to stay in the dark";
-				botMessage = "Or they will catch us!";
+				topMessage = ChaseApp.lang.get(LanguageKeys.trench_top);
+				midMessage = ChaseApp.lang.get(LanguageKeys.trench_mid);
+				botMessage = ChaseApp.lang.get(LanguageKeys.trench_bot);
 				break;
 			default:
 				break;
