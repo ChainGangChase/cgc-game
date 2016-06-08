@@ -27,6 +27,6 @@
   "dependencies": {
     "cgc-art": "git@github.com:ChainGangChase/cgc-art.git#0.1.0",
     "cgc-sound": "git@github.com:ChainGangChase/cgc-sound.git#0.1.0",
-    "cgc-i18n": "git@github.com:ChainGangChase/cgc-i18n.git#0.1.1"
+    "cgc-i18n": "git@github.com:ChainGangChase/cgc-i18n.git#0.2.0"
   }
 }

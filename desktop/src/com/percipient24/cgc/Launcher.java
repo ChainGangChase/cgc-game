@@ -63,10 +63,14 @@ public class Launcher implements Runnable {
 	};
 	private String[] languages = {
 		"English US",
+		"German",
+		"Inuktitut",
 		"Igpay Atinlay"
 	};
 	private String[] locales = {
 		"en",
+		"de",
+		"iu",
 		"pi"
 	};
 	private Color backgroundColor = new Color(.13f, .066f, 0.0f, 1.0f);
