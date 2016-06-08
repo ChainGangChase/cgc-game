@@ -169,8 +169,10 @@ public class MainMenu extends CGCScreen
 			messageLayout.getLayout(),
 			MenuTextureRegion.TITLE_SAFE_X + 0,
 			2 * MenuTextureRegion.TITLE_SAFE_Y + messageY);
-		
+
 		sBatch.end();
+
+		ChaseApp.title.renderNoClear(delta);
 	}
 	
 	/*

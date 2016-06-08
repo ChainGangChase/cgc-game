@@ -220,6 +220,29 @@ public class CGCScreen implements Screen
 			MenuTextureRegion.MENU_ANCHORS[MenuTextureRegion.UPPER_LEFT].y);
 		ChaseApp.menuFont.getData().setScale(FONT_MAIN);
 	}
+
+	public void renderNoClear(float delta)
+	{
+		if (!(this instanceof Overlay) && ChaseApp.overlay == null)
+		{
+			handleInput();
+		}
+		
+		sBatch.begin();
+		
+		if(shouldDrawBackground)
+		{
+			background.draw(sBatch);
+		}
+		
+		ChaseApp.titleFont.getData().setScale(1.0f);
+		ChaseApp.titleFont.draw(
+			sBatch,
+			titleLayout.getLayout(),
+			MenuTextureRegion.MENU_ANCHORS[MenuTextureRegion.UPPER_LEFT].x,
+			MenuTextureRegion.MENU_ANCHORS[MenuTextureRegion.UPPER_LEFT].y);
+		ChaseApp.menuFont.getData().setScale(FONT_MAIN);
+	}
 	
 	/*
 	 * Draws a generic menu screen

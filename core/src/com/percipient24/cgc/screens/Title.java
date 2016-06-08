@@ -295,6 +295,10 @@ public class Title extends CGCScreen
 			wiggling = false;
 		}
 	};
+
+	private void transitionOut() {
+		Tween.to(background, MenuTextureRegionAccessor.ALPHA, 1.0f).target(0.0f).start(tManager);
+	}
 	
 	/*
 	 * Handles control input to this screen
@@ -313,6 +317,7 @@ public class Title extends CGCScreen
 				input.getBoss().changeControlState(ControlType.SELECT, false);
 				super.handleInput();
 				myApp.setScreen(ChaseApp.mainMenu);
+				transitionOut();
 				return;
 			}
 		}
@@ -345,6 +350,43 @@ public class Title extends CGCScreen
 	public void render(float delta) 
 	{
 		super.render(delta);
+		tManager.update(delta);
+		sBatch.end();
+		
+		sBatch.setProjectionMatrix(ChaseApp.menuCam.combined);
+		sBatch.begin();
+		sky.draw(sBatch);
+		trees.draw(sBatch);
+		updateWiggle();
+		ground.draw(sBatch, wiggle);
+		updateWiggle();
+		railway.draw(sBatch, wiggle);
+		updateWiggle();
+		border.draw(sBatch);
+		updateWiggle();
+		chain.draw(sBatch, wiggle);
+		updateWiggle();
+		gang.draw(sBatch, wiggle);
+		updateWiggle();
+		chase.draw(sBatch, wiggle);
+		
+		if (showPressStart)
+		{
+			ChaseApp.menuFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+			// TODO Graphically represent Keyboard Input
+			
+			left.draw(sBatch, delta);
+			right.draw(sBatch, delta);
+			betaBadge.setRotation(0);
+			betaBadge.draw(sBatch);
+		}
+		
+		sBatch.end();
+	}
+
+	public void renderNoClear(float delta)
+	{
+		super.renderNoClear(delta);
 		tManager.update(delta);
 		sBatch.end();
 		
