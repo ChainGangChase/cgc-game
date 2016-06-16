@@ -132,6 +132,8 @@ public class Player extends RotatableEntity
 	private Vector2 oldPosition;
 	private Vector2 spawnPosition;
 	protected int firstDirection = -1;
+
+	private int coins = 10;
 	
 	/*
 	 * Creates a new Player object
@@ -2174,5 +2176,15 @@ public class Player extends RotatableEntity
 	public boolean isOnScreen()
 	{
 		return onScreen;
+	}
+
+	public int getCoins()
+	{
+		return coins;
+	}
+	
+	public void setCoins(int i)
+	{
+		coins = i;
 	}
 } // End class

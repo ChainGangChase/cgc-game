@@ -711,11 +711,13 @@ public class BossFight extends CGCWorld
 		
 		if (won)
 		{
+			ChaseApp.win.setPlayers(players);
 			myApp.setScreen(ChaseApp.win);
 		}
 		else
 		{
 			myApp.alert("Setting screen", "To lose");
+			ChaseApp.lose.setPlayers(players);
 			myApp.setScreen(ChaseApp.lose);
 		}
 	}

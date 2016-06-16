@@ -28,7 +28,7 @@ import com.percipient24.cgc.screens.helpers.LanguageKeys;
  * @version 0.1 13/5/24
  * @author Joe Pietruch
  */
-public class Lose extends CGCScreen 
+public class Lose extends EndScreen 
 {
 	private TweenManager tManager;
 	private Transition transition;
@@ -129,6 +129,7 @@ public class Lose extends CGCScreen
 		super.render(delta);
 		
 		drawGenericMenu();
+		drawPlayerResults();
 		
 		sBatch.end();
 		if (transitioning)

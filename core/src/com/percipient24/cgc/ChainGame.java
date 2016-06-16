@@ -1364,6 +1364,7 @@ public class ChainGame extends CGCWorld
 			endGameStats(false);
 			sBatch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 			
+			ChaseApp.lose.setPlayers(players);
 			myApp.setScreen(ChaseApp.lose);
 			TimerManager.clear();
 		}
