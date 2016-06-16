@@ -7,6 +7,7 @@
 package com.percipient24.cgc.entities.players;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Joint;
@@ -1940,6 +1941,21 @@ public class Player extends RotatableEntity
 			body.setLinearVelocity(vel.scl(speed));
 		}
 	}
+
+	public void dropCoins(int max) {
+		int start = getCoins();
+		if (start == 0) {
+			return;
+		} else if (max == 0) {
+			setCoins(0);
+			// TODO : actually drop coins
+			return;
+		}
+		int dropped = MathUtils.random(1, Math.min(start, max));
+		setCoins(start - dropped);
+		// TODO : actually drop coins
+
+	}
 	
 	/*
 	 * Determines how this Player reacts to getting punched
@@ -1950,6 +1966,8 @@ public class Player extends RotatableEntity
 	{
 		changeMidAnimationState(AnimationState.HIT);
 		SoundManager.playSound("punch person", false);
+		// TODO : weight droppage by difficulty
+		dropCoins(3);
 		//Override in subclass if necessary.
 		body.setLinearDamping(MOVE_DAMP);
 		applyPunchForce(direction, 500);
