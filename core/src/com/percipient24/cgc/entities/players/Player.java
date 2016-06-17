@@ -7,6 +7,7 @@
 package com.percipient24.cgc.entities.players;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Joint;
@@ -24,6 +25,7 @@ import com.percipient24.cgc.ControllerScheme;
 import com.percipient24.cgc.SoundManager;
 import com.percipient24.cgc.TimerManager;
 import com.percipient24.cgc.entities.ChainLink;
+import com.percipient24.cgc.entities.Coin;
 import com.percipient24.cgc.entities.GameEntity;
 import com.percipient24.cgc.entities.GuardTower;
 import com.percipient24.cgc.entities.PlayerWall;
@@ -1940,6 +1942,49 @@ public class Player extends RotatableEntity
 			body.setLinearVelocity(vel.scl(speed));
 		}
 	}
+
+	public void dropCoins(int max, int direction) {
+		int start = getCoins();
+		int dropped;
+		if (start == 0) {
+			return;
+		} else if (max == 0) {
+			setCoins(0);
+			dropped = start;
+			return;
+		}
+		dropped = MathUtils.random(1, Math.min(start, max));
+		setCoins(start - dropped);
+		// TODO : actually drop coins
+
+		while (dropped > 0) {
+			Body coinBody = CGCWorld.getBF().createPlayerBody(
+				this.getBody().getWorldCenter().x,
+				this.getBody().getWorldCenter().y,
+				0.6f,
+				BodyType.DynamicBody,
+				BodyFactory.CAT_DECEASED,
+				BodyFactory.MASK_DECEASED);
+
+			coinBody.setFixedRotation(true);
+			Coin coin = new Coin(
+				this,
+				AnimationManager.prisonerDieLowAnims[playerID], 
+				AnimationManager.prisonerDieMidAnims[playerID], 
+				AnimationManager.prisonerDieHighAnims[playerID], 
+				EntityType.PLAYER,
+				coinBody,
+				0.5f, 
+				playerID,
+				null);
+
+			coinBody.setUserData(coin);
+			coin.addToWorldLayers(CGCWorld.getLH());
+			coin.applyForceToSelf(direction, 800);
+			shouldMakeCorpse = false;
+			dropped--;
+		}
+	}
 	
 	/*
 	 * Determines how this Player reacts to getting punched
@@ -1950,6 +1995,9 @@ public class Player extends RotatableEntity
 	{
 		changeMidAnimationState(AnimationState.HIT);
 		SoundManager.playSound("punch person", false);
+		// TODO : weight droppage by difficulty
+		ChaseApp.alert("punched dir", direction);
+		dropCoins(3, direction);
 		//Override in subclass if necessary.
 		body.setLinearDamping(MOVE_DAMP);
 		applyPunchForce(direction, 500);
@@ -2176,6 +2224,10 @@ public class Player extends RotatableEntity
 	public boolean isOnScreen()
 	{
 		return onScreen;
+	}
+
+	public ChainGame getChainGame() {
+		return chainGame;
 	}
 
 	public int getCoins()
