@@ -36,7 +36,7 @@ public class CGCScreen implements Screen
 	public StringLayout titleLayout;
 	public StringLayout messageLayout;
 	public StringLayout itemLayout;
-	protected ChaseApp myApp;
+	public ChaseApp myApp;
 	
 	// Generic menu control
 	protected String message;

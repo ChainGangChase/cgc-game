@@ -461,7 +461,7 @@ public class ChaseApp extends Game
 	 *  @param s1					What is sending the message
 	 *  @param s2					The message to send
 	 */
-	public void alert(String s1, String s2)
+	public static void alert(String s1, String s2)
 	{
 		Gdx.app.log(s1, s2);
 	}
@@ -472,7 +472,7 @@ public class ChaseApp extends Game
 	 *  @param s1					What is sending the message
 	 *  @param i					The message to send
 	 */
-	public void alert(String s1, int i)
+	public static void alert(String s1, int i)
 	{
 		Gdx.app.log(s1, "" + i);
 	}
@@ -483,7 +483,7 @@ public class ChaseApp extends Game
 	 *  @param s1					What is sending the message
 	 *  @param f					The message to send
 	 */
-	public void alert(String s1, float f)
+	public static void alert(String s1, float f)
 	{
 		Gdx.app.log(s1, "" + f);
 	}
@@ -494,7 +494,7 @@ public class ChaseApp extends Game
 	 *  @param s1					What is sending the message
 	 *  @param d					The message to send
 	 */
-	public void alert(String s1, double d)
+	public static void alert(String s1, double d)
 	{
 		Gdx.app.log(s1, "" + d);
 	}
@@ -505,7 +505,7 @@ public class ChaseApp extends Game
 	 *  @param s1					What is sending the message
 	 *  @param b					The message to send
 	 */
-	public void alert(String s1, boolean b)
+	public static void alert(String s1, boolean b)
 	{
 		Gdx.app.log(s1, "" + b);
 	}
@@ -516,7 +516,7 @@ public class ChaseApp extends Game
 	 *  @param s1					What is sending the message
 	 *  @param v					The message to send
 	 */
-	public void alert(String s1, Vector2 v)
+	public static void alert(String s1, Vector2 v)
 	{
 		Gdx.app.log(s1, v.x + " " + v.y);
 	}
@@ -526,7 +526,7 @@ public class ChaseApp extends Game
 	 * 
 	 * @param s1					The message to end
 	 */
-	public void alert(String s1)
+	public static void alert(String s1)
 	{
 		Gdx.app.log("ChaseApp", s1);
 	}
@@ -536,7 +536,7 @@ public class ChaseApp extends Game
 	 * 
 	 * @param b						The message to end
 	 */
-	public void alert(Boolean b)
+	public static void alert(Boolean b)
 	{
 		Gdx.app.log("ChaseApp", ""+b);
 	}
@@ -546,7 +546,7 @@ public class ChaseApp extends Game
 	 * 
 	 * @param f						The message to end
 	 */
-	public void alert(float f)
+	public static void alert(float f)
 	{
 		Gdx.app.log("ChaseApp", "" + f);
 	}
@@ -556,7 +556,7 @@ public class ChaseApp extends Game
 	 * 
 	 * @param d						The message to end
 	 */
-	public void alert(double d)
+	public static void alert(double d)
 	{
 		Gdx.app.log("ChaseApp", "" + d);
 	}
@@ -566,7 +566,7 @@ public class ChaseApp extends Game
 	 * 
 	 * @param i						The message to end
 	 */
-	public void alert(int i)
+	public static void alert(int i)
 	{
 		Gdx.app.log("ChaseApp", "" + i);
 	}
@@ -576,7 +576,7 @@ public class ChaseApp extends Game
 	 * 
 	 * @param v						The message to end
 	 */
-	public void alert(Vector2 v)
+	public static void alert(Vector2 v)
 	{
 		Gdx.app.log("ChaseApp", v.x + " " + v.y);
 	}
