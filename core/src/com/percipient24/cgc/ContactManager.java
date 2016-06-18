@@ -11,8 +11,10 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.percipient24.cgc.ChaseApp;
 import com.percipient24.helpers.BodyFactory;
 import com.percipient24.cgc.entities.ChainLink;
+import com.percipient24.cgc.entities.Coin;
 import com.percipient24.cgc.entities.GameEntity;
 import com.percipient24.cgc.entities.GuardTower;
 import com.percipient24.cgc.entities.PlayerWall;
@@ -69,6 +71,7 @@ public class ContactManager implements ContactListener
 		
 		geA.collide(geB);
 
+		testPlayerCoin(geA, geB, true);
 		testPlayerSensor(geA, geB, true);
 		testPlayerMud(geA, geB, fA, fB, true);
 		testPlayerWater(geA, geB, fA, fB, true);
@@ -291,6 +294,47 @@ public class ContactManager implements ContactListener
 	}
 	
 	/*
+	 * Handles a CarrierCop collision with a ChainLink
+	 * 
+	 * @param cop					The CarrierCop colliding with the ChainLink
+	 * @param chain					The ChainLink colliding with the CarrierCop
+	 * @param start					Whether the entities are about to start or stop colliding
+	 */
+	public void handlePlayerCoin(Player player, Coin coin, boolean start)
+	{
+		if (start && !coin.getCollected() && coin.isCollectable())
+		{
+			coin.setCollected(true);
+			CGCWorld.addToDestroyList(coin);
+			player.pickupCoin();
+		}
+	}
+	
+	/*
+	 * Test a Player entity against a Sensor entity
+	 * 
+	 * @param geA					The first entity
+	 * @param geB					The second entity
+	 * @param start					Whether the entities are about to start or stop colliding
+	 */
+	public void testPlayerCoin(GameEntity geA, GameEntity geB, boolean start)
+	{
+		EntityType a = geA.getType();
+		EntityType b = geB.getType();
+		if(a == EntityType.COIN || b == EntityType.COIN)
+		{
+			if((b == EntityType.CONVICT || b == EntityType.COP) && a == EntityType.COIN)
+			{
+				handlePlayerCoin((Player)geB,(Coin)geA,start);
+			}
+			else if((a == EntityType.CONVICT || a == EntityType.COP) && b == EntityType.COIN)
+			{
+				handlePlayerCoin((Player)geA,(Coin)geB,start);
+			}
+		}
+	}
+	
+	/*
 	 * Test a Player entity against a Sensor entity
 	 * 
 	 * @param geA					The first entity
@@ -494,6 +538,7 @@ public class ContactManager implements ContactListener
 		GameEntity geA = (GameEntity)a.getUserData();
 		GameEntity geB = (GameEntity)b.getUserData();
 		
+		testPlayerCoin(geA, geB, false);
 		testPlayerSensor(geA, geB, false);
 		testPlayerMud(geA, geB, fA, fB, false);
 		testPlayerWater(geA, geB, fA, fB, false);

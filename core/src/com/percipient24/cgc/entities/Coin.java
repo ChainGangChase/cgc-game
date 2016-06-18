@@ -45,6 +45,8 @@ public class Coin extends RotatableEntity
 	protected int playerNumber;
 	protected Timer.Task blankTask;
 	protected Player player;
+	protected boolean collected = false;
+	protected float collectable = 0.33f;
 	
 	private Vector2 terrainForce;
 	protected boolean air = false;
@@ -135,6 +137,10 @@ public class Coin extends RotatableEntity
 	public void step(float deltaTime, int layer)
 	{	
 		rotation = (gCurrentFacing() - 1) * -45.0f;
+		if (collectable > 0) {
+			collectable -= deltaTime;
+		}
+
 		
 		switch (layer)
 		{
@@ -591,5 +597,24 @@ public class Coin extends RotatableEntity
 	public void setChainGame(ChainGame cg)
 	{
 		chainGame = cg;
+	}
+
+	public Player getPlayer()
+	{
+		return player;
+	}
+
+	public boolean isCollectable() {
+		return collectable <= 0;
+	}
+
+	public boolean getCollected()
+	{
+		return collected;
+	}
+
+	public void setCollected(boolean value)
+	{
+		collected = value;
 	}
 } // End class

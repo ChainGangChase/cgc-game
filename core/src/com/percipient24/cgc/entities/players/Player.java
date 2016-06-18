@@ -1963,8 +1963,8 @@ public class Player extends RotatableEntity
 				this.getBody().getWorldCenter().y,
 				0.6f,
 				BodyType.DynamicBody,
-				BodyFactory.CAT_DECEASED,
-				BodyFactory.MASK_DECEASED);
+				BodyFactory.CAT_PRISONER,
+				BodyFactory.MASK_PRISONER);
 
 			coinBody.setFixedRotation(true);
 			Coin coin = new Coin(
@@ -1972,7 +1972,7 @@ public class Player extends RotatableEntity
 				AnimationManager.prisonerDieLowAnims[playerID], 
 				AnimationManager.prisonerDieMidAnims[playerID], 
 				AnimationManager.prisonerDieHighAnims[playerID], 
-				EntityType.PLAYER,
+				EntityType.COIN,
 				coinBody,
 				0.5f, 
 				playerID,
@@ -1984,6 +1984,10 @@ public class Player extends RotatableEntity
 			shouldMakeCorpse = false;
 			dropped--;
 		}
+	}
+
+	public void pickupCoin() {
+		coins++;
 	}
 	
 	/*
