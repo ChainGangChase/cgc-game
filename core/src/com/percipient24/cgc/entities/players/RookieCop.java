@@ -88,6 +88,7 @@ public class RookieCop extends Player
 		maxGrabStrength = MAX_GRAB_STRENGTH_BASE + Math.round(((float)(Math.random() * 2) - 1.0f) * MAX_GRAB_RANGE);
 		currentGrabStrength = maxGrabStrength;
 		noGrab = false;
+		setCoins(0);
 		
 		grabCooldownTask = new Timer.Task() 
 		{	
