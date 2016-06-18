@@ -1666,6 +1666,8 @@ public class Player extends RotatableEntity
 		
 		if (toDestroy() && shouldMakeCorpse)
 		{
+			dropAllCoins();
+			
 			Body corpseBody = CGCWorld.getBF().createPlayerBody(this.getBody().getWorldCenter().x, this.getBody().getWorldCenter().y,
 																0.6f, BodyType.DynamicBody, BodyFactory.CAT_DECEASED,
 																BodyFactory.MASK_DECEASED);
@@ -1943,7 +1945,21 @@ public class Player extends RotatableEntity
 		}
 	}
 
-	public void dropCoins(int max, int direction) {
+	public void dropAllCoins()
+	{
+		int start = getCoins();
+		int direction = 0;
+		while (start > 0)
+		{
+			dropCoins(1, direction);
+			direction++;
+			start--;
+			direction = direction%8;
+		}
+	}
+
+	public void dropCoins(int max, int direction)
+	{
 		int start = getCoins();
 		int dropped;
 		if (start == 0) {
@@ -1957,7 +1973,8 @@ public class Player extends RotatableEntity
 		setCoins(start - dropped);
 		// TODO : actually drop coins
 
-		while (dropped > 0) {
+		while (dropped > 0)
+		{
 			Body coinBody = CGCWorld.getBF().createPlayerBody(
 				this.getBody().getWorldCenter().x,
 				this.getBody().getWorldCenter().y,
