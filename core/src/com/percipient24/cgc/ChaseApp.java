@@ -394,6 +394,13 @@ public class ChaseApp extends Game
 						se[i] = SupportedControllers.OUYA_ON_LINUX;
 					}
 				}
+
+				else if(cName.contains("razer serval")) {
+					if(os.equals("Mac"))
+					{
+						se[i] = SupportedControllers.SERVAL_ON_MAC;
+					}
+				}
 				
 				else if(cName.contains("logitech"))
 				{

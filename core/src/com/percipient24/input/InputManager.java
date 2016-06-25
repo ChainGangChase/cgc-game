@@ -269,6 +269,7 @@ public class InputManager extends ControllerAdapter
 	 */
 	public boolean xSliderMoved(Controller arg0, int arg1, boolean arg2) 
 	{
+		//Gdx.app.log("xSlide", ""+arg1+" "+arg2);
 		return false;
 	}
 
@@ -278,6 +279,7 @@ public class InputManager extends ControllerAdapter
 	 */
 	public boolean ySliderMoved(Controller arg0, int arg1, boolean arg2) 
 	{
+		//Gdx.app.log("ySlide", ""+arg1+" "+arg2);
 		return false;
 	}
 

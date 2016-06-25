@@ -426,6 +426,36 @@ public class ControllerMap
 				ALY = LogitechMac.ALY;
 			break;
 			
+			case SERVAL_ON_MAC:
+				A = ServalMac.A;
+				B = ServalMac.B;
+				X = ServalMac.X;
+				Y = ServalMac.Y;
+				
+				DU = ServalMac.DU;
+				DD = ServalMac.DD;
+				DL = ServalMac.DL;
+				DR = ServalMac.DR;
+				
+				PAUSE = ServalMac.START;
+				
+				L1 = ServalMac.L1;
+				L2 = ServalMac.L2;
+				L3 = ServalMac.L3;
+				
+				R1 = ServalMac.R1;
+				R2 = ServalMac.R2;
+				R3 = ServalMac.R3;
+				
+				AR2 = ServalMac.AR2;
+				ARX = ServalMac.ARX;
+				ARY = ServalMac.ARY;
+				
+				AL2 = ServalMac.AL2;
+				ALX = ServalMac.ALX;
+				ALY = ServalMac.ALY;
+			break;
+			
 			case OUYA_ON_LINUX:
 				A = OuyaLinux.O;
 				B = OuyaLinux.A;
