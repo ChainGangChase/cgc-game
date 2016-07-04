@@ -86,6 +86,7 @@ public class AnimationManager
 	public static Animation[] treeAnims;
 	public static Animation[] towerAnims;
 	public static Animation[] vwallAnims;
+	public static Animation coinAnim;
 	
 	// HUD Animations
 	public static Animation[] calloutAnims;
@@ -374,6 +375,10 @@ public class AnimationManager
 		helicopterAnim = new Animation(0.05f, 
 				new Array<TextureRegion>(ChaseApp.atlas.findRegions("helicopter")));
 		helicopterAnim.setPlayMode(Animation.PlayMode.LOOP);
+
+		coinAnim = new Animation(0.08f,
+			new Array<TextureRegion>(ChaseApp.atlas.findRegions("gameanimations/coin")));
+		coinAnim.setPlayMode(Animation.PlayMode.LOOP);
 	}
 	
 	/*

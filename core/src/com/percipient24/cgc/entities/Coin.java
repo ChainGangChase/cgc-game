@@ -77,11 +77,10 @@ public class Coin extends RotatableEntity
 	 * @param pID					The ID of the player being created (player #)
 	 * @param knockbackPosition		The position to launch this Coin away from (may be null)
 	 */
-	public Coin(Player owner, Animation newLowAnimation, Animation newMidAnimation,
-			Animation newHighAnimation, EntityType pEntityType, 
+	public Coin(Player owner, Animation newMidAnimation, EntityType pEntityType, 
 			Body attachedBody, short pID, Vector2 knockbackPosition)
 	{
-		super(newLowAnimation, newMidAnimation, newHighAnimation, pEntityType, attachedBody);
+		super(null, newMidAnimation, null, pEntityType, attachedBody);
 		
 		body.setLinearDamping(DEAD_DAMP);
 		
@@ -119,11 +118,10 @@ public class Coin extends RotatableEntity
 	 * @param pID					The ID of the player being created (player #)
 	 * @param knockbackPosition		The position to launch this Coin away from (may be null)
 	 */
-	public Coin(Player owner, Animation newLowAnimation, Animation newMidAnimation,
-			Animation newHighAnimation, EntityType pEntityType, 
+	public Coin(Player owner, Animation newMidAnimation, EntityType pEntityType, 
 			Body attachedBody, float startAlpha, short pID, Vector2 knockbackPosition)
 	{
-		this(owner, newLowAnimation, newMidAnimation, newHighAnimation, 
+		this(owner, newMidAnimation, 
 				pEntityType, attachedBody, pID, knockbackPosition);
 		alpha = startAlpha;
 	}
@@ -140,30 +138,10 @@ public class Coin extends RotatableEntity
 		if (collectable > 0) {
 			collectable -= deltaTime;
 		}
-
-		
-		switch (layer)
-		{
-			case LayerHandler.LOW:
-				if (lowStateTime < 1f)
-				{
-					lowStateTime += deltaTime;
-				}
-				break;
-			case LayerHandler.MID:
-				if (midStateTime < 1f)
-				{
-					midStateTime += deltaTime;
-				}
-				break;
-			case LayerHandler.HIGH:
-				if (highStateTime < 1f)
-				{
-					highStateTime += deltaTime;
-				}
-				break;
-			default:
-				break;
+		if(midAnimation.getKeyFrameIndex(midStateTime) == 0) {
+			midStateTime += deltaTime/20f;
+		} else {
+			midStateTime += deltaTime;			
 		}
 	}
 	
@@ -422,23 +400,11 @@ public class Coin extends RotatableEntity
 		if (relativeScreenPosition.x != Float.MAX_VALUE
 				&& relativeScreenPosition.y != Float.MAX_VALUE)
 		{
-			// Handle alpha
-			Color colorForAlpha = sBatch.getColor();
-			colorForAlpha.a = getAlpha();
-			sBatch.setColor(colorForAlpha);
 			
-			TextureRegion frameLow = getLowRegion();
 			TextureRegion frameMid = getMidRegion();
-			TextureRegion frameHigh = getHighRegion();
-			
-			if (layerNumber <= LayerHandler.CORPSE)
+			if (!CGCWorld.isPaused())
 			{
-				if (!CGCWorld.isPaused())
-				{
-					step(delta, LayerHandler.LOW);
-					step(delta, LayerHandler.MID);
-					step(delta, LayerHandler.HIGH);
-				}
+				step(delta, LayerHandler.MID);
 			}
 			
 			// Position and Rotation
@@ -457,74 +423,20 @@ public class Coin extends RotatableEntity
 			
 			if (isScaled())
 			{
-				sBatch.draw(frameLow, baseX, baseY, 0, 0, 
-						frameLow.getRegionWidth(), frameLow.getRegionHeight(), 
-						CGCWorld.getCamera().zoom, 
-						CGCWorld.getCamera().zoom, 
-						getRotation(LayerHandler.LOW));
-				
-				
-				if (Options.storedParallaxOption)
-				{
-					Xmod = Camera.PARALLAX_MOD * relativeScreenPosition.x / getParallaxDistMod();
-					Ymod = Camera.PARALLAX_MOD * relativeScreenPosition.y / getParallaxDistMod();
-				}
-				
 				sBatch.draw(frameMid, baseX + Xmod, baseY + Ymod, 0, 0, 
 						frameMid.getRegionWidth(), frameMid.getRegionHeight(), 
 						CGCWorld.getCamera().zoom, 
 						CGCWorld.getCamera().zoom, 
 						getRotation(LayerHandler.MID));
-			
-				if (Options.storedParallaxOption)
-				{
-					Xmod = Camera.PARALLAX_MOD * relativeScreenPosition.x / (getParallaxDistMod() / 2);
-					Ymod = Camera.PARALLAX_MOD * relativeScreenPosition.y / (getParallaxDistMod() / 2);
-				}
-				
-				sBatch.draw(frameHigh, baseX + Xmod, baseY + Ymod, 0, 0, 
-						frameHigh.getRegionWidth(), frameHigh.getRegionHeight(), 
-						CGCWorld.getCamera().zoom, 
-						CGCWorld.getCamera().zoom, 
-						getRotation(LayerHandler.HIGH));
 			}
 			else // Not scaled
 			{
-				sBatch.draw(frameLow, baseX, baseY, 0, 0, 
-						frameLow.getRegionWidth(), frameLow.getRegionHeight(), 
-						CGCWorld.getCamera().zoom, 
-						CGCWorld.getCamera().zoom, 
-						getRotation(LayerHandler.LOW));
-				
-				
-				if (Options.storedParallaxOption)
-				{
-					Xmod = Camera.PARALLAX_MOD * relativeScreenPosition.x / getParallaxDistMod();
-					Ymod = Camera.PARALLAX_MOD * relativeScreenPosition.y / getParallaxDistMod();
-				}
-				
 				sBatch.draw(frameMid, baseX + Xmod, baseY + Ymod, 0, 0, 
 						frameMid.getRegionWidth(), frameMid.getRegionHeight(), 
 						CGCWorld.getCamera().zoom, 
 						CGCWorld.getCamera().zoom, 
 						getRotation(LayerHandler.MID));
-			
-				if (Options.storedParallaxOption)
-				{
-					Xmod = Camera.PARALLAX_MOD * relativeScreenPosition.x / (getParallaxDistMod() / 2);
-					Ymod = Camera.PARALLAX_MOD * relativeScreenPosition.y / (getParallaxDistMod() / 2);
-				}
-				
-				sBatch.draw(frameHigh, baseX + Xmod, baseY + Ymod, 0, 0, 
-						frameHigh.getRegionWidth(), frameHigh.getRegionHeight(), 
-						CGCWorld.getCamera().zoom, 
-						CGCWorld.getCamera().zoom, 
-						getRotation(LayerHandler.HIGH));
 			}
-			
-			colorForAlpha = sBatch.getColor();
-			colorForAlpha.a = 1.0f;
-			sBatch.setColor(colorForAlpha);
 		}
 	}
 	
