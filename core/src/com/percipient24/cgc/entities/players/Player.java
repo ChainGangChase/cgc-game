@@ -1985,10 +1985,8 @@ public class Player extends RotatableEntity
 
 			coinBody.setFixedRotation(true);
 			Coin coin = new Coin(
-				this,
-				AnimationManager.prisonerDieLowAnims[playerID], 
-				AnimationManager.prisonerDieMidAnims[playerID], 
-				AnimationManager.prisonerDieHighAnims[playerID], 
+				this, 
+				AnimationManager.coinAnim,
 				EntityType.COIN,
 				coinBody,
 				0.5f, 

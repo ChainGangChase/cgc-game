@@ -38,9 +38,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 public abstract class GameEntity
 {
-	private Animation lowAnimation;
-	private Animation midAnimation;
-	private Animation highAnimation;
+	protected Animation lowAnimation;
+	protected Animation midAnimation;
+	protected Animation highAnimation;
 	protected float lowStateTime;
 	protected float midStateTime;
 	protected float highStateTime;
