@@ -8,7 +8,7 @@ package com.percipient24.cgc.overlays;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
-import com.percipient24.cgc.AnimationManager;
+import com.percipient24.cgc.art.TextureAnimationDrawer;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.cgc.Data;
 import com.percipient24.cgc.entities.players.Player;
@@ -24,7 +24,7 @@ import com.percipient24.enums.BossType;
  */
 public class BossHUDProgress extends CGCOverlay
 {
-	private AnimationManager animManager;
+	private TextureAnimationDrawer animManager;
 	private BossType boss;
 	
 	private float playerAdjustment;
@@ -59,7 +59,7 @@ public class BossHUDProgress extends CGCOverlay
 		playerAdjustment = 0;
 		if (boss == BossType.TANK)
 		{
-			playerAdjustment = animManager.gHeight(AnimationManager.hudTankAnim);
+			playerAdjustment = animManager.gHeight(TextureAnimationDrawer.hudTankAnim);
 		}
 	}
 
@@ -76,18 +76,18 @@ public class BossHUDProgress extends CGCOverlay
 			hudMargin = (Data.ACTUAL_WIDTH * .1f);
 			
 			trackXPosition = Data.ACTUAL_WIDTH - hudMargin
-					+ animManager.gWidth(AnimationManager.progMeterAnim) / 2f * scaleX
-					- animManager.gWidth(AnimationManager.progFinishAnim) / 2f * scaleX;
+					+ animManager.gWidth(TextureAnimationDrawer.progMeterAnim) / 2f * scaleX
+					- animManager.gWidth(TextureAnimationDrawer.progFinishAnim) / 2f * scaleX;
 			
-			animManager.drawFrame(sBatch, AnimationManager.progMeterAnim, 0, Data.ACTUAL_WIDTH - hudMargin, 
-					Data.ACTUAL_HEIGHT / 2 - animManager.gHeight(AnimationManager.progMeterAnim) / 2, 
-					0, animManager.gHeight(AnimationManager.progMeterAnim) / 2, scaleX, 
+			animManager.drawFrame(sBatch, TextureAnimationDrawer.progMeterAnim, 0, Data.ACTUAL_WIDTH - hudMargin,
+					Data.ACTUAL_HEIGHT / 2 - animManager.gHeight(TextureAnimationDrawer.progMeterAnim) / 2,
+					0, animManager.gHeight(TextureAnimationDrawer.progMeterAnim) / 2, scaleX,
 					scaleY);
 			
-			animManager.drawFrame(sBatch, AnimationManager.progFinishAnim, 
+			animManager.drawFrame(sBatch, TextureAnimationDrawer.progFinishAnim,
 					3, trackXPosition, Data.ACTUAL_HEIGHT / 2
-					+ animManager.gHeight(AnimationManager.progMeterAnim) / 2 * scaleY
-					- animManager.gHeight(AnimationManager.progFinishAnim) * scaleY - 2 * scaleY,
+					+ animManager.gHeight(TextureAnimationDrawer.progMeterAnim) / 2 * scaleY
+					- animManager.gHeight(TextureAnimationDrawer.progFinishAnim) * scaleY - 2 * scaleY,
 					0, 0, scaleX, scaleY);
 			
 			//Draw the player dots last, so they will always be on top.
@@ -113,26 +113,26 @@ public class BossHUDProgress extends CGCOverlay
 				if (players.get(i) instanceof Prisoner)
 				{	
 					progressYPosition = Data.ACTUAL_HEIGHT / 2
-							- animManager.gHeight(AnimationManager.progMeterAnim) / 2 * scaleY
-							+ playerProgress[i] * ((animManager.gHeight(AnimationManager.progMeterAnim)
+							- animManager.gHeight(TextureAnimationDrawer.progMeterAnim) / 2 * scaleY
+							+ playerProgress[i] * ((animManager.gHeight(TextureAnimationDrawer.progMeterAnim)
 							- playerAdjustment) * scaleY
-							- animManager.gHeight(AnimationManager.progConvictAnim) * scaleY);
+							- animManager.gHeight(TextureAnimationDrawer.progConvictAnim) * scaleY);
 					
 					if (players.get(i).isAlive())
 					{
-						animManager.drawFrame(sBatch, AnimationManager.progConvictAnim, 0, 
+						animManager.drawFrame(sBatch, TextureAnimationDrawer.progConvictAnim, 0,
 							Data.ACTUAL_WIDTH - hudMargin
-							+ animManager.gWidth(AnimationManager.progMeterAnim) / 2 * scaleX 
-							- animManager.gWidth(AnimationManager.progConvictAnim) / 2, 
+							+ animManager.gWidth(TextureAnimationDrawer.progMeterAnim) / 2 * scaleX
+							- animManager.gWidth(TextureAnimationDrawer.progConvictAnim) / 2,
 							progressYPosition,
 							scaleX, scaleY);
 					}
 					else
 					{
-						animManager.drawFrame(sBatch, AnimationManager.progConvictAnim, 1, 
+						animManager.drawFrame(sBatch, TextureAnimationDrawer.progConvictAnim, 1,
 							Data.ACTUAL_WIDTH - hudMargin
-							+ animManager.gWidth(AnimationManager.progMeterAnim) / 2 * scaleX
-							- animManager.gWidth(AnimationManager.progConvictAnim) / 2, 
+							+ animManager.gWidth(TextureAnimationDrawer.progMeterAnim) / 2 * scaleX
+							- animManager.gWidth(TextureAnimationDrawer.progConvictAnim) / 2,
 							progressYPosition,
 							scaleX, scaleY);
 					}
@@ -155,18 +155,18 @@ public class BossHUDProgress extends CGCOverlay
 			hudMargin = (Data.ACTUAL_WIDTH * .1f);
 			
 			trackXPosition = Data.ACTUAL_WIDTH - hudMargin
-					+ animManager.gWidth(AnimationManager.progMeterAnim) / 2f * scaleX
-					- animManager.gWidth(AnimationManager.progFinishAnim) / 2f * scaleX;
+					+ animManager.gWidth(TextureAnimationDrawer.progMeterAnim) / 2f * scaleX
+					- animManager.gWidth(TextureAnimationDrawer.progFinishAnim) / 2f * scaleX;
 			
-			animManager.drawFrame(sBatch, AnimationManager.progMeterAnim, 0, Data.ACTUAL_WIDTH - hudMargin, 
-					Data.ACTUAL_HEIGHT / 2 - animManager.gHeight(AnimationManager.progMeterAnim) / 2, 
-					0, animManager.gHeight(AnimationManager.progMeterAnim) / 2, scaleX, 
+			animManager.drawFrame(sBatch, TextureAnimationDrawer.progMeterAnim, 0, Data.ACTUAL_WIDTH - hudMargin,
+					Data.ACTUAL_HEIGHT / 2 - animManager.gHeight(TextureAnimationDrawer.progMeterAnim) / 2,
+					0, animManager.gHeight(TextureAnimationDrawer.progMeterAnim) / 2, scaleX,
 					scaleY);
 			
-			animManager.drawFrame(sBatch, AnimationManager.progFinishAnim, 3, 
+			animManager.drawFrame(sBatch, TextureAnimationDrawer.progFinishAnim, 3,
 					trackXPosition, Data.ACTUAL_HEIGHT / 2
-					+ animManager.gHeight(AnimationManager.progMeterAnim) / 2 * scaleY
-					- animManager.gHeight(AnimationManager.progFinishAnim) * scaleY - 2 * scaleY,
+					+ animManager.gHeight(TextureAnimationDrawer.progMeterAnim) / 2 * scaleY
+					- animManager.gHeight(TextureAnimationDrawer.progFinishAnim) * scaleY - 2 * scaleY,
 					0, 0, scaleX, scaleY);
 			
 			if (boss == BossType.TANK_AI || boss == BossType.TANK)
@@ -177,12 +177,12 @@ public class BossHUDProgress extends CGCOverlay
 					bossProgress = 1.0f;
 				}
 				
-				animManager.drawFrame(sBatch, AnimationManager.hudTankAnim, 0, 
+				animManager.drawFrame(sBatch, TextureAnimationDrawer.hudTankAnim, 0,
 						trackXPosition, Data.ACTUAL_HEIGHT / 2
-						- animManager.gHeight(AnimationManager.progMeterAnim) / 2 * scaleY
-						+ (bossProgress * (animManager.gHeight(AnimationManager.progMeterAnim) * scaleY
-						- animManager.gHeight(AnimationManager.hudTankAnim) * scaleY)),
-						0, animManager.gHeight(AnimationManager.hudTankAnim) / 2,
+						- animManager.gHeight(TextureAnimationDrawer.progMeterAnim) / 2 * scaleY
+						+ (bossProgress * (animManager.gHeight(TextureAnimationDrawer.progMeterAnim) * scaleY
+						- animManager.gHeight(TextureAnimationDrawer.hudTankAnim) * scaleY)),
+						0, animManager.gHeight(TextureAnimationDrawer.hudTankAnim) / 2,
 						scaleX, scaleY);
 			}
 			
@@ -209,26 +209,26 @@ public class BossHUDProgress extends CGCOverlay
 				if (players.get(i) instanceof Prisoner)
 				{	
 					progressYPosition = Data.ACTUAL_HEIGHT / 2
-							- animManager.gHeight(AnimationManager.progMeterAnim) / 2 * scaleY
-							+ playerProgress[i] * ((animManager.gHeight(AnimationManager.progMeterAnim)
+							- animManager.gHeight(TextureAnimationDrawer.progMeterAnim) / 2 * scaleY
+							+ playerProgress[i] * ((animManager.gHeight(TextureAnimationDrawer.progMeterAnim)
 							- playerAdjustment) * scaleY
-							- animManager.gHeight(AnimationManager.progConvictAnim) * scaleY);
+							- animManager.gHeight(TextureAnimationDrawer.progConvictAnim) * scaleY);
 					
 					if (players.get(i).isAlive())
 					{
-						animManager.drawFrame(sBatch, AnimationManager.progConvictAnim, 0, 
+						animManager.drawFrame(sBatch, TextureAnimationDrawer.progConvictAnim, 0,
 							Data.ACTUAL_WIDTH - hudMargin
-							+ animManager.gWidth(AnimationManager.progMeterAnim) / 2 * scaleX 
-							- animManager.gWidth(AnimationManager.progConvictAnim) / 2, 
+							+ animManager.gWidth(TextureAnimationDrawer.progMeterAnim) / 2 * scaleX
+							- animManager.gWidth(TextureAnimationDrawer.progConvictAnim) / 2,
 							progressYPosition,
 							scaleX, scaleY);
 					}
 					else
 					{
-						animManager.drawFrame(sBatch, AnimationManager.progConvictAnim, 1, 
+						animManager.drawFrame(sBatch, TextureAnimationDrawer.progConvictAnim, 1,
 							Data.ACTUAL_WIDTH - hudMargin
-							+ animManager.gWidth(AnimationManager.progMeterAnim) / 2 * scaleX
-							- animManager.gWidth(AnimationManager.progConvictAnim) / 2, 
+							+ animManager.gWidth(TextureAnimationDrawer.progMeterAnim) / 2 * scaleX
+							- animManager.gWidth(TextureAnimationDrawer.progConvictAnim) / 2,
 							progressYPosition,
 							scaleX, scaleY);
 					}

@@ -10,14 +10,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Timer;
+import com.percipient24.cgc.*;
 import com.percipient24.helpers.BodyFactory;
 import com.percipient24.helpers.LayerHandler;
-import com.percipient24.cgc.AnimationManager;
-import com.percipient24.cgc.BossFight;
-import com.percipient24.cgc.CGCWorld;
-import com.percipient24.cgc.CGCTimer;
-import com.percipient24.cgc.Data;
-import com.percipient24.cgc.TimerManager;
 import com.percipient24.cgc.entities.GameEntity;
 import com.percipient24.cgc.entities.Jeep;
 import com.percipient24.cgc.entities.Targeter;
@@ -83,11 +78,11 @@ public class GunCop extends RookieCop
 		b.setFixedRotation(true);
 		if (!tankDriver)
 		{
-			target = new Targeter(null, null, AnimationManager.targetingAnims[0], EntityType.TARGETER, b, CGCWorld.getCamera(), playerID);
+			target = new Targeter(null, null, com.percipient24.cgc.art.TextureAnimationDrawer.targetingAnims[0], EntityType.TARGETER, b, CGCWorld.getCamera(), playerID);
 		}
 		else
 		{
-			target = new Targeter(null, null, AnimationManager.targetingAnims[1], EntityType.TARGETER, b, CGCWorld.getCamera(), playerID);
+			target = new Targeter(null, null, com.percipient24.cgc.art.TextureAnimationDrawer.targetingAnims[1], EntityType.TARGETER, b, CGCWorld.getCamera(), playerID);
 			fireTime = TANK_RATE;
 		}
 		b.setUserData(target);
@@ -101,8 +96,8 @@ public class GunCop extends RookieCop
 					BodyFactory.CAT_BOSS, BodyFactory.MASK_BOSS);
 			b.getFixtureList().get(0).setSensor(true);
 			b.setFixedRotation(true);
-			jeep = new Jeep(AnimationManager.jeepAnims[0], AnimationManager.jeepAnims[1], 
-					AnimationManager.jeepAnims[2], EntityType.JEEP, b);
+			jeep = new Jeep(com.percipient24.cgc.art.TextureAnimationDrawer.jeepAnims[0], com.percipient24.cgc.art.TextureAnimationDrawer.jeepAnims[1],
+					com.percipient24.cgc.art.TextureAnimationDrawer.jeepAnims[2], EntityType.JEEP, b);
 			b.setUserData(jeep);
 			jeep.addToWorldLayers(CGCWorld.getLH());
 		}
@@ -192,7 +187,7 @@ public class GunCop extends RookieCop
 				Body b = CGCWorld.getBF().createCircle(body.getWorldCenter().x-getImageHalfWidth(0, body.getAngle())+target.getImageHalfWidth(0)-0.05f, 
 						body.getWorldCenter().y-getImageHalfHeight(0, body.getAngle()) + 0.7f, 
 						0.1f, BodyType.DynamicBody, BodyFactory.CAT_INTERACTABLE, BodyFactory.MASK_INTERACTABLE);
-				GameEntity ge = new Bullet(null, null, AnimationManager.bulletAnim, EntityType.BULLET,
+				GameEntity ge = new Bullet(null, null, com.percipient24.cgc.art.TextureAnimationDrawer.bulletAnim, EntityType.BULLET,
 						b, target.getBody().getPosition(), 
 						new Vector2(target.getHighRegion().getRegionWidth()/2,
 								target.getHighRegion().getRegionHeight()/2));
@@ -213,7 +208,7 @@ public class GunCop extends RookieCop
 				Body b = CGCWorld.getBF().createCircle(fight.getBoss().getBody().getWorldCenter().x+x+.25f, 
 						fight.getBoss().getBody().getWorldCenter().y+y+.25f, 0.5f, BodyType.DynamicBody, 
 						BodyFactory.CAT_EXPLOSIVE, BodyFactory.MASK_EXPLOSIVE);
-				GameEntity ge = new TankShell(null, null, AnimationManager.tankShellAnim, EntityType.TANK_SHELL,
+				GameEntity ge = new TankShell(null, null, com.percipient24.cgc.art.TextureAnimationDrawer.tankShellAnim, EntityType.TANK_SHELL,
 						b, fireTarget, 
 						new Vector2(target.getHighRegion().getRegionWidth()/2,
 								target.getHighRegion().getRegionHeight()/2));

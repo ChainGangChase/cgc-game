@@ -8,10 +8,7 @@ package com.percipient24.cgc.overlays;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.percipient24.cgc.AnimationManager;
-import com.percipient24.cgc.CGCWorld;
-import com.percipient24.cgc.ChainGame;
-import com.percipient24.cgc.Data;
+import com.percipient24.cgc.*;
 
 /*
  * Contains logic for rendering the HUD progress meter
@@ -21,7 +18,7 @@ import com.percipient24.cgc.Data;
  */
 public class HUDProgress extends CGCOverlay
 {
-	private AnimationManager animManager;
+	private com.percipient24.cgc.art.TextureAnimationDrawer animManager;
 	private ChainGame game;
 	
 	private float[] playerProgress;
@@ -79,12 +76,12 @@ public class HUDProgress extends CGCOverlay
 			hudMargin = (Data.ACTUAL_WIDTH * .1f);
 			
 			trackXPosition = Data.ACTUAL_WIDTH - hudMargin
-					+ animManager.gWidth(AnimationManager.progMeterAnim) / 2f * scaleX
-					- animManager.gWidth(AnimationManager.progFinishAnim) / 2f * scaleX;
+					+ animManager.gWidth(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2f * scaleX
+					- animManager.gWidth(com.percipient24.cgc.art.TextureAnimationDrawer.progFinishAnim) / 2f * scaleX;
 			
-			animManager.drawFrame(sBatch, AnimationManager.progMeterAnim, 0, Data.ACTUAL_WIDTH - hudMargin, 
-					Data.ACTUAL_HEIGHT / 2 - animManager.gHeight(AnimationManager.progMeterAnim) / 2, 
-					0, animManager.gHeight(AnimationManager.progMeterAnim) / 2, scaleX, 
+			animManager.drawFrame(sBatch, com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim, 0, Data.ACTUAL_WIDTH - hudMargin,
+					Data.ACTUAL_HEIGHT / 2 - animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2,
+					0, animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2, scaleX,
 					scaleY);
 					
 			//If this is the final map, draw the finish line and bottom track.
@@ -93,50 +90,50 @@ public class HUDProgress extends CGCOverlay
 				if (trackMotion < 0.0f)
 				{
 					//Draw the finish line.
-					if (!AnimationManager.progFinishAnim.isAnimationFinished(finishElapsed))
+					if (!com.percipient24.cgc.art.TextureAnimationDrawer.progFinishAnim.isAnimationFinished(finishElapsed))
 					{
 						finishElapsed += Gdx.graphics.getDeltaTime();
 					}
 					
-					animManager.drawAnimation(sBatch, AnimationManager.progFinishAnim, 
+					animManager.drawAnimation(sBatch, com.percipient24.cgc.art.TextureAnimationDrawer.progFinishAnim,
 							finishElapsed, false, trackXPosition, Data.ACTUAL_HEIGHT / 2
-							+ animManager.gHeight(AnimationManager.progMeterAnim) / 2 * scaleY
-							- animManager.gHeight(AnimationManager.progFinishAnim) * scaleY - 2 * scaleY,
+							+ animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2 * scaleY
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progFinishAnim) * scaleY - 2 * scaleY,
 							0,
 							0, scaleX, scaleY);
 					
 					//Draw the bottom track.
-					animManager.drawFrame(sBatch, AnimationManager.progTrackVanishAnim, 
+					animManager.drawFrame(sBatch, com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim,
 							0, trackXPosition, Data.ACTUAL_HEIGHT / 2
-							- animManager.gHeight(AnimationManager.progMeterAnim) / 2 * scaleY
-							- animManager.gHeight(AnimationManager.progTrackVanishAnim)
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2 * scaleY
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim)
 							* (1 - scaleY) + 2 * scaleY,
 							0,
-							animManager.gHeight(AnimationManager.progTrackVanishAnim), scaleX, scaleY);
+							animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim), scaleX, scaleY);
 				}
 				else
 				{
 					trackMotion -= .01f;
 					
 					//Move the top track to the bottom.
-					animManager.drawFrame(sBatch, AnimationManager.progTrackVanishAnim, 0,
+					animManager.drawFrame(sBatch, com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim, 0,
 							trackXPosition, Data.ACTUAL_HEIGHT / 2
-							- animManager.gHeight(AnimationManager.progMeterAnim) / 2 * scaleY
-							+ trackMotion * ((animManager.gHeight(AnimationManager.progMeterAnim) - 4)
-							- animManager.gHeight(AnimationManager.progTrackVanishAnim)) * scaleY + 2 * scaleY,
-							0, animManager.gHeight(AnimationManager.progTrackVanishAnim), 
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2 * scaleY
+							+ trackMotion * ((animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) - 4)
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim)) * scaleY + 2 * scaleY,
+							0, animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim),
 							scaleX, scaleY);
 					
 					//Make the bottom track disappear.
-					if (!AnimationManager.progTrackVanishAnim.isAnimationFinished(trackElapsedVanish))
+					if (!com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim.isAnimationFinished(trackElapsedVanish))
 					{
 						trackElapsedVanish += Gdx.graphics.getDeltaTime();
-						animManager.drawAnimation(sBatch, AnimationManager.progTrackVanishAnim, 
+						animManager.drawAnimation(sBatch, com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim,
 							trackElapsedVanish, false, trackXPosition, Data.ACTUAL_HEIGHT / 2
-							- animManager.gHeight(AnimationManager.progMeterAnim) / 2 * scaleY
-							- animManager.gHeight(AnimationManager.progTrackVanishAnim)
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2 * scaleY
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim)
 							* (1 - scaleY) + 2 * scaleY,
-							0, animManager.gHeight(AnimationManager.progTrackVanishAnim), 
+							0, animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim),
 							scaleX, scaleY);
 					}
 				}
@@ -147,21 +144,21 @@ public class HUDProgress extends CGCOverlay
 				if (trackMotion == 1.0f)
 				{
 					//Draw a track at the top.
-					animManager.drawFrame(sBatch, AnimationManager.progTrackVanishAnim, 0,
+					animManager.drawFrame(sBatch, com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim, 0,
 							trackXPosition, Data.ACTUAL_HEIGHT / 2
-							+ animManager.gHeight(AnimationManager.progMeterAnim) / 2 * scaleY
-							- animManager.gHeight(AnimationManager.progTrackVanishAnim) * scaleY - 2 * scaleY,
+							+ animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2 * scaleY
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim) * scaleY - 2 * scaleY,
 							0, 0, scaleX, scaleY);
 					
 					//After the first map, draw a second track icon at the bottom.
 					if (curMap > 0)
 					{
-						animManager.drawFrame(sBatch, AnimationManager.progTrackVanishAnim, 0, 
+						animManager.drawFrame(sBatch, com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim, 0,
 								trackXPosition, Data.ACTUAL_HEIGHT / 2
-								- animManager.gHeight(AnimationManager.progMeterAnim) / 2 * scaleY
-								- animManager.gHeight(AnimationManager.progTrackVanishAnim)
+								- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2 * scaleY
+								- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim)
 								* (1 - scaleY) + 2 * scaleY,
-								0, animManager.gHeight(AnimationManager.progTrackVanishAnim), 
+								0, animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim),
 								scaleX, scaleY);
 					}
 				}
@@ -169,23 +166,23 @@ public class HUDProgress extends CGCOverlay
 				{
 					trackMotion = 0.0f;
 					
-					if (!AnimationManager.progTrackAppearAnim.isAnimationFinished(trackElapsedAppear))
+					if (!com.percipient24.cgc.art.TextureAnimationDrawer.progTrackAppearAnim.isAnimationFinished(trackElapsedAppear))
 					{
 						//Make the top track appear.
 						trackElapsedAppear += Gdx.graphics.getDeltaTime();
-						animManager.drawAnimation(sBatch, AnimationManager.progTrackAppearAnim, 
+						animManager.drawAnimation(sBatch, com.percipient24.cgc.art.TextureAnimationDrawer.progTrackAppearAnim,
 							trackElapsedAppear, false, trackXPosition, Data.ACTUAL_HEIGHT / 2
-							+ animManager.gHeight(AnimationManager.progMeterAnim) / 2 * scaleY
-							- animManager.gHeight(AnimationManager.progTrackVanishAnim) * scaleY - 2 * scaleY,
+							+ animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2 * scaleY
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim) * scaleY - 2 * scaleY,
 							0, 0, scaleX, scaleY);	
 						
 						//Draw the bottom track as an unmoving image.
-						animManager.drawFrame(sBatch, AnimationManager.progTrackVanishAnim, 0,
+						animManager.drawFrame(sBatch, com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim, 0,
 								trackXPosition, Data.ACTUAL_HEIGHT / 2
-								- animManager.gHeight(AnimationManager.progMeterAnim) / 2 * scaleY
-								- animManager.gHeight(AnimationManager.progTrackVanishAnim)
+								- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2 * scaleY
+								- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim)
 								* (1 - scaleY) + 2 * scaleY,
-								0, animManager.gHeight(AnimationManager.progTrackVanishAnim), 
+								0, animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim),
 								scaleX, scaleY);
 					}
 					//Once the animation is done, just draw unmoving images.
@@ -199,25 +196,25 @@ public class HUDProgress extends CGCOverlay
 					trackMotion -= .01f;
 					
 					//Make the bottom track disappear, if there is one.
-					if (curMap > 1 && !AnimationManager.progTrackVanishAnim.isAnimationFinished(trackElapsedVanish))
+					if (curMap > 1 && !com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim.isAnimationFinished(trackElapsedVanish))
 					{
 						trackElapsedVanish += Gdx.graphics.getDeltaTime();
-						animManager.drawAnimation(sBatch, AnimationManager.progTrackVanishAnim, 
+						animManager.drawAnimation(sBatch, com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim,
 							trackElapsedVanish, false, trackXPosition, Data.ACTUAL_HEIGHT / 2
-							- animManager.gHeight(AnimationManager.progMeterAnim) / 2 * scaleY
-							- animManager.gHeight(AnimationManager.progTrackVanishAnim)
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2 * scaleY
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim)
 							* (1 - scaleY) + 2 * scaleY,
-							0, animManager.gHeight(AnimationManager.progTrackVanishAnim), 
+							0, animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim),
 							scaleX, scaleY);
 					}
 					
 					//Move the top track down to the bottom.
-					animManager.drawFrame(sBatch, AnimationManager.progTrackVanishAnim, 0, 
+					animManager.drawFrame(sBatch, com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim, 0,
 							trackXPosition, Data.ACTUAL_HEIGHT / 2
-							- animManager.gHeight(AnimationManager.progMeterAnim) / 2 * scaleY
-							+ trackMotion * ((animManager.gHeight(AnimationManager.progMeterAnim) - 4)
-							- animManager.gHeight(AnimationManager.progTrackVanishAnim)) * scaleY + 2 * scaleY,
-							0, animManager.gHeight(AnimationManager.progTrackVanishAnim),
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2 * scaleY
+							+ trackMotion * ((animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) - 4)
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim)) * scaleY + 2 * scaleY,
+							0, animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progTrackVanishAnim),
 							scaleX, scaleY);
 				}
 			}
@@ -242,35 +239,35 @@ public class HUDProgress extends CGCOverlay
 				if (resetProgress[i] < 1.0f)
 				{
 					resetYPosition = Data.ACTUAL_HEIGHT / 2
-							- animManager.gHeight(AnimationManager.progMeterAnim) / 2 * scaleY
-							+ resetProgress[i] * (animManager.gHeight(AnimationManager.progMeterAnim) * scaleY
-							- animManager.gHeight(AnimationManager.progConvictAnim) * scaleY);
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2 * scaleY
+							+ resetProgress[i] * (animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) * scaleY
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progConvictAnim) * scaleY);
 					resetProgress[i] -= .01f;
 				}
 				
 				if (CGCWorld.getPlayersTypes()[i])
 				{
 					progressYPosition = Data.ACTUAL_HEIGHT / 2
-							- animManager.gHeight(AnimationManager.progMeterAnim) / 2 * scaleY
-							+ (playerProgress[i] * (animManager.gHeight(AnimationManager.progMeterAnim)
-							- animManager.gHeight(AnimationManager.progConvictAnim)) * scaleY);
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2 * scaleY
+							+ (playerProgress[i] * (animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim)
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progConvictAnim)) * scaleY);
 					
 					if (resetProgress[i] != 1.0f && resetProgress[i] > playerProgress[i])
 					{
-						animManager.drawFrame(sBatch, AnimationManager.progConvictAnim, 0, 
+						animManager.drawFrame(sBatch, com.percipient24.cgc.art.TextureAnimationDrawer.progConvictAnim, 0,
 								Data.ACTUAL_WIDTH - hudMargin
-								+ animManager.gWidth(AnimationManager.progMeterAnim) / 2 * scaleX 
-								- animManager.gWidth(AnimationManager.progConvictAnim) / 2, 
-								resetYPosition, animManager.gWidth(AnimationManager.progConvictAnim) / 2,
+								+ animManager.gWidth(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2 * scaleX
+								- animManager.gWidth(com.percipient24.cgc.art.TextureAnimationDrawer.progConvictAnim) / 2,
+								resetYPosition, animManager.gWidth(com.percipient24.cgc.art.TextureAnimationDrawer.progConvictAnim) / 2,
 								0, scaleX, scaleY);
 					}
 					else
 					{
-						animManager.drawFrame(sBatch, AnimationManager.progConvictAnim, 0, 
+						animManager.drawFrame(sBatch, com.percipient24.cgc.art.TextureAnimationDrawer.progConvictAnim, 0,
 								Data.ACTUAL_WIDTH - hudMargin
-								+ animManager.gWidth(AnimationManager.progMeterAnim) / 2 * scaleX
-								- animManager.gWidth(AnimationManager.progConvictAnim) / 2, 
-								progressYPosition, animManager.gWidth(AnimationManager.progConvictAnim) / 2,
+								+ animManager.gWidth(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2 * scaleX
+								- animManager.gWidth(com.percipient24.cgc.art.TextureAnimationDrawer.progConvictAnim) / 2,
+								progressYPosition, animManager.gWidth(com.percipient24.cgc.art.TextureAnimationDrawer.progConvictAnim) / 2,
 								0, scaleX, scaleY);
 						
 						resetProgress[i] = 1.0f;
@@ -279,26 +276,26 @@ public class HUDProgress extends CGCOverlay
 				else
 				{
 					progressYPosition = Data.ACTUAL_HEIGHT / 2
-							- animManager.gHeight(AnimationManager.progMeterAnim) / 2 * scaleY
-							+ (playerProgress[i] * (animManager.gHeight(AnimationManager.progMeterAnim)
-							- animManager.gHeight(AnimationManager.progCopAnim)) * scaleY);
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2 * scaleY
+							+ (playerProgress[i] * (animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim)
+							- animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.progCopAnim)) * scaleY);
 					
 					if (resetProgress[i] != 1.0f && resetProgress[i] > playerProgress[i])
 					{
-						animManager.drawFrame(sBatch, AnimationManager.progCopAnim, 0, 
+						animManager.drawFrame(sBatch, com.percipient24.cgc.art.TextureAnimationDrawer.progCopAnim, 0,
 								Data.ACTUAL_WIDTH - hudMargin 
-								+ animManager.gWidth(AnimationManager.progMeterAnim) / 2 * scaleX
-								- animManager.gWidth(AnimationManager.progCopAnim) / 2, 
-								resetYPosition, animManager.gWidth(AnimationManager.progCopAnim) / 2,
+								+ animManager.gWidth(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2 * scaleX
+								- animManager.gWidth(com.percipient24.cgc.art.TextureAnimationDrawer.progCopAnim) / 2,
+								resetYPosition, animManager.gWidth(com.percipient24.cgc.art.TextureAnimationDrawer.progCopAnim) / 2,
 								0, scaleX, scaleY);
 					}
 					else
 					{
-						animManager.drawFrame(sBatch, AnimationManager.progCopAnim, 0, 
+						animManager.drawFrame(sBatch, com.percipient24.cgc.art.TextureAnimationDrawer.progCopAnim, 0,
 								Data.ACTUAL_WIDTH - hudMargin
-								+ animManager.gWidth(AnimationManager.progMeterAnim) / 2 * scaleX
-								- animManager.gWidth(AnimationManager.progCopAnim) / 2, 
-								progressYPosition, animManager.gWidth(AnimationManager.progCopAnim) / 2,
+								+ animManager.gWidth(com.percipient24.cgc.art.TextureAnimationDrawer.progMeterAnim) / 2 * scaleX
+								- animManager.gWidth(com.percipient24.cgc.art.TextureAnimationDrawer.progCopAnim) / 2,
+								progressYPosition, animManager.gWidth(com.percipient24.cgc.art.TextureAnimationDrawer.progCopAnim) / 2,
 								0, scaleX, scaleY);
 						
 						resetProgress[i] = 1.0f;

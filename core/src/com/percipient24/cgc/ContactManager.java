@@ -12,15 +12,8 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.percipient24.cgc.ChaseApp;
+import com.percipient24.cgc.entities.*;
 import com.percipient24.helpers.BodyFactory;
-import com.percipient24.cgc.entities.ChainLink;
-import com.percipient24.cgc.entities.Coin;
-import com.percipient24.cgc.entities.GameEntity;
-import com.percipient24.cgc.entities.GuardTower;
-import com.percipient24.cgc.entities.PlayerWall;
-import com.percipient24.cgc.entities.Sensor;
-import com.percipient24.cgc.entities.Spotlight;
-import com.percipient24.cgc.entities.Wall;
 import com.percipient24.cgc.entities.boss.SteelHorse;
 import com.percipient24.cgc.entities.players.Player;
 import com.percipient24.cgc.entities.players.Prisoner;
@@ -76,12 +69,53 @@ public class ContactManager implements ContactListener
 		testPlayerMud(geA, geB, fA, fB, true);
 		testPlayerWater(geA, geB, fA, fB, true);
 		testPlayerTower(geA, geB, fA, fB, true);
+
+		testPlayerChair(geA, geB, true);
 		
 		testPlayerBridge(geA, geB, fA, fB, true);
 		testPlayerSpotlight(geA, geB, fA, fB, true);
 		testCarrierCopChainLink(geA, geB, true);
 		
 		testSteelHorseWall(geA, geB, true);
+	}
+
+	/*
+	 * Starts when a collision is no longer possible
+	 *
+	 * @param contact				The AABB where contact may be ending
+	 * @see com.badlogic.gdx.physics.box2d.ContactListener#endContact(com.badlogic.gdx.physics.box2d.Contact)
+	 */
+	public void endContact(Contact contact)
+	{
+		if (contact == null || contact.getFixtureA() == null || contact.getFixtureB() == null ||
+				contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null ||
+				(GameEntity)contact.getFixtureA().getBody().getUserData() == null ||
+				(GameEntity)contact.getFixtureB().getBody().getUserData() == null)
+		{
+			return;
+		}
+
+
+		Fixture fA = contact.getFixtureA();
+		Fixture fB = contact.getFixtureB();
+		Body a = contact.getFixtureA().getBody();
+		Body b = contact.getFixtureB().getBody();
+		GameEntity geA = (GameEntity)a.getUserData();
+		GameEntity geB = (GameEntity)b.getUserData();
+
+		testPlayerCoin(geA, geB, false);
+		testPlayerSensor(geA, geB, false);
+		testPlayerMud(geA, geB, fA, fB, false);
+		testPlayerWater(geA, geB, fA, fB, false);
+		testPlayerTower(geA, geB, fA, fB, false);
+
+		testPlayerChair(geA, geB, false);
+
+		testPlayerBridge(geA, geB, fA, fB, false);
+		testPlayerSpotlight(geA, geB, fA, fB, false);
+		testCarrierCopChainLink(geA, geB, false);
+
+		testSteelHorseWall(geA, geB, false);
 	}
 	
 	/*
@@ -219,6 +253,14 @@ public class ContactManager implements ContactListener
 			{
 				((Prisoner) player).endCollide((GuardTower)guardTower);
 			}
+		}
+	}
+
+	public void handlePlayerChair(GameEntity player, GameEntity chair, boolean start) {
+		if (chair.getType() == EntityType.CHAIR_SENSOR)
+		{
+			ChairSensor chairSensor = (ChairSensor)chair;
+			chairSensor.handler.handleContact(player, chair, start);
 		}
 	}
 	
@@ -439,6 +481,24 @@ public class ContactManager implements ContactListener
 			}
 		}
 	}
+
+	public void testPlayerChair(GameEntity geA, GameEntity geB, boolean start)
+	{
+		ChaseApp.alert("ending contact", start);
+		ChaseApp.alert("a", geA.getType().toString());
+		ChaseApp.alert("a", geB.getType().toString());
+		if(geA.getType() == EntityType.CONVICT || geB.getType() == EntityType.CONVICT)
+		{
+			if(geB.getType() == EntityType.CHAIR_SENSOR)
+			{
+				handlePlayerChair(geA, geB, start);
+			}
+			else if(geA.getType() == EntityType.CHAIR_SENSOR)
+			{
+				handlePlayerChair(geB, geA, start);
+			}
+		}
+	}
 	
 	/*
 	 * Test a Player entity against a Bridge entity
@@ -513,42 +573,6 @@ public class ContactManager implements ContactListener
 				handlePlayerSpotlight(geB, geA, start);
 			}
 		}
-	}
-
-	/*
-	 * Starts when a collision is no longer possible
-	 * 
-	 * @param contact				The AABB where contact may be ending
-	 * @see com.badlogic.gdx.physics.box2d.ContactListener#endContact(com.badlogic.gdx.physics.box2d.Contact)
-	 */
-	public void endContact(Contact contact) 
-	{
-		if (contact == null || contact.getFixtureA() == null || contact.getFixtureB() == null ||
-				contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null ||
-				(GameEntity)contact.getFixtureA().getBody().getUserData() == null || 
-				(GameEntity)contact.getFixtureB().getBody().getUserData() == null)
-		{
-			return;
-		}
-		
-		Fixture fA = contact.getFixtureA();
-		Fixture fB = contact.getFixtureB();
-		Body a = contact.getFixtureA().getBody();
-		Body b = contact.getFixtureB().getBody();
-		GameEntity geA = (GameEntity)a.getUserData();
-		GameEntity geB = (GameEntity)b.getUserData();
-		
-		testPlayerCoin(geA, geB, false);
-		testPlayerSensor(geA, geB, false);
-		testPlayerMud(geA, geB, fA, fB, false);
-		testPlayerWater(geA, geB, fA, fB, false);
-		testPlayerTower(geA, geB, fA, fB, false);
-		
-		testPlayerBridge(geA, geB, fA, fB, false);
-		testPlayerSpotlight(geA, geB, fA, fB, false);
-		testCarrierCopChainLink(geA, geB, false);
-		
-		testSteelHorseWall(geA, geB, false);
 	}
 
 	/*

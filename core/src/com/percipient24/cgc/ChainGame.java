@@ -31,7 +31,6 @@ import com.badlogic.gdx.utils.Array;
 //import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
 // CGC Imports
-import com.percipient24.cgc.ChaseApp;
 import com.percipient24.helpers.BodyFactory;
 import com.percipient24.helpers.LayerHandler;
 import com.percipient24.cgc.entities.ChainLink;
@@ -180,7 +179,7 @@ public class ChainGame extends CGCWorld
 		Tween.registerAccessor(Transition.class, new TransitionAccessor());
 		this.transition = transition;
 		
-		animManager = new AnimationManager(myApp, input);
+		animManager = new com.percipient24.cgc.art.TextureAnimationDrawer(myApp, input);
 		mapsCompleted = false;
 		trainsCompleted = false;
 		trainsPast = 0;
@@ -212,9 +211,9 @@ public class ChainGame extends CGCWorld
 												BodyFactory.CAT_PRISONER, BodyFactory.MASK_PRISONER);
 			tempBody.setFixedRotation(true);
 			
-			Player tempPlayer = new Prisoner(this, AnimationManager.prisonerStandLowAnims[i], 
-											AnimationManager.prisonerStandMidAnims[i],
-											AnimationManager.prisonerStandHighAnims[i],
+			Player tempPlayer = new Prisoner(this, com.percipient24.cgc.art.TextureAnimationDrawer.prisonerStandLowAnims[i],
+											com.percipient24.cgc.art.TextureAnimationDrawer.prisonerStandMidAnims[i],
+											com.percipient24.cgc.art.TextureAnimationDrawer.prisonerStandHighAnims[i],
 											EntityType.CONVICT, tempBody, (short) i);
 
 			tempBody.setUserData(tempPlayer);
@@ -268,9 +267,9 @@ public class ChainGame extends CGCWorld
 		
 		// Load sensor symbols
 		sensorSymbols = new Animation[3];
-		sensorSymbols[0] = AnimationManager.sensorTriAnim;
-		sensorSymbols[1] = AnimationManager.sensorSqrAni;
-		sensorSymbols[2] = AnimationManager.sensorStarAnim;
+		sensorSymbols[0] = com.percipient24.cgc.art.TextureAnimationDrawer.sensorTriAnim;
+		sensorSymbols[1] = com.percipient24.cgc.art.TextureAnimationDrawer.sensorSqrAni;
+		sensorSymbols[2] = com.percipient24.cgc.art.TextureAnimationDrawer.sensorStarAnim;
 		symbolShapesUsed = 0;
 		
 		colors = new Color[5];
@@ -415,11 +414,11 @@ public class ChainGame extends CGCWorld
 				bodyList.add(b);
 				if (j%2 == 1)
 				{
-					ge = new ChainLink(AnimationManager.chainAnims[0], null, null, EntityType.CHAINLINK, b);
+					ge = new ChainLink(com.percipient24.cgc.art.TextureAnimationDrawer.chainAnims[0], null, null, EntityType.CHAINLINK, b);
 				}
 				else
 				{
-					ge = new ChainLink(AnimationManager.chainAnims[1], null, null, EntityType.CHAINLINK, b);
+					ge = new ChainLink(com.percipient24.cgc.art.TextureAnimationDrawer.chainAnims[1], null, null, EntityType.CHAINLINK, b);
 				}
 				b.setUserData(ge);
 				b.setAngularDamping(1000.0f);
@@ -554,7 +553,7 @@ public class ChainGame extends CGCWorld
 		{
 			if (players.get(i).getShowCallout())
 			{
-				TextureRegion calloutFrame = AnimationManager.calloutAnims[i].getKeyFrame(0);
+				TextureRegion calloutFrame = com.percipient24.cgc.art.TextureAnimationDrawer.calloutAnims[i].getKeyFrame(0);
 				
 				if (players.get(i).getCorpse() == null)
 				{
@@ -576,14 +575,14 @@ public class ChainGame extends CGCWorld
 			{
 				if (((RookieCop) players.get(i)).getBarRatio() < 1.0f)
 				{
-					TextureRegion tempRegion = AnimationManager.barBackAnim.getKeyFrame(0);
+					TextureRegion tempRegion = com.percipient24.cgc.art.TextureAnimationDrawer.barBackAnim.getKeyFrame(0);
 					
 					sBatch.draw(tempRegion, players.get(i).getBody().getPosition().x, 
 								players.get(i).getBody().getPosition().y + .2f, -0.5f, -0.5f, 
 								tempRegion.getRegionWidth(), tempRegion.getRegionHeight(), 
 								camera.zoom, camera.zoom, 0);
 					
-					tempRegion = AnimationManager.grabFillAnim.getKeyFrame(0);
+					tempRegion = com.percipient24.cgc.art.TextureAnimationDrawer.grabFillAnim.getKeyFrame(0);
 					
 					sBatch.draw(tempRegion, players.get(i).getBody().getPosition().x + .02f, 
 								players.get(i).getBody().getPosition().y + .22f, -0.5f, -0.5f, 
@@ -592,7 +591,7 @@ public class ChainGame extends CGCWorld
 					
 					if (((RookieCop) players.get(i)).isGrabCooldown())
 					{
-						tempRegion = AnimationManager.dazedAnim.getKeyFrame(0);
+						tempRegion = com.percipient24.cgc.art.TextureAnimationDrawer.dazedAnim.getKeyFrame(0);
 						
 						sBatch.draw(tempRegion, players.get(i).getBody().getPosition().x, 
 								players.get(i).getBody().getPosition().y, 0, 0, 
@@ -616,8 +615,8 @@ public class ChainGame extends CGCWorld
 			{
 				if (((Prisoner) players.get(i)).getBarRatio() < 1.0f)
 				{
-					TextureRegion grabBack = AnimationManager.barBackAnim.getKeyFrame(0);
-					TextureRegion staminaFill = AnimationManager.staminaFillAnim.getKeyFrame(0);
+					TextureRegion grabBack = com.percipient24.cgc.art.TextureAnimationDrawer.barBackAnim.getKeyFrame(0);
+					TextureRegion staminaFill = com.percipient24.cgc.art.TextureAnimationDrawer.staminaFillAnim.getKeyFrame(0);
 					
 					sBatch.draw(grabBack, players.get(i).getBody().getPosition().x, 
 								players.get(i).getBody().getPosition().y + .2f, -0.5f, -0.5f, 
@@ -713,7 +712,7 @@ public class ChainGame extends CGCWorld
 							
 							if (t == null) // If the terrain is background...
 							{
-								terrainFrame = AnimationManager.bgAnims[0].getKeyFrame(0);
+								terrainFrame = com.percipient24.cgc.art.TextureAnimationDrawer.bgAnims[0].getKeyFrame(0);
 								sBatch.draw(terrainFrame, x+1, y, -0.5f, -0.5f, 
 											terrainFrame.getRegionWidth(), 
 											terrainFrame.getRegionHeight(), 
@@ -778,7 +777,7 @@ public class ChainGame extends CGCWorld
 								}
 								else
 								{
-									terrainFrame = AnimationManager.ouyaWater.getKeyFrame(0);
+									terrainFrame = com.percipient24.cgc.art.TextureAnimationDrawer.ouyaWater.getKeyFrame(0);
 									sBatch.draw(terrainFrame, x+1.5f, y+0.5f, w.getImageHalfWidth(0)*2, w.getImageHalfHeight(0)*2, 
 												terrainFrame.getRegionWidth(), terrainFrame.getRegionHeight(), 
 												c.zoom, c.zoom, 0);
@@ -792,7 +791,7 @@ public class ChainGame extends CGCWorld
 								
 								if (w.getDirection() > 0 && w.getDirection() < 9) // TODO Set to be >= 0 if we ever have a standing water anim
 								{
-									terrainFrame = AnimationManager.currentAnims[w.getDirection()].getKeyFrame(Water.getCurrentTime());
+									terrainFrame = com.percipient24.cgc.art.TextureAnimationDrawer.currentAnims[w.getDirection()].getKeyFrame(Water.getCurrentTime());
 									sBatch.draw(terrainFrame, x+1.0f, y, -0.5f, -0.5f,
 												terrainFrame.getRegionWidth(), terrainFrame.getRegionHeight(), 
 												c.zoom, c.zoom, 0);
@@ -857,7 +856,7 @@ public class ChainGame extends CGCWorld
 								}
 								else
 								{
-									terrainFrame = AnimationManager.ouyaMud.getKeyFrame(0);
+									terrainFrame = com.percipient24.cgc.art.TextureAnimationDrawer.ouyaMud.getKeyFrame(0);
 									sBatch.draw(terrainFrame, x+1.5f, y+0.5f, m.getImageHalfWidth(0)*2, m.getImageHalfHeight(0)*2, 
 												terrainFrame.getRegionWidth(), terrainFrame.getRegionHeight(), 
 												c.zoom, c.zoom, 0);
@@ -1012,7 +1011,7 @@ public class ChainGame extends CGCWorld
 					if (players.get(j) instanceof Prisoner
 							&& ((Prisoner)players.get(j)).canOpen(tempSensor.gLockID()))
 					{
-						sBatch.draw(AnimationManager.keyHeadAnims[players.get(j).getPID()].getKeyFrame(0), 
+						sBatch.draw(com.percipient24.cgc.art.TextureAnimationDrawer.keyHeadAnims[players.get(j).getPID()].getKeyFrame(0),
 								tempSensor.getBody().getPosition().x - 1/3f, 
 								tempSensor.getBody().getPosition().y - 1/3f, 
 								0, 0, 64, 64, camera.zoom, camera.zoom, 0.0f);
@@ -1329,9 +1328,9 @@ public class ChainGame extends CGCWorld
 										BodyType.DynamicBody, BodyFactory.CAT_COP, BodyFactory.MASK_COP);
 				b.setFixedRotation(true);
 				
-				RookieCop rc = new RookieCop(this, AnimationManager.copStandLowAnims[p.getPID()], 
-											AnimationManager.copStandMidAnims[p.getPID()],
-											AnimationManager.copStandHighAnims[p.getPID()],
+				RookieCop rc = new RookieCop(this, com.percipient24.cgc.art.TextureAnimationDrawer.copStandLowAnims[p.getPID()],
+											com.percipient24.cgc.art.TextureAnimationDrawer.copStandMidAnims[p.getPID()],
+											com.percipient24.cgc.art.TextureAnimationDrawer.copStandHighAnims[p.getPID()],
 											EntityType.COP, b, p.getPID());
 				
 				b.setUserData(rc);
@@ -1614,7 +1613,7 @@ public class ChainGame extends CGCWorld
 			Body b = bf.createRectangle(0, getPlayerAverageY(), 
 						2, 3, BodyType.KinematicBody, 
 						BodyFactory.MASK_NON_INTERACTIVE, BodyFactory.MASK_NON_INTERACTIVE);
-			Helicopter h = new Helicopter(this, null, null, AnimationManager.helicopterAnim, 
+			Helicopter h = new Helicopter(this, null, null, com.percipient24.cgc.art.TextureAnimationDrawer.helicopterAnim,
 										EntityType.HELICOPTER, b);
 			b.setUserData(h);
 			b.getFixtureList().get(0).setSensor(true);

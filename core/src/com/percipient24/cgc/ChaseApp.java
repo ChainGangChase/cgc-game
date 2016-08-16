@@ -15,7 +15,6 @@ import com.badlogic.gdx.utils.I18NBundle;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Color;
@@ -25,6 +24,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.percipient24.cgc.art.Characters;
 import com.percipient24.helpers.FileHandlers;
 import com.percipient24.cgc.net.CGCStats;
 import com.percipient24.cgc.screens.*;
@@ -61,6 +61,9 @@ public class ChaseApp extends Game
 	private SpriteBatch sBatch;
 	private Matrix4 menuMatrix;
 	public static Camera menuCam;
+	public static com.percipient24.cgc.art.TextureAnimationHolder artAssets;
+
+	public static Characters characters;
 	
 	// IO variables
 	public static FileHandlers fileHandler;
@@ -273,6 +276,7 @@ public class ChaseApp extends Game
 		I18NBundle myBundle = I18NBundle.createBundle(baseFileHandle, locale);
 
 		lang = myBundle;
+		ChaseApp.alert("lang loaded");
 	}
 	
 	/*
@@ -286,10 +290,11 @@ public class ChaseApp extends Game
 		fileHandler = new FileHandlers(this);
 		
 		stats = new CGCStats();
+		artAssets = new com.percipient24.cgc.art.TextureAnimationHolder(this);
+		characters = new Characters(this);
 		
 		title = new Title(this);
 		mainMenu = new MainMenu(this);
-		characterSelect = new CharacterSelect(this);
 		mapSelect = new SelectMap(this);
 		howToPlay = new HowPlay(this);
 		create = new CreateOwn(this);
@@ -299,7 +304,8 @@ public class ChaseApp extends Game
 		credits = new Credits(this);
 		exit = new Exit(this);
 		options = new Options(this);
-		
+		characterSelect = new CharacterSelect(this);
+
 		// TODO: Remove before launch!
 		//_resTest = new _ResolutionTestScreen(this);
 		

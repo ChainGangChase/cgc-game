@@ -8,11 +8,7 @@ package com.percipient24.cgc.overlays;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Timer;
-import com.percipient24.cgc.AnimationManager;
-import com.percipient24.cgc.CGCTimer;
-import com.percipient24.cgc.CGCWorld;
-import com.percipient24.cgc.Data;
-import com.percipient24.cgc.TimerManager;
+import com.percipient24.cgc.*;
 
 /*
  * Contains the logic for the end-of-level arrows
@@ -22,7 +18,7 @@ import com.percipient24.cgc.TimerManager;
  */
 public class KeepGoingArrows extends CGCOverlay
 {
-	private AnimationManager animManager;
+	private com.percipient24.cgc.art.TextureAnimationDrawer animManager;
 	
 	private CGCTimer blinkClock;
 	private Timer.Task blinkTask;
@@ -55,19 +51,19 @@ public class KeepGoingArrows extends CGCOverlay
 	{
 		if (showElement && showArrows)
 		{
-			animManager.drawFrame(sBatch, AnimationManager.keepGoingAnim, 0,
-					Data.ACTUAL_WIDTH * .25f - animManager.gWidth(AnimationManager.keepGoingAnim) / 2 * scaleX,
-					Data.ACTUAL_HEIGHT * .9f - animManager.gHeight(AnimationManager.keepGoingAnim) * scaleY,
+			animManager.drawFrame(sBatch, com.percipient24.cgc.art.TextureAnimationDrawer.keepGoingAnim, 0,
+					Data.ACTUAL_WIDTH * .25f - animManager.gWidth(com.percipient24.cgc.art.TextureAnimationDrawer.keepGoingAnim) / 2 * scaleX,
+					Data.ACTUAL_HEIGHT * .9f - animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.keepGoingAnim) * scaleY,
 					scaleX, scaleY);
 			
-			animManager.drawFrame(sBatch, AnimationManager.keepGoingAnim, 0,
-					Data.ACTUAL_WIDTH * .5f - animManager.gWidth(AnimationManager.keepGoingAnim) / 2 * scaleX,
-					Data.ACTUAL_HEIGHT * .9f - animManager.gHeight(AnimationManager.keepGoingAnim) * scaleY,
+			animManager.drawFrame(sBatch, com.percipient24.cgc.art.TextureAnimationDrawer.keepGoingAnim, 0,
+					Data.ACTUAL_WIDTH * .5f - animManager.gWidth(com.percipient24.cgc.art.TextureAnimationDrawer.keepGoingAnim) / 2 * scaleX,
+					Data.ACTUAL_HEIGHT * .9f - animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.keepGoingAnim) * scaleY,
 					scaleX, scaleY);
 			
-			animManager.drawFrame(sBatch, AnimationManager.keepGoingAnim, 0,
-					Data.ACTUAL_WIDTH * .75f - animManager.gWidth(AnimationManager.keepGoingAnim) / 2 * scaleX,
-					Data.ACTUAL_HEIGHT * .9f - animManager.gHeight(AnimationManager.keepGoingAnim) * scaleY,
+			animManager.drawFrame(sBatch, com.percipient24.cgc.art.TextureAnimationDrawer.keepGoingAnim, 0,
+					Data.ACTUAL_WIDTH * .75f - animManager.gWidth(com.percipient24.cgc.art.TextureAnimationDrawer.keepGoingAnim) / 2 * scaleX,
+					Data.ACTUAL_HEIGHT * .9f - animManager.gHeight(com.percipient24.cgc.art.TextureAnimationDrawer.keepGoingAnim) * scaleY,
 					scaleX, scaleY);
 		}
 	}

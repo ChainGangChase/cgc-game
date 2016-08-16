@@ -3,13 +3,16 @@
  * 
  * Copyright 2014, MAGIC Spell Studios, LLC
  */
-package com.percipient24.cgc;
+package com.percipient24.cgc.art;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.percipient24.cgc.CGCWorld;
+import com.percipient24.cgc.ChainGame;
+import com.percipient24.cgc.ChaseApp;
 import com.percipient24.cgc.entities.terrain.Water;
 import com.percipient24.input.InputManager;
 
@@ -20,7 +23,7 @@ import com.percipient24.input.InputManager;
  * @author Christopher Rider
  * @author William Ziegler
  */
-public class AnimationManager
+public class TextureAnimationDrawer
 {
 	public static final float RUN_ANIM_FRAME_TIME = 1.0f/12.0f;
 	public static final float STAND_ANIM_FRAME_TIME = 1.0f/8.0f;
@@ -132,12 +135,12 @@ public class AnimationManager
 	public static Animation[] targetingAnims;
 
 	/*
-	 * Creates a new AnimationManager object
+	 * Creates a new TextureAnimationDrawer object
 	 * 
 	 * @param myApp					The ChaseApp to use
 	 * @param input					The InputManager used by this game
 	 */
-	public AnimationManager(ChaseApp myApp, InputManager input)
+	public TextureAnimationDrawer(ChaseApp myApp, InputManager input)
 	{
 		loadCharacterAnimations(input);
 		loadTerrainAnimations();
@@ -421,6 +424,123 @@ public class AnimationManager
 			Animation newTankAnimation = new Animation(1.0f, tankRegions.get(i));
 			newTankAnimation.setPlayMode(Animation.PlayMode.LOOP);
 			tankAnims[i] = newTankAnimation;
+		}
+	}
+
+	public static void loadDefaultCharacterAnimations(InputManager input) {
+		int max_players = 10;
+		prisonerRunLowAnims = new Animation[max_players];
+		prisonerRunMidAnims = new Animation[max_players];
+		prisonerRunHighAnims = new Animation[max_players];
+		prisonerStandLowAnims = new Animation[max_players];
+		prisonerStandMidAnims = new Animation[max_players];
+		prisonerStandHighAnims = new Animation[max_players];
+		prisonerHitAnims = new Animation[max_players];
+		prisonerJumpAnims = new Animation[max_players];
+		prisonerPunchLowAnims = new Animation[max_players];
+		prisonerPunchMidAnims = new Animation[max_players];
+		prisonerPunchHighAnims = new Animation[max_players];
+		prisonerDieLowAnims = new Animation[max_players];
+		prisonerDieMidAnims = new Animation[max_players];
+		prisonerDieHighAnims = new Animation[max_players];
+		prisonerTiedLowAnims = new Animation[max_players];
+		prisonerTiedMidAnims = new Animation[max_players];
+		prisonerTiedHighAnims = new Animation[max_players];
+		keyHeadAnims = new Animation[max_players];
+
+		for (int i = 0; i < input.controlList.length; i++)
+		{
+			int pid = i;
+
+			// Load the run cycle
+			Animation newAnimation;
+
+			newAnimation = new Animation(RUN_ANIM_FRAME_TIME,
+					new Array<TextureRegion>(ChaseApp.atlas.findRegions("gameanimations/conrunlow0")));
+			newAnimation.setPlayMode(Animation.PlayMode.LOOP);
+			prisonerRunLowAnims[pid] = newAnimation;
+
+			newAnimation = new Animation(RUN_ANIM_FRAME_TIME,
+					new Array<TextureRegion>(ChaseApp.atlas.findRegions("gameanimations/conrunmid0")));
+			newAnimation.setPlayMode(Animation.PlayMode.LOOP);
+			prisonerRunMidAnims[pid] = newAnimation;
+
+			newAnimation = new Animation(RUN_ANIM_FRAME_TIME,
+					new Array<TextureRegion>(ChaseApp.atlas.findRegions("gameanimations/conrunhigh0")));
+			newAnimation.setPlayMode(Animation.PlayMode.LOOP);
+			prisonerRunHighAnims[pid] = newAnimation;
+
+			newAnimation = new Animation(STAND_ANIM_FRAME_TIME,
+					new Array<TextureRegion>(ChaseApp.atlas.findRegions("gameanimations/constandlow0")));
+			newAnimation.setPlayMode(Animation.PlayMode.LOOP);
+			prisonerStandLowAnims[pid] = newAnimation;
+
+			newAnimation = new Animation(STAND_ANIM_FRAME_TIME,
+					new Array<TextureRegion>(ChaseApp.atlas.findRegions("gameanimations/constandmid0")));
+			newAnimation.setPlayMode(Animation.PlayMode.LOOP);
+			prisonerStandMidAnims[pid] = newAnimation;
+
+			newAnimation = new Animation(STAND_ANIM_FRAME_TIME,
+					new Array<TextureRegion>(ChaseApp.atlas.findRegions("gameanimations/constandhigh0")));
+			newAnimation.setPlayMode(Animation.PlayMode.LOOP);
+			prisonerStandHighAnims[pid] = newAnimation;
+
+			newAnimation = new Animation(HIT_ANIM_FRAME_TIME,
+					new Array<TextureRegion>(ChaseApp.atlas.findRegions("gameanimations/conhit0")));
+			newAnimation.setPlayMode(Animation.PlayMode.LOOP);
+			prisonerHitAnims[pid] = newAnimation;
+
+			newAnimation = new Animation(JUMP_ANIM_FRAME_TIME,
+					new Array<TextureRegion>(ChaseApp.atlas.findRegions("gameanimations/conjump0")));
+			newAnimation.setPlayMode(Animation.PlayMode.LOOP);
+			prisonerJumpAnims[pid] = newAnimation;
+
+			newAnimation = new Animation(PUNCH_ANIM_FRAME_TIME,
+					new Array<TextureRegion>(ChaseApp.atlas.findRegions("gameanimations/conpunchlow0")));
+			newAnimation.setPlayMode(Animation.PlayMode.NORMAL);
+			prisonerPunchLowAnims[pid] = newAnimation;
+
+			newAnimation = new Animation(PUNCH_ANIM_FRAME_TIME,
+					new Array<TextureRegion>(ChaseApp.atlas.findRegions("gameanimations/conpunchmid0")));
+			newAnimation.setPlayMode(Animation.PlayMode.NORMAL);
+			prisonerPunchMidAnims[pid] = newAnimation;
+
+			newAnimation = new Animation(PUNCH_ANIM_FRAME_TIME,
+					new Array<TextureRegion>(ChaseApp.atlas.findRegions("gameanimations/conpunchhigh0")));
+			newAnimation.setPlayMode(Animation.PlayMode.NORMAL);
+			prisonerPunchHighAnims[pid] = newAnimation;
+
+			newAnimation = new Animation(DIE_ANIM_FRAME_TIME,
+					new Array<TextureRegion>(ChaseApp.atlas.findRegions("gameanimations/condielow0")));
+			newAnimation.setPlayMode(Animation.PlayMode.LOOP);
+			prisonerDieLowAnims[pid] = newAnimation;
+
+			newAnimation = new Animation(DIE_ANIM_FRAME_TIME,
+					new Array<TextureRegion>(ChaseApp.atlas.findRegions("gameanimations/condiemid0")));
+			newAnimation.setPlayMode(Animation.PlayMode.LOOP);
+			prisonerDieMidAnims[pid] = newAnimation;
+
+			newAnimation = new Animation(DIE_ANIM_FRAME_TIME,
+					new Array<TextureRegion>(ChaseApp.atlas.findRegions("gameanimations/condiehigh0")));
+			newAnimation.setPlayMode(Animation.PlayMode.LOOP);
+			prisonerDieHighAnims[pid] = newAnimation;
+
+			newAnimation = new Animation(TIED_ANIM_FRAME_TIME,
+					new Array<TextureRegion>(ChaseApp.atlas.findRegions("gameanimations/construgglelow0")));
+			newAnimation.setPlayMode(Animation.PlayMode.LOOP);
+			prisonerTiedLowAnims[pid] = newAnimation;
+
+			newAnimation = new Animation(TIED_ANIM_FRAME_TIME,
+					new Array<TextureRegion>(ChaseApp.atlas.findRegions("gameanimations/construgglemid0")));
+			newAnimation.setPlayMode(Animation.PlayMode.LOOP);
+			prisonerTiedMidAnims[pid] = newAnimation;
+
+			newAnimation = new Animation(TIED_ANIM_FRAME_TIME,
+					new Array<TextureRegion>(ChaseApp.atlas.findRegions("gameanimations/construgglehigh0")));
+			newAnimation.setPlayMode(Animation.PlayMode.LOOP);
+			prisonerTiedHighAnims[pid] = newAnimation;
+
+			AtlasRegion keyHeadTempRegion = ChaseApp.atlas.findRegion("overlayanimations/keyhead", 0);
 		}
 	}
 	

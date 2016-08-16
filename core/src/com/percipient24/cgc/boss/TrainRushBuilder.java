@@ -9,8 +9,8 @@ package com.percipient24.cgc.boss;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Array;
+import com.percipient24.cgc.art.TextureAnimationDrawer;
 import com.percipient24.helpers.BodyFactory;
-import com.percipient24.cgc.AnimationManager;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.cgc.entities.GameEntity;
 import com.percipient24.cgc.entities.Track;
@@ -60,29 +60,29 @@ public class TrainRushBuilder extends BossBuilder
 		//generate walls to bound the map
 		wall = CGCWorld.getBF().createRectangle(0, 5, 1, 11, BodyType.StaticBody, BodyFactory.CAT_WALL,
 												BodyFactory.MASK_WALL);
-		ge = new Wall(AnimationManager.vwallAnims[0], AnimationManager.vwallAnims[0],
-						AnimationManager.vwallAnims[0], EntityType.WALL, wall, true);
+		ge = new Wall(TextureAnimationDrawer.vwallAnims[0], TextureAnimationDrawer.vwallAnims[0],
+						TextureAnimationDrawer.vwallAnims[0], EntityType.WALL, wall, true);
 		wall.setUserData(ge);
 		ge.addToWorldLayers(CGCWorld.getLH());
 		
 		wall = CGCWorld.getBF().createRectangle(19, 5, 1, 11, BodyType.StaticBody, BodyFactory.CAT_WALL,
 												BodyFactory.MASK_WALL);
-		ge = new Wall(AnimationManager.vwallAnims[0], AnimationManager.vwallAnims[0],
-						AnimationManager.vwallAnims[0], EntityType.WALL, wall, true);
+		ge = new Wall(TextureAnimationDrawer.vwallAnims[0], TextureAnimationDrawer.vwallAnims[0],
+						TextureAnimationDrawer.vwallAnims[0], EntityType.WALL, wall, true);
 		wall.setUserData(ge);
 		ge.addToWorldLayers(CGCWorld.getLH());
 		
 		wall = CGCWorld.getBF().createRectangle(9.5f, 0, 20, 1, BodyType.StaticBody, BodyFactory.CAT_WALL,
 												BodyFactory.MASK_WALL);
-		ge = new Wall(AnimationManager.hwallAnim, AnimationManager.hwallAnim,
-						AnimationManager.hwallAnim, EntityType.WALL, wall, false);
+		ge = new Wall(TextureAnimationDrawer.hwallAnim, TextureAnimationDrawer.hwallAnim,
+						TextureAnimationDrawer.hwallAnim, EntityType.WALL, wall, false);
 		wall.setUserData(ge);
 		ge.addToWorldLayers(CGCWorld.getLH());
 		
 		wall = CGCWorld.getBF().createRectangle(9.5f, 11, 20, 1, BodyType.StaticBody, BodyFactory.CAT_WALL,
 												BodyFactory.MASK_WALL);
-		ge = new Wall(AnimationManager.hwallAnim, AnimationManager.hwallAnim,
-						AnimationManager.hwallAnim, EntityType.WALL, wall, false);
+		ge = new Wall(TextureAnimationDrawer.hwallAnim, TextureAnimationDrawer.hwallAnim,
+						TextureAnimationDrawer.hwallAnim, EntityType.WALL, wall, false);
 		wall.setUserData(ge);
 		ge.addToWorldLayers(CGCWorld.getLH());
 		
@@ -97,7 +97,7 @@ public class TrainRushBuilder extends BossBuilder
 			Body track = CGCWorld.getBF().createRectangle(9.5f, 1.25f + (i * 1.7f), 20, 1, BodyType.StaticBody,
 															BodyFactory.CAT_NON_INTERACTIVE,
 															BodyFactory.CAT_NON_INTERACTIVE);
-			ge = new Track(AnimationManager.trackAnim, null, null, EntityType.TRACK, track);
+			ge = new Track(TextureAnimationDrawer.trackAnim, null, null, EntityType.TRACK, track);
 			track.setUserData(ge);
 			ge.addToWorldLayers(CGCWorld.getLH());
 			track.getFixtureList().get(0).setSensor(true);

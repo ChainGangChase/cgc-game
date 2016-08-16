@@ -8,9 +8,9 @@ package com.percipient24.cgc.entities.players;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.percipient24.cgc.art.TextureAnimationDrawer;
 import com.percipient24.helpers.BodyFactory;
 import com.percipient24.helpers.LayerHandler;
-import com.percipient24.cgc.AnimationManager;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.cgc.entities.Spotlight;
 import com.percipient24.cgc.entities.Targeter;
@@ -56,7 +56,7 @@ public class SpotlightCop extends RookieCop
 				2.1f, BodyType.DynamicBody, BodyFactory.CAT_INTERACTABLE, BodyFactory.MASK_INTERACTABLE);
 		b.getFixtureList().get(0).setSensor(true);
 		b.setFixedRotation(true);
-		spotlight = new Spotlight(null, null, AnimationManager.spotlightAnim, 
+		spotlight = new Spotlight(null, null, TextureAnimationDrawer.spotlightAnim,
 				EntityType.TARGETER, b, CGCWorld.getCamera(), getPID());
 		b.setUserData(spotlight);
 		spotlight.addToWorldLayers(CGCWorld.getLH());

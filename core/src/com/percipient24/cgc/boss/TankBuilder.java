@@ -8,9 +8,9 @@ package com.percipient24.cgc.boss;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Array;
+import com.percipient24.cgc.art.TextureAnimationDrawer;
 import com.percipient24.helpers.BodyFactory;
 import com.percipient24.helpers.LayerHandler;
-import com.percipient24.cgc.AnimationManager;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.cgc.entities.Fence;
 import com.percipient24.cgc.entities.GameEntity;
@@ -75,8 +75,8 @@ public class TankBuilder extends BossBuilder
 			
 			wall = CGCWorld.getBF().createRectangle(0, 6+11*chunk, 1, 11, BodyType.StaticBody, 
 					BodyFactory.CAT_WALL, BodyFactory.MASK_WALL);
-			ge = new Wall(AnimationManager.vwallAnims[0], null,
-					AnimationManager.vwallAnims[0], EntityType.WALL, 
+			ge = new Wall(TextureAnimationDrawer.vwallAnims[0], null,
+					TextureAnimationDrawer.vwallAnims[0], EntityType.WALL,
 					wall, true);
 			wall.setUserData(ge);
 
@@ -84,8 +84,8 @@ public class TankBuilder extends BossBuilder
 			
 			wall = CGCWorld.getBF().createRectangle(19, 6+11*chunk, 1, 11, BodyType.StaticBody, 
 					BodyFactory.CAT_WALL, BodyFactory.MASK_WALL);
-			ge = new Wall(AnimationManager.vwallAnims[0], null,
-					AnimationManager.vwallAnims[0], EntityType.WALL, 
+			ge = new Wall(TextureAnimationDrawer.vwallAnims[0], null,
+					TextureAnimationDrawer.vwallAnims[0], EntityType.WALL,
 					wall, true);
 			wall.setUserData(ge);
 
@@ -103,16 +103,16 @@ public class TankBuilder extends BossBuilder
 					wall = CGCWorld.getBF().createRectangle(0, 6 + 11 * (chunk+i+1),
 							1, 11, BodyType.StaticBody,
 							BodyFactory.CAT_WALL, BodyFactory.MASK_WALL);
-					ge = new Wall(AnimationManager.vwallAnims[0], null, 
-							AnimationManager.vwallAnims[1], EntityType.WALL, wall, true);
+					ge = new Wall(TextureAnimationDrawer.vwallAnims[0], null,
+							TextureAnimationDrawer.vwallAnims[1], EntityType.WALL, wall, true);
 					wall.setUserData(ge);
 					ge.addToWorldLayers(CGCWorld.getLH());
 					
 					wall = CGCWorld.getBF().createRectangle(19, 6 + 11 * (chunk+i+1),
 							1, 11, BodyType.StaticBody,
 							BodyFactory.CAT_WALL, BodyFactory.MASK_WALL);
-					ge = new Wall(AnimationManager.vwallAnims[0], null, 
-							AnimationManager.vwallAnims[1], EntityType.WALL, wall, true);
+					ge = new Wall(TextureAnimationDrawer.vwallAnims[0], null,
+							TextureAnimationDrawer.vwallAnims[1], EntityType.WALL, wall, true);
 					wall.setUserData(ge);
 					ge.addToWorldLayers(CGCWorld.getLH());
 				}
@@ -133,7 +133,7 @@ public class TankBuilder extends BossBuilder
 				{
 					case WATER_STILL: 
 						b = CGCWorld.getBF().createRectangle(x+1, y+14, 0.89f, 0.89f, BodyType.StaticBody, 
-								BodyFactory.CAT_TETRAIN, BodyFactory.MASK_TETRAIN);
+								BodyFactory.CAT_TERRAIN, BodyFactory.MASK_TERRAIN);
 						b.getFixtureList().get(0).setSensor(true);
 						ge = new Water(null, null, null, EntityType.WATER, b, 0, 7, 7, 7, 7);
 						b.setUserData(ge);
@@ -141,7 +141,7 @@ public class TankBuilder extends BossBuilder
 						break;
 					case WATER_RIVER_LEFT:
 						b = CGCWorld.getBF().createRectangle(x+1, y+14, 0.89f, 0.89f, BodyType.StaticBody, 
-								BodyFactory.CAT_TETRAIN, BodyFactory.MASK_TETRAIN);
+								BodyFactory.CAT_TERRAIN, BodyFactory.MASK_TERRAIN);
 						b.getFixtureList().get(0).setSensor(true);
 						ge = new Water(null, null, null, EntityType.WATER, b, 5, 7, 7, 7, 7);
 						b.setUserData(ge);
@@ -149,7 +149,7 @@ public class TankBuilder extends BossBuilder
 						break;
 					case WATER_RIVER_RIGHT:
 						b = CGCWorld.getBF().createRectangle(x+1, y+14, 0.89f, 0.89f, BodyType.StaticBody, 
-								BodyFactory.CAT_TETRAIN, BodyFactory.MASK_TETRAIN);
+								BodyFactory.CAT_TERRAIN, BodyFactory.MASK_TERRAIN);
 						b.getFixtureList().get(0).setSensor(true);
 						ge = new Water(null, null, null, EntityType.WATER, b, 1, 7, 7, 7, 7);
 						b.setUserData(ge);
@@ -157,7 +157,7 @@ public class TankBuilder extends BossBuilder
 						break;
 					case MUD:
 						b = CGCWorld.getBF().createRectangle(x+1, y+14, 0.89f, 0.89f, BodyType.StaticBody, 
-								BodyFactory.CAT_TETRAIN, BodyFactory.MASK_TETRAIN);
+								BodyFactory.CAT_TERRAIN, BodyFactory.MASK_TERRAIN);
 						b.getFixtureList().get(0).setSensor(true);
 						ge = new Mud(null, null, null, EntityType.MUD, b, 7, 7, 7, 7);
 						b.setUserData(ge);
@@ -178,7 +178,7 @@ public class TankBuilder extends BossBuilder
 					case TREE:
 						b = CGCWorld.getBF().createCircle(x+1, y+14, 0.9f, BodyType.StaticBody, 
 								BodyFactory.CAT_TREE, BodyFactory.MASK_TREE);		
-						ge = new Tree(AnimationManager.treeAnims[0], AnimationManager.treeAnims[1], AnimationManager.treeAnims[2],
+						ge = new Tree(TextureAnimationDrawer.treeAnims[0], TextureAnimationDrawer.treeAnims[1], TextureAnimationDrawer.treeAnims[2],
 								EntityType.TREE, b, x, y+14);
 						b.setUserData(ge);
 						ge.addToWorldLayers(CGCWorld.getLH());
@@ -186,7 +186,7 @@ public class TankBuilder extends BossBuilder
 					case POST:
 						b = CGCWorld.getBF().createCircle(x+1, y+14, 0.1f, BodyType.StaticBody, 
 								BodyFactory.CAT_FENCE, BodyFactory.MASK_FENCE);
-						ge = new Fence(AnimationManager.postAnims[0], AnimationManager.postAnims[1], 
+						ge = new Fence(TextureAnimationDrawer.postAnims[0], TextureAnimationDrawer.postAnims[1],
 								null, EntityType.POST, b, x, y+14);
 						b.setUserData(ge);
 						ge.addToWorldLayers(CGCWorld.getLH());
@@ -197,7 +197,7 @@ public class TankBuilder extends BossBuilder
 							{
 								b = CGCWorld.getBF().createRectangle(x+1-0.25f, y+14, 0.5f, 0.08333f, BodyType.StaticBody, 
 										BodyFactory.CAT_FENCE, BodyFactory.MASK_FENCE);
-								ge = new Fence(AnimationManager.fenceAnims[0], AnimationManager.fenceAnims[1],
+								ge = new Fence(TextureAnimationDrawer.fenceAnims[0], TextureAnimationDrawer.fenceAnims[1],
 										null, EntityType.FENCE, b, x, y+14);
 								b.setUserData(ge);
 								ge.addToWorldLayers(CGCWorld.getLH());
@@ -207,7 +207,7 @@ public class TankBuilder extends BossBuilder
 						{
 							b = CGCWorld.getBF().createRectangle(x+1-0.25f, y+14, 0.5f, 0.08333f, BodyType.StaticBody, 
 									BodyFactory.CAT_FENCE, BodyFactory.MASK_FENCE);
-							ge = new Fence(AnimationManager.fenceAnims[0], AnimationManager.fenceAnims[1],
+							ge = new Fence(TextureAnimationDrawer.fenceAnims[0], TextureAnimationDrawer.fenceAnims[1],
 									null, EntityType.FENCE, b, x, y+14);
 							b.setUserData(ge);
 							ge.addToWorldLayers(CGCWorld.getLH());
@@ -219,7 +219,7 @@ public class TankBuilder extends BossBuilder
 							{
 								b = CGCWorld.getBF().createRectangle(x+1+0.25f, y+14, 0.5f, 0.08333f, BodyType.StaticBody, 
 										BodyFactory.CAT_FENCE, BodyFactory.MASK_FENCE);
-								ge = new Fence(AnimationManager.fenceAnims[0], AnimationManager.fenceAnims[1],
+								ge = new Fence(TextureAnimationDrawer.fenceAnims[0], TextureAnimationDrawer.fenceAnims[1],
 										null, EntityType.FENCE, b, x, y+14);
 								b.setUserData(ge);
 								ge.addToWorldLayers(CGCWorld.getLH());
@@ -229,7 +229,7 @@ public class TankBuilder extends BossBuilder
 						{
 							b = CGCWorld.getBF().createRectangle(x+1+0.25f, y+14, 0.5f, 0.08333f, BodyType.StaticBody, 
 									BodyFactory.CAT_FENCE, BodyFactory.MASK_FENCE);
-							ge = new Fence(AnimationManager.fenceAnims[0], AnimationManager.fenceAnims[1],
+							ge = new Fence(TextureAnimationDrawer.fenceAnims[0], TextureAnimationDrawer.fenceAnims[1],
 									null, EntityType.FENCE, b, x, y+14);
 							b.setUserData(ge);
 							ge.addToWorldLayers(CGCWorld.getLH());
@@ -372,13 +372,13 @@ public class TankBuilder extends BossBuilder
 			BodyFactory.CAT_BOSS, BodyFactory.MASK_BOSS);
 		if (aiControl)
 		{
-			boss = new Tank(AnimationManager.tankAnims[0], AnimationManager.tankAnims[1], 
-					AnimationManager.tankAnims[2], EntityType.TANK, bossBody, aiControl, null);
+			boss = new Tank(TextureAnimationDrawer.tankAnims[0], TextureAnimationDrawer.tankAnims[1],
+					TextureAnimationDrawer.tankAnims[2], EntityType.TANK, bossBody, aiControl, null);
 		}
 		else
 		{
-			boss = new Tank(AnimationManager.tankAnims[0], AnimationManager.tankAnims[1], 
-					AnimationManager.tankAnims[2], EntityType.TANK, bossBody, aiControl, tankControl.getTarget());
+			boss = new Tank(TextureAnimationDrawer.tankAnims[0], TextureAnimationDrawer.tankAnims[1],
+					TextureAnimationDrawer.tankAnims[2], EntityType.TANK, bossBody, aiControl, tankControl.getTarget());
 		}
 		bossBody.setUserData(boss);
 		bossBody.setFixedRotation(true);

@@ -65,22 +65,20 @@ public class ControllerScheme
 	{
 		return controller.justPressed(ControlType.PAUSE) || controller.getOuyaPause();
 	}
-	
+
 	/*
 	 * Moves the player based on their side of the controller/mode of input
 	 */
-	public void drivePlayer()
-	{
-		if (player instanceof Prisoner)
-		{
-			((Prisoner) player).controlUpdate(controller.justPressed(ControlType.UP_FACE), 
-					controller.justPressed(ControlType.DOWN_FACE), 
-					controller.justPressed(ControlType.LEFT_FACE), 
+	public void drivePlayer() {
+		if (player instanceof Prisoner) {
+			((Prisoner) player).controlUpdate(controller.justPressed(ControlType.UP_FACE),
+					controller.justPressed(ControlType.DOWN_FACE),
+					controller.justPressed(ControlType.LEFT_FACE),
 					controller.justPressed(ControlType.RIGHT_FACE),
 					controller.justPressed(ControlType.CALLOUT),
 					controller.isPressed(ControlType.UP),
 					controller.isPressed(ControlType.DOWN),
-					controller.isPressed(ControlType.LEFT), 
+					controller.isPressed(ControlType.LEFT),
 					controller.isPressed(ControlType.RIGHT),
 					controller.justPressed(ControlType.UP),
 					controller.justPressed(ControlType.DOWN),
@@ -88,21 +86,23 @@ public class ControllerScheme
 					controller.justPressed(ControlType.LEFT),
 					controller.justPressed(ControlType.JUMP),
 					controller.faceJustMashed());
+		} else {
+			player.controlUpdate(controller.justPressed(ControlType.UP_FACE),
+					controller.justPressed(ControlType.DOWN_FACE),
+					controller.justPressed(ControlType.LEFT_FACE),
+					controller.justPressed(ControlType.RIGHT_FACE),
+					controller.justPressed(ControlType.CALLOUT),
+					controller.isPressed(ControlType.UP),
+					controller.isPressed(ControlType.DOWN),
+					controller.isPressed(ControlType.LEFT),
+					controller.isPressed(ControlType.RIGHT),
+					controller.justPressed(ControlType.JUMP),
+					controller.faceJustMashed());
 		}
-		else
-		{
-			player.controlUpdate(controller.justPressed(ControlType.UP_FACE), 
-									controller.justPressed(ControlType.DOWN_FACE), 
-									controller.justPressed(ControlType.LEFT_FACE), 
-									controller.justPressed(ControlType.RIGHT_FACE),
-									controller.justPressed(ControlType.CALLOUT),
-									controller.isPressed(ControlType.UP),
-									controller.isPressed(ControlType.DOWN),
-									controller.isPressed(ControlType.LEFT), 
-									controller.isPressed(ControlType.RIGHT),
-									controller.justPressed(ControlType.JUMP),
-									controller.faceJustMashed());
-		}
+	}
+
+	public void haltPlayer() {
+		player.haltPlayer();
 	}
 	
 	/*
@@ -123,5 +123,9 @@ public class ControllerScheme
 	public void setPlayer(Player p)
 	{
 		player = p;
+	}
+
+	public Player getPlayer() {
+		return player;
 	}
 } // End class
