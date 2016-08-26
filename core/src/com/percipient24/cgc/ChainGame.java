@@ -31,6 +31,8 @@ import com.badlogic.gdx.utils.Array;
 //import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
 // CGC Imports
+import com.percipient24.cgc.art.CharacterArt;
+import com.percipient24.cgc.entities.terrain.CharacterSelectSensor;
 import com.percipient24.helpers.BodyFactory;
 import com.percipient24.helpers.LayerHandler;
 import com.percipient24.cgc.entities.ChainLink;
@@ -210,11 +212,12 @@ public class ChainGame extends CGCWorld
 			Body tempBody = bf.createPlayerBody(start+(i*1.5f), 2, 0.6f, BodyType.DynamicBody,
 												BodyFactory.CAT_PRISONER, BodyFactory.MASK_PRISONER);
 			tempBody.setFixedRotation(true);
+
+			CharacterSelectSensor chair = ChaseApp.characterSelect.activeChairs.get(i);
 			
-			Player tempPlayer = new Prisoner(this, com.percipient24.cgc.art.TextureAnimationDrawer.prisonerStandLowAnims[i],
-											com.percipient24.cgc.art.TextureAnimationDrawer.prisonerStandMidAnims[i],
-											com.percipient24.cgc.art.TextureAnimationDrawer.prisonerStandHighAnims[i],
+			Player tempPlayer = new Prisoner(this, chair.player.getCharacter(),
 											EntityType.CONVICT, tempBody, (short) i);
+			tempPlayer.copCharacter = chair.cop.getCharacter();
 
 			tempBody.setUserData(tempPlayer);
 			
@@ -223,20 +226,26 @@ public class ChainGame extends CGCWorld
 			players.add(tempPlayer);
 			
 			deadKeyIDs.add(-1);
+
+			ControllerScheme old = chair.player.getScheme();
+			ControllerScheme cs = new ControllerScheme(tempPlayer, old.isLeft());
+			cs.setController(old.getController());
+			schemes.add(cs);
+			tempPlayer.setScheme(cs);
 		}
 		
 		// Set up control schemes for the players
-		for (int i = 0; i < input.controlList.length; i++)
-		{
-			if (input.controlList[i].isUsed())
-			{
-				ControllerScheme cs = new ControllerScheme(players.get(input.controlList[i].getPID()),
-															input.controlList[i].isLeft());
-				cs.setController(input.controlList[i]);
-				schemes.add(cs);
-				players.get(input.controlList[i].getPID()).setScheme(cs);
-			}
-		}
+//		for (int i = 0; i < input.controlList.length; i++)
+//		{
+//			if (input.controlList[i].isUsed())
+//			{
+//				ControllerScheme cs = new ControllerScheme(players.get(input.controlList[i].getPID()),
+//															input.controlList[i].isLeft());
+//				cs.setController(input.controlList[i]);
+//				schemes.add(cs);
+//				players.get(input.controlList[i].getPID()).setScheme(cs);
+//			}
+//		}
 		
 		setDifficultyMods();
 		createChains(start, numChainsInLink);
@@ -1323,15 +1332,13 @@ public class ChainGame extends CGCWorld
 			{
 				mySpawnPos = possibleSpawnPositions.random();
 				Player p = recentlyDeceased.get(i);
+				CharacterArt copArt = p.copCharacter;
 				
 				b = bf.createPlayerBody(mySpawnPos.x + 1, mySpawnPos.y, 0.6f, 
 										BodyType.DynamicBody, BodyFactory.CAT_COP, BodyFactory.MASK_COP);
 				b.setFixedRotation(true);
 				
-				RookieCop rc = new RookieCop(this, com.percipient24.cgc.art.TextureAnimationDrawer.copStandLowAnims[p.getPID()],
-											com.percipient24.cgc.art.TextureAnimationDrawer.copStandMidAnims[p.getPID()],
-											com.percipient24.cgc.art.TextureAnimationDrawer.copStandHighAnims[p.getPID()],
-											EntityType.COP, b, p.getPID());
+				RookieCop rc = new RookieCop(this, copArt, EntityType.COP, b, p.getPID());
 				
 				b.setUserData(rc);
 				players.set(p.getPID(), rc);

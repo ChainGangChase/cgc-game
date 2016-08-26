@@ -123,7 +123,9 @@ public class BossFight extends CGCWorld
 		tManager = ChaseApp.tManager;
 		Tween.registerAccessor(Transition.class, new TransitionAccessor());
 		this.transition = transition;
-		
+
+
+		schemes = new Array<ControllerScheme>(players.size);
 		// "Clean" prisoner chain data and make bodies for living prisoners
 		int start = 3;
 		for (int i = 0; i < players.size; i++)
@@ -157,6 +159,13 @@ public class BossFight extends CGCWorld
 						p.getRightPlayer().setLeftPlayer(null);
 						p.setRightPlayer(null);
 					}
+
+					ControllerScheme old = p.getScheme();
+
+					ControllerScheme cs = new ControllerScheme(p, old.isLeft());
+					cs.setController(old.getController());
+					schemes.add(cs);
+					p.setScheme(cs);
 					
 					p.resetPlayer();
 					((Prisoner) p).sGameWorld(this);
@@ -357,18 +366,18 @@ public class BossFight extends CGCWorld
 		camera.update();
 		
 		// Recreate the control schemes
-		schemes = new Array<ControllerScheme>(players.size);
-		for (int i = 0; i < input.controlList.length; i++)
-		{
-			if (input.controlList[i].isUsed())
-			{
-				ControllerScheme cs = new ControllerScheme(players.get(input.controlList[i].getPID()),
-															input.controlList[i].isLeft());
-				cs.setController(input.controlList[i]);
-				schemes.add(cs);
-				players.get(input.controlList[i].getPID()).setScheme(cs);
-			}
-		}
+//		schemes = new Array<ControllerScheme>(players.size);
+//		for (int i = 0; i < input.controlList.length; i++)
+//		{
+//			if (input.controlList[i].isUsed())
+//			{
+//				ControllerScheme cs = new ControllerScheme(players.get(input.controlList[i].getPID()),
+//															input.controlList[i].isLeft());
+//				cs.setController(input.controlList[i]);
+//				schemes.add(cs);
+//				players.get(input.controlList[i].getPID()).setScheme(cs);
+//			}
+//		}
 		
 		for (int i = 0; i < rookieCops.size; i++)
 		{

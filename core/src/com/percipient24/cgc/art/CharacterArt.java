@@ -82,7 +82,7 @@ public class CharacterArt {
 			tiedMidAnim	 = extractAnimation(app.atlas, "gameanimations/", concop, "strugglemid", charIndex, RUN_ANIM_FRAME_TIME, Animation.PlayMode.LOOP);
 			tiedHighAnim = extractAnimation(app.atlas, "gameanimations/", concop, "strugglehigh", charIndex, RUN_ANIM_FRAME_TIME, Animation.PlayMode.LOOP);
 		} else {
-			copPunchAnim = extractAnimation(app.atlas, "gameanimations/", concop, "coppunch", charIndex, RUN_ANIM_FRAME_TIME, Animation.PlayMode.LOOP);
+			copPunchAnim = extractAnimation(app.atlas, "gameanimations/", concop, "punch", "0", RUN_ANIM_FRAME_TIME, Animation.PlayMode.LOOP);
 		}
 
 		runLowAnim 	= extractAnimation(app.atlas, "gameanimations/", concop, "runlow", charIndex, RUN_ANIM_FRAME_TIME, Animation.PlayMode.LOOP);

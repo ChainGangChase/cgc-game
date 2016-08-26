@@ -54,7 +54,7 @@ public class CharacterSelectSensor {
 	}
 
 	public boolean isReady() {
-		return isOccupied && isPlayerLocked && isCopLocked;
+		return (isOccupied && isPlayerLocked && isCopLocked) || !isOccupied;
 	}
 
 	public void standUp() {

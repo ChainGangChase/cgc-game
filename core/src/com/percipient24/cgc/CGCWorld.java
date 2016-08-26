@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
@@ -1439,8 +1441,13 @@ public abstract class CGCWorld extends CGCScreen
 			{
 				if (toDestroyList.get(0).getBody() != null)
 				{
-					world.destroyBody(toDestroyList.get(0).getBody());
-				}			
+					Body b = toDestroyList.get(0).getBody();
+					Array<Fixture> fixes = new Array<Fixture>();
+					world.getFixtures(fixes);
+					if (fixes.contains(b.getFixtureList().first(), false)) {
+						world.destroyBody(b);
+					}
+				}
 				toDestroyList.get(0).finalCleanup();
 				toDestroyList.get(0).removeFromWorldLayers(lh);
 				toDestroyList.removeValue(toDestroyList.get(0), true);

@@ -78,8 +78,8 @@ public class CharacterSelect extends CGCWorld
 	private final float BLACK_BANNER_HEIGHT = 0.1f;
 	
 	private boolean forgetPlayers = true;
-	
-	private int numPlayers;
+
+	private int activePlayers;
 	private int numPortraitsToShow;
 	private int[] framesHeld;
 	
@@ -96,6 +96,7 @@ public class CharacterSelect extends CGCWorld
 	
 	private Array<PlayerCard> playerCards;
 	private Array<CharacterSelectSensor> chairs;
+	public Array<CharacterSelectSensor> activeChairs;
 	
 	private ShapeRenderer shapes;
 	
@@ -135,16 +136,16 @@ public class CharacterSelect extends CGCWorld
 	{
 		super(app, 0, false);
 
-		int numPlayers = input.controlList.length;
-		schemes = new Array<ControllerScheme>(numPlayers);
-		CGCWorld.numPlayers = numPlayers;
+		int availablePlayers = input.controlList.length;
+		schemes = new Array<ControllerScheme>(availablePlayers);
+		CGCWorld.numPlayers = availablePlayers;
 
 		new com.percipient24.cgc.art.TextureAnimationDrawer(app, input);
 		com.percipient24.cgc.art.TextureAnimationDrawer.loadDefaultCharacterAnimations(input);
 
 		// create character bodies
 		int start = 3;
-		for(int i = 0; i < numPlayers; i++)
+		for(int i = 0; i < availablePlayers; i++)
 		{
 			Body tempBody = bf.createPlayerBody(start+(i*1.5f), 1, 0.6f, BodyDef.BodyType.DynamicBody,
 					BodyFactory.CAT_PRISONER, BodyFactory.MASK_PRISONER);
@@ -498,7 +499,7 @@ public class CharacterSelect extends CGCWorld
 //							// and is the boss
 //							if (allConfirmed())
 //							{
-//								numPlayers = 0;
+//								activePlayers = 0;
 //
 //								// and all players have confirmed their selections
 //								for (int j = 0; j < input.controlList.length; j++)
@@ -514,7 +515,7 @@ public class CharacterSelect extends CGCWorld
 //												playerCards.get(getCardIndex(j)).getCopSelection());
 //										// assign the corresponding controller
 //										input.controlList[j].assignControls(getCardIndex(j), j);
-//										numPlayers++;
+//										activePlayers++;
 //									}
 //								}
 //
@@ -674,20 +675,41 @@ public class CharacterSelect extends CGCWorld
 //			}
 //		}
 		//super.handleInput();
-		boolean shouldUpdatePortraits = false;
-		for(int i = 0; i < schemes.size; i++)
-		{
-			ControllerScheme scheme = schemes.get(i);
-			if (!scheme.getPlayer().seated) {
-				schemes.get(i).drivePlayer();
-			} else {
-				schemes.get(i).haltPlayer();
-				shouldUpdatePortraits = handleSeatedInput(schemes.get(i)) || shouldUpdatePortraits;
+		if (!transitioning) {
+
+			ControlAdapter boss = input.getBoss();
+			ControlAdapter keyboardLeft = input.getKeyboardLeft();
+			ControlAdapter keyboardRight = input.getKeyboardRight();
+
+			boolean shouldUpdatePortraits = false;
+			for(int i = 0; i < schemes.size; i++)
+			{
+				ControllerScheme scheme = schemes.get(i);
+
+				if (boss == scheme.getController()) {
+					if (!scheme.getPlayer().seated &&
+							scheme.getController().justPressed(ControlType.BACK)) {
+						handleB(boss, keyboardLeft, keyboardRight);
+					} else if (
+						scheme.getPlayer().seated &&
+						scheme.getPlayer().seat.isReady() &&
+						scheme.getController().justPressed(ControlType.SELECT)) {
+						attemptStartGame();
+					}
+				}
+
+				if (!scheme.getPlayer().seated) {
+					schemes.get(i).drivePlayer();
+				} else {
+					schemes.get(i).haltPlayer();
+					shouldUpdatePortraits = handleSeatedInput(schemes.get(i)) || shouldUpdatePortraits;
+				}
+			}
+			if (shouldUpdatePortraits) {
+				respondToAdjustedPlayers();
 			}
 		}
-		if (shouldUpdatePortraits) {
-			respondToAdjustedPlayers();
-		}
+
 	}
 
 	public boolean handleSeatedInput(ControllerScheme scheme) {
@@ -706,7 +728,8 @@ public class CharacterSelect extends CGCWorld
 				player.setCharacter(Characters.getPrevConStartingAt(player.getCharacter(), false));
 				changedCharacter = true;
 			}
-			if (controller.justPressed(ControlType.DOWN_FACE)) {
+			if (controller.justPressed(ControlType.DOWN_FACE) ||
+				controller.justPressed(ControlType.SELECT)) {
 				chair.lockPlayerSelection();
 			}
 		} else if (!chair.isCopLocked) {
@@ -721,14 +744,17 @@ public class CharacterSelect extends CGCWorld
 				chair.cop.setCharacter(player.copCharacter);
 				changedCharacter = true;
 			}
-			if (controller.justPressed(ControlType.DOWN_FACE)) {
+			if (controller.justPressed(ControlType.DOWN_FACE) ||
+				controller.justPressed(ControlType.SELECT)) {
 				chair.lockCopSelection();
 			}
-			if (controller.justPressed(ControlType.RIGHT_FACE)) {
+			if (controller.justPressed(ControlType.RIGHT_FACE) ||
+				controller.justPressed(ControlType.BACK)) {
 				chair.unlockPlayerSelection();
 			}
 		} else if (chair.isReady()) {
-			if (controller.justPressed(ControlType.RIGHT_FACE)) {
+			if (controller.justPressed(ControlType.RIGHT_FACE) ||
+				controller.justPressed(ControlType.BACK)) {
 				chair.unlockCopSelection();
 			}
 		}
@@ -740,6 +766,35 @@ public class CharacterSelect extends CGCWorld
 		chair.cop.haltPlayer();
 		controller.update();
 		return changedCharacter;
+	}
+
+		public int getActivePlayers() {
+		return activePlayers;
+	}
+
+	private void attemptStartGame() {
+		boolean ready = true;
+		activeChairs = new Array<CharacterSelectSensor>();
+		activePlayers = 0;
+		for (int i = 0; i < chairs.size; i++) {
+			CharacterSelectSensor chair = chairs.get(i);
+			if (!chair.isReady()) {
+				ready = false;
+			} else {
+				if (chair.isOccupied) {
+					activePlayers++;
+					activeChairs.add(chair);
+				}
+			}
+		}
+
+		if (ready) {
+			if (tutorial) {
+				startTransition();
+			} else {
+				myApp.setScreen(ChaseApp.mapSelect);
+			}
+		}
 	}
 
 	public void renderPhysics(float delta) {

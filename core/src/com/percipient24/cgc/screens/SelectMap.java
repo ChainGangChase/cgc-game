@@ -676,7 +676,7 @@ public class SelectMap extends CGCScreen
 		{
 			transitioning = false;
 			input.getBoss().getCurrent().resetData();
-			myApp.setScreen(new ChainGame(myApp, ChaseApp.characterSelect.getNumPlayers(), 
+			myApp.setScreen(new ChainGame(myApp, ChaseApp.characterSelect.getActivePlayers(),
 					lastMap, mapCache, transition, false));
 		}
 	};
@@ -691,6 +691,8 @@ public class SelectMap extends CGCScreen
 		title = ChaseApp.lang.get(LanguageKeys.select_map);
 		titleLayout.updateText(title);
 		message = ChaseApp.lang.get(LanguageKeys.get_maps);
+
+		ChaseApp.alert("Hey there");
 
 		String mapInfo = "";
 		
@@ -780,7 +782,11 @@ public class SelectMap extends CGCScreen
 			back.setWiggle(-Data.MENU_WIDTH * .05f, -200);
 			select.setWiggle(-Data.MENU_WIDTH * .05f, -400);
 		}
-		
+
+		ChaseApp.alert("What happened?");
+		ChaseApp.alert(mapCache.size());
+		ChaseApp.alert(ChaseApp.characterSelect.getActivePlayers());
+
 		super.show();
 	}
 	
