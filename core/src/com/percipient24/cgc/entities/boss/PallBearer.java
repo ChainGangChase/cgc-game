@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Array;
-import com.percipient24.cgc.AnimationManager;
+import com.percipient24.cgc.art.TextureAnimationDrawer;
 import com.percipient24.cgc.BossFight;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.cgc.entities.players.CarrierCop;
@@ -49,8 +49,8 @@ public class PallBearer extends Boss
 		Body b = CGCWorld.getBF().createCircle(body.getPosition().cpy().x, body.getPosition().cpy().y,0.6f, 
 				BodyType.DynamicBody, BodyFactory.CAT_NON_INTERACTIVE, BodyFactory.MASK_NON_INTERACTIVE);
 		
-		sheriff = new Sheriff(AnimationManager.sheriffAnim, AnimationManager.sheriffAnim, 
-				AnimationManager.sheriffAnim, EntityType.SHERIFF, b, this);
+		sheriff = new Sheriff(TextureAnimationDrawer.sheriffAnim, TextureAnimationDrawer.sheriffAnim,
+				TextureAnimationDrawer.sheriffAnim, EntityType.SHERIFF, b, this);
 		b.setUserData(sheriff);
 		sheriff.addToWorldLayers(CGCWorld.getLH());
 		sheriff.addTargeter();

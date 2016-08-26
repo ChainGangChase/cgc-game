@@ -9,7 +9,7 @@ package com.percipient24.cgc.overlays;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
-import com.percipient24.cgc.AnimationManager;
+import com.percipient24.cgc.art.TextureAnimationDrawer;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.cgc.Data;
 import com.percipient24.cgc.entities.players.Player;
@@ -24,7 +24,7 @@ import com.percipient24.cgc.entities.players.Prisoner;
  */
 public class OffScreenTimer extends CGCOverlay
 {
-	private AnimationManager animManager;
+	private TextureAnimationDrawer animManager;
 	
 	/*
 	 * Creates a new OffScreenTimer object
@@ -59,30 +59,30 @@ public class OffScreenTimer extends CGCOverlay
 					{
 						if(p.getPosition().y > CGCWorld.getCamera().position.y)
 						{
-							animManager.drawFrame(sBatch, AnimationManager.prisonerUpArrowAnim, p.getTimeLeft(),
+							animManager.drawFrame(sBatch, TextureAnimationDrawer.prisonerUpArrowAnim, p.getTimeLeft(),
 									osx, Gdx.graphics.getHeight() - CGCWorld.getAnimManager().gWidth(p.getHighAnim()));
 						}
 						else
 						{
-							animManager.drawFrame(sBatch, AnimationManager.prisonerDownArrowAnim, p.getTimeLeft(), osx, 0);
+							animManager.drawFrame(sBatch, TextureAnimationDrawer.prisonerDownArrowAnim, p.getTimeLeft(), osx, 0);
 						}
 					}
 					else
 					{
 						if(p.getPosition().y > CGCWorld.getCamera().position.y)
 						{
-							animManager.drawFrame(sBatch, AnimationManager.copUpArrowAnim, p.getTimeLeft(),
+							animManager.drawFrame(sBatch, TextureAnimationDrawer.copUpArrowAnim, p.getTimeLeft(),
 									osx, Gdx.graphics.getHeight() -  CGCWorld.getAnimManager().gWidth(p.getHighAnim()));
 						}
 						else
 						{
-							animManager.drawFrame(sBatch, AnimationManager.copDownArrowAnim, p.getTimeLeft(), osx, 0);
+							animManager.drawFrame(sBatch, TextureAnimationDrawer.copDownArrowAnim, p.getTimeLeft(), osx, 0);
 						}
 					}
 					
-					animManager.drawFrame(sBatch, AnimationManager.offScreenTimerAnim, p.getTimeLeft(),
-							Gdx.graphics.getWidth() / 2 - animManager.gWidth(AnimationManager.offScreenTimerAnim) / 2,
-							Gdx.graphics.getHeight() / 2 - animManager.gHeight(AnimationManager.offScreenTimerAnim) / 2);
+					animManager.drawFrame(sBatch, TextureAnimationDrawer.offScreenTimerAnim, p.getTimeLeft(),
+							Gdx.graphics.getWidth() / 2 - animManager.gWidth(TextureAnimationDrawer.offScreenTimerAnim) / 2,
+							Gdx.graphics.getHeight() / 2 - animManager.gHeight(TextureAnimationDrawer.offScreenTimerAnim) / 2);
 				}
 			}
 		}

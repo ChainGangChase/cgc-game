@@ -13,14 +13,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.percipient24.cgc.*;
 import com.percipient24.helpers.BodyFactory;
 import com.percipient24.helpers.LayerHandler;
-import com.percipient24.cgc.AnimationManager;
-import com.percipient24.cgc.CGCWorld;
-import com.percipient24.cgc.CGCTimer;
-import com.percipient24.cgc.Camera;
-import com.percipient24.cgc.Data;
-import com.percipient24.cgc.TimerManager;
 import com.percipient24.enums.EntityType;
 import com.percipient24.cgc.entities.ChainLink;
 import com.percipient24.cgc.entities.Fence;
@@ -237,7 +232,7 @@ public class Tank extends Boss
 				Body b = CGCWorld.getBF().createCircle(body.getWorldCenter().x+x+.25f, 
 						body.getWorldCenter().y+y+.25f-2.5625f, 0.5f, BodyType.DynamicBody, 
 						BodyFactory.CAT_EXPLOSIVE, BodyFactory.MASK_EXPLOSIVE);
-				GameEntity ge = new TankShell(null, null, AnimationManager.tankShellAnim, EntityType.TANK_SHELL,
+				GameEntity ge = new TankShell(null, null, com.percipient24.cgc.art.TextureAnimationDrawer.tankShellAnim, EntityType.TANK_SHELL,
 						b, fireTarget, 
 						new Vector2(target.getHighRegion().getRegionWidth()/2,
 								target.getHighRegion().getRegionHeight()/2));

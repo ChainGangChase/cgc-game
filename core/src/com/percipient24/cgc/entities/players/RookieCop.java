@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.utils.Timer;
+import com.percipient24.cgc.art.CharacterArt;
 import com.percipient24.helpers.BodyFactory;
 import com.percipient24.helpers.LayerHandler;
 import com.percipient24.cgc.CGCTimer;
@@ -66,6 +67,27 @@ public class RookieCop extends Player
 	public static float dazedSlowRecharge = 0.3f;
 	
 	private float donutRotationAngle = 0.0f;
+
+	public RookieCop(CGCWorld theWorld, CharacterArt art, EntityType pEntityType, Body attachedBody, short pID) {
+		super(art, pEntityType, attachedBody, pID);
+		gameWorld = theWorld;
+
+		maxGrabStrength = MAX_GRAB_STRENGTH_BASE + Math.round(((float)(Math.random() * 2) - 1.0f) * MAX_GRAB_RANGE);
+		currentGrabStrength = maxGrabStrength;
+		noGrab = false;
+		setCoins(0);
+
+		grabCooldownTask = new Timer.Task()
+		{
+			public void run()
+			{
+				currentGrabStrength = maxGrabStrength;
+				noGrab = false;
+			}
+		};
+
+		grabCooldownTimer = new CGCTimer(grabCooldownTask, grabCooldown, false, "grabCooldownTimer");
+	}
 	
 	/*
 	 * Creates a new RookieCop object

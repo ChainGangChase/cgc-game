@@ -10,12 +10,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Timer;
+import com.percipient24.cgc.*;
 import com.percipient24.helpers.BodyFactory;
 import com.percipient24.helpers.LayerHandler;
-import com.percipient24.cgc.AnimationManager;
-import com.percipient24.cgc.CGCTimer;
-import com.percipient24.cgc.CGCWorld;
-import com.percipient24.cgc.TimerManager;
 import com.percipient24.cgc.entities.GameEntity;
 import com.percipient24.cgc.entities.Targeter;
 import com.percipient24.cgc.entities.boss.Boss;
@@ -71,7 +68,7 @@ public class SteelHorseRider extends RookieCop
 		b.getFixtureList().get(0).setSensor(true);
 		b.setFixedRotation(true);
 
-		target = new Targeter(null, null, AnimationManager.targetingAnims[0], 
+		target = new Targeter(null, null, com.percipient24.cgc.art.TextureAnimationDrawer.targetingAnims[0],
 				EntityType.TARGETER, b, CGCWorld.getCamera(), playerID);
 
 		b.setUserData(target);
@@ -135,7 +132,7 @@ public class SteelHorseRider extends RookieCop
 			Body b = CGCWorld.getBF().createCircle(body.getWorldCenter().x, 
 					body.getWorldCenter().y, 
 					0.1f, BodyType.DynamicBody, BodyFactory.CAT_INTERACTABLE, BodyFactory.MASK_INTERACTABLE);
-			GameEntity ge = new RiderBullet(null, null, AnimationManager.bulletAnim, EntityType.BULLET,
+			GameEntity ge = new RiderBullet(null, null, com.percipient24.cgc.art.TextureAnimationDrawer.bulletAnim, EntityType.BULLET,
 					b, target.getBody().getPosition(), 
 					new Vector2(target.getHighRegion().getRegionWidth() / 2,
 							target.getHighRegion().getRegionHeight() / 2), false);

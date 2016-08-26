@@ -9,9 +9,11 @@ package com.percipient24.cgc.entities.players;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.utils.Array;
+import com.percipient24.cgc.art.CharacterArt;
 import com.percipient24.helpers.BodyFactory;
 import com.percipient24.helpers.LayerHandler;
 import com.percipient24.cgc.BossFight;
@@ -70,7 +72,21 @@ public class Prisoner extends Player
 	public long startTime;
 	public long endTime;
 	private int lastMapOnID = -1;
-	
+
+	public Prisoner(CGCWorld theWorld, CharacterArt art, EntityType pEntityType, Body attachedBody, short pID) {
+		super(art, pEntityType, attachedBody, pID);
+
+		gameWorld = theWorld;
+		towerContacts = new Array<GuardTower>();
+		lightContacts = new Array<Spotlight>();
+		sensorContacts = new Array<Sensor>();
+		grabbedByArray = new Array<RookieCop>();
+		keyID = (int) (playerID+1);
+
+		maxStamina = MAX_STAMINA_BASE + Math.round(((float)(Math.random() * 2) - 1.0f) * MAX_STAMINA_RANGE);
+		currentStamina = maxStamina;
+	}
+
 	/*
 	 * Creates a new Prisoner object
 	 * 
@@ -464,7 +480,7 @@ public class Prisoner extends Player
 			applyForceToSelf(knockbackDirection, 250);
 		}
 		
-		if (!inBossFight && chainGame.getCurrentTrain() >= 0)
+		if (!inBossFight && chainGame != null && chainGame.getCurrentTrain() >= 0)
 		{
 			for (int i = 0; i < CGCWorld.getBF().getCurrentTrain(chainGame.getCurrentTrain()).size; i++)
 			{

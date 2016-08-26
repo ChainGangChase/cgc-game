@@ -12,8 +12,8 @@ import java.util.Queue;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
+import com.percipient24.cgc.art.TextureAnimationDrawer;
 import com.percipient24.helpers.LayerHandler;
-import com.percipient24.cgc.AnimationManager;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.cgc.entities.Track;
 import com.percipient24.cgc.entities.players.Player;
@@ -292,7 +292,7 @@ public class Conductor extends Boss
 	private void turnOnTracks(int trackCode) {
 		for(int i = 0; i < this.tracks.length; i++) {
 			if ((1<<i & trackCode) != 0){
-				this.tracks[i].setLowAnim(AnimationManager.trackAnim);
+				this.tracks[i].setLowAnim(TextureAnimationDrawer.trackAnim);
 			}
 		}
 	}
@@ -302,7 +302,7 @@ public class Conductor extends Boss
 	 */
 	private void turnOffAllTracks() {
 		for(int i = 0; i < this.tracks.length; i++) {
-			this.tracks[i].setLowAnim(AnimationManager.trackSolid);
+			this.tracks[i].setLowAnim(TextureAnimationDrawer.trackSolid);
 		}
 	}
 

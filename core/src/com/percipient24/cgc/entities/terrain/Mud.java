@@ -9,8 +9,8 @@ package com.percipient24.cgc.entities.terrain;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.percipient24.cgc.art.TextureAnimationDrawer;
 import com.percipient24.helpers.LayerHandler;
-import com.percipient24.cgc.AnimationManager;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.enums.EntityType;
 
@@ -50,10 +50,10 @@ public class Mud extends Terrain
 		super(newLowAnimation, newMidAnimation, newHighAnimation, pEntityType, attachedBody,
 				tr, br, bl, tl);
 		
-		topRightTime = CGCWorld.getRandom().nextFloat() * (3 * AnimationManager.TERRAIN_ANIM_FRAME_TIME);
-		botRightTime = CGCWorld.getRandom().nextFloat() * (3 * AnimationManager.TERRAIN_ANIM_FRAME_TIME);
-		botLeftTime = CGCWorld.getRandom().nextFloat() * (3 * AnimationManager.TERRAIN_ANIM_FRAME_TIME);
-		topLeftTime = CGCWorld.getRandom().nextFloat() * (3 * AnimationManager.TERRAIN_ANIM_FRAME_TIME);
+		topRightTime = CGCWorld.getRandom().nextFloat() * (3 * TextureAnimationDrawer.TERRAIN_ANIM_FRAME_TIME);
+		botRightTime = CGCWorld.getRandom().nextFloat() * (3 * TextureAnimationDrawer.TERRAIN_ANIM_FRAME_TIME);
+		botLeftTime = CGCWorld.getRandom().nextFloat() * (3 * TextureAnimationDrawer.TERRAIN_ANIM_FRAME_TIME);
+		topLeftTime = CGCWorld.getRandom().nextFloat() * (3 * TextureAnimationDrawer.TERRAIN_ANIM_FRAME_TIME);
 	}
 	
 	/*
@@ -64,25 +64,25 @@ public class Mud extends Terrain
 	 */
 	public void step(float deltaTime, int layer) 
 	{
-		if (topRightTime > 4 * AnimationManager.TERRAIN_ANIM_FRAME_TIME)
+		if (topRightTime > 4 * TextureAnimationDrawer.TERRAIN_ANIM_FRAME_TIME)
 		{
 			topRightTime = 0;
 		}
 		//topRightTime += deltaTime;
 		
-		if (botRightTime > 4 * AnimationManager.TERRAIN_ANIM_FRAME_TIME)
+		if (botRightTime > 4 * TextureAnimationDrawer.TERRAIN_ANIM_FRAME_TIME)
 		{
 			botRightTime = 0;
 		}
 		//botRightTime += deltaTime;
 		
-		if (botLeftTime > 4 * AnimationManager.TERRAIN_ANIM_FRAME_TIME)
+		if (botLeftTime > 4 * TextureAnimationDrawer.TERRAIN_ANIM_FRAME_TIME)
 		{
 			botLeftTime = 0;
 		}
 		//botLeftTime += deltaTime;
 		
-		if (topLeftTime > 4 * AnimationManager.TERRAIN_ANIM_FRAME_TIME)
+		if (topLeftTime > 4 * TextureAnimationDrawer.TERRAIN_ANIM_FRAME_TIME)
 		{
 			topLeftTime = 0;
 		}
@@ -114,10 +114,10 @@ public class Mud extends Terrain
 	{
 		switch (corner)
 		{
-			case 0: return AnimationManager.mudAnims[mudType].getKeyFrame(topRightTime);
-			case 1: return AnimationManager.mudAnims[mudType].getKeyFrame(botRightTime);
-			case 2: return AnimationManager.mudAnims[mudType].getKeyFrame(botLeftTime);
-			default: return AnimationManager.mudAnims[mudType].getKeyFrame(topLeftTime);
+			case 0: return TextureAnimationDrawer.mudAnims[mudType].getKeyFrame(topRightTime);
+			case 1: return TextureAnimationDrawer.mudAnims[mudType].getKeyFrame(botRightTime);
+			case 2: return TextureAnimationDrawer.mudAnims[mudType].getKeyFrame(botLeftTime);
+			default: return TextureAnimationDrawer.mudAnims[mudType].getKeyFrame(topLeftTime);
 		}
 	}
 } // End class

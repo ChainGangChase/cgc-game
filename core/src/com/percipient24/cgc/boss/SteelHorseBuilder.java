@@ -7,8 +7,8 @@ package com.percipient24.cgc.boss;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.percipient24.cgc.art.TextureAnimationDrawer;
 import com.percipient24.helpers.BodyFactory;
-import com.percipient24.cgc.AnimationManager;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.cgc.entities.GameEntity;
 import com.percipient24.cgc.entities.GuardTower;
@@ -51,8 +51,8 @@ public class SteelHorseBuilder extends BossBuilder
 		//Make the bottom wall.
 		wall = CGCWorld.getBF().createRectangle(9.5f, 0, 20, 1, BodyType.StaticBody, 
 				BodyFactory.CAT_WALL, BodyFactory.MASK_WALL);
-		ge = new Wall(AnimationManager.hwallAnim, null,
-				AnimationManager.hwallAnim, EntityType.WALL, 
+		ge = new Wall(TextureAnimationDrawer.hwallAnim, null,
+				TextureAnimationDrawer.hwallAnim, EntityType.WALL,
 				wall, false);
 		wall.setUserData(ge);
 
@@ -64,8 +64,8 @@ public class SteelHorseBuilder extends BossBuilder
 			
 			wall = CGCWorld.getBF().createRectangle(0, 5+(10+3f/5f)*i, 1, 11, BodyType.StaticBody, 
 					BodyFactory.CAT_WALL, BodyFactory.MASK_WALL);
-			ge = new Wall(AnimationManager.vwallAnims[0], null,
-					AnimationManager.vwallAnims[0], EntityType.WALL, 
+			ge = new Wall(TextureAnimationDrawer.vwallAnims[0], null,
+					TextureAnimationDrawer.vwallAnims[0], EntityType.WALL,
 					wall, true);
 			wall.setUserData(ge);
 
@@ -73,8 +73,8 @@ public class SteelHorseBuilder extends BossBuilder
 			
 			wall = CGCWorld.getBF().createRectangle(19, 5+(10+3f/5f)*i, 1, 11, BodyType.StaticBody, 
 					BodyFactory.CAT_WALL, BodyFactory.MASK_WALL);
-			ge = new Wall(AnimationManager.vwallAnims[0], null,
-					AnimationManager.vwallAnims[0], EntityType.WALL, 
+			ge = new Wall(TextureAnimationDrawer.vwallAnims[0], null,
+					TextureAnimationDrawer.vwallAnims[0], EntityType.WALL,
 					wall, true);
 			wall.setUserData(ge);
 			
@@ -86,9 +86,9 @@ public class SteelHorseBuilder extends BossBuilder
 			int x = CGCWorld.getRandom().nextInt(17)+1;
 			int y = CGCWorld.getRandom().nextInt(levelLength*11);
 			Body tower = CGCWorld.getBF().createRectangle(x, y, 1, 1, 
-					BodyType.StaticBody, BodyFactory.CAT_TETRAIN, 
-					BodyFactory.MASK_TETRAIN);
-			ge = new GuardTower(AnimationManager.towerAnims[0], null, AnimationManager.towerAnims[1],
+					BodyType.StaticBody, BodyFactory.CAT_TERRAIN,
+					BodyFactory.MASK_TERRAIN);
+			ge = new GuardTower(TextureAnimationDrawer.towerAnims[0], null, TextureAnimationDrawer.towerAnims[1],
 					EntityType.TOWER, tower, x, y);
 			tower.setUserData(ge);
 			tower.getFixtureList().get(0).setSensor(true);
@@ -99,8 +99,8 @@ public class SteelHorseBuilder extends BossBuilder
 		//Make the top wall.
 		wall = CGCWorld.getBF().createRectangle(9.5f, 32.1f, 20, 1, BodyType.StaticBody, 
 				BodyFactory.CAT_WALL, BodyFactory.MASK_WALL);
-		ge = new Wall(AnimationManager.hwallAnim, null,
-				AnimationManager.hwallAnim, EntityType.WALL, 
+		ge = new Wall(TextureAnimationDrawer.hwallAnim, null,
+				TextureAnimationDrawer.hwallAnim, EntityType.WALL,
 				wall, false);
 		wall.setUserData(ge);
 
@@ -118,8 +118,8 @@ public class SteelHorseBuilder extends BossBuilder
 		bossBody = CGCWorld.getBF().createRectangle(9.0f, 5.0f, 1.0f, 2.0f, 
 				BodyType.DynamicBody, 
 				BodyFactory.CAT_STEEL_HORSE, BodyFactory.MASK_STEEL_HORSE);
-		boss = new SteelHorse(AnimationManager.steelHorseAnim, 
-				AnimationManager.steelHorseAnim, AnimationManager.steelHorseAnim, 
+		boss = new SteelHorse(TextureAnimationDrawer.steelHorseAnim,
+				TextureAnimationDrawer.steelHorseAnim, TextureAnimationDrawer.steelHorseAnim,
 				EntityType.STEEL_HORSE, bossBody);
 		bossBody.setUserData(boss);
 		bossBody.setFixedRotation(true);

@@ -20,7 +20,7 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.physics.box2d.joints.RopeJointDef;
 import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
 import com.badlogic.gdx.utils.Array;
-import com.percipient24.cgc.AnimationManager;
+import com.percipient24.cgc.art.TextureAnimationDrawer;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.cgc.entities.GameEntity;
 import com.percipient24.cgc.entities.TrainCar;
@@ -65,7 +65,7 @@ public class BodyFactory
 	public static final short CAT_INTERACTABLE = CAT_7; // Used for Towers, Sensors, Spotlights, and Bullets
 	public static final short CAT_BOSS = CAT_4; // Used for Jeeps and Tanks
 	public static final short CAT_IMPASSABLE = CAT_5; // Used for Player Walls and Sheriff-Ground
-	public static final short CAT_TETRAIN = CAT_5 | CAT_6; // Used for Train, Mud, Water, and Bridges
+	public static final short CAT_TERRAIN = CAT_5 | CAT_6; // Used for Train, Mud, Water, and Bridges
 	public static final short CAT_TREE = CAT_3;
 	public static final short CAT_WALL = CAT_5 | CAT_6 | CAT_13;
 	public static final short CAT_WHEEL = CAT_9;
@@ -87,7 +87,7 @@ public class BodyFactory
 	public static final short MASK_BOSS = CAT_12 | CAT_10 | CAT_2 | CAT_3; // Used for Jeeps, Tanks, and Steel Horse
 	public static final short MASK_PLAYER_WALL = CAT_1;
 	public static final short MASK_SHERIFF_GROUND = MASK_PLAYER_WALL | CAT_15;
-	public static final short MASK_TETRAIN = CAT_1 | CAT_11 | CAT_15; // Used for Train, Mud, Water, and Bridges
+	public static final short MASK_TERRAIN = CAT_1 | CAT_11 | CAT_15; // Used for Train, Mud, Water, and Bridges
 	public static final short MASK_TREE = CAT_1 | CAT_11 | CAT_10 | CAT_4 | CAT_8;
 	public static final short MASK_WALL = CAT_1 | CAT_11 | CAT_10 | CAT_14 | CAT_15;
 	public static final short MASK_WHEEL = CAT_10;
@@ -513,10 +513,10 @@ public class BodyFactory
 	 */
 	public void createCar(Body anchor, float startX, float startY, boolean endCar, boolean left)
 	{
-		Body car = createRectangle(startX, startY, 5, 1.5f, BodyType.DynamicBody, 
-				CAT_TETRAIN, MASK_TETRAIN);
-		GameEntity ge = new TrainCar(AnimationManager.trainAnims[0], 
-				AnimationManager.trainAnims[1], AnimationManager.trainAnims[2], 
+		Body car = createRectangle(startX, startY, 5, 1.5f, BodyType.DynamicBody,
+				CAT_TERRAIN, MASK_TERRAIN);
+		GameEntity ge = new TrainCar(TextureAnimationDrawer.trainAnims[0],
+				TextureAnimationDrawer.trainAnims[1], TextureAnimationDrawer.trainAnims[2],
 				EntityType.TRAIN, car, left);
 		car.setUserData(ge);
 		

@@ -15,13 +15,9 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Timer;
+import com.percipient24.cgc.*;
 import com.percipient24.helpers.BodyFactory;
 import com.percipient24.helpers.LayerHandler;
-import com.percipient24.cgc.AnimationManager;
-import com.percipient24.cgc.BossFight;
-import com.percipient24.cgc.CGCTimer;
-import com.percipient24.cgc.CGCWorld;
-import com.percipient24.cgc.TimerManager;
 import com.percipient24.cgc.entities.ChainLink;
 import com.percipient24.cgc.entities.GameEntity;
 import com.percipient24.cgc.entities.Wall;
@@ -131,7 +127,7 @@ public class SteelHorse extends Boss
 		Body b = CGCWorld.getBF().createCircle(0, 0, 
 				0.6f, BodyType.StaticBody, BodyFactory.CAT_IMPASSABLE, BodyFactory.MASK_SHERIFF_GROUND);
 		
-		sheriff = new Sheriff(AnimationManager.sheriffAnim, AnimationManager.sheriffAnim, AnimationManager.sheriffAnim, EntityType.SHERIFF, b, this);
+		sheriff = new Sheriff(com.percipient24.cgc.art.TextureAnimationDrawer.sheriffAnim, com.percipient24.cgc.art.TextureAnimationDrawer.sheriffAnim, com.percipient24.cgc.art.TextureAnimationDrawer.sheriffAnim, EntityType.SHERIFF, b, this);
 		sheriff.addToWorldLayers(CGCWorld.getLH());
 		//sheriff.addTargeter();
 		b.setUserData(sheriff);
@@ -309,9 +305,9 @@ public class SteelHorse extends Boss
 			
 			hp--;
 			
-			setLowAnim(AnimationManager.crashAnim);
-			setMidAnim(AnimationManager.crashAnim);
-			setHighAnim(AnimationManager.crashAnim);
+			setLowAnim(com.percipient24.cgc.art.TextureAnimationDrawer.crashAnim);
+			setMidAnim(com.percipient24.cgc.art.TextureAnimationDrawer.crashAnim);
+			setHighAnim(com.percipient24.cgc.art.TextureAnimationDrawer.crashAnim);
 			
 			if (hp > 0)
 			{
@@ -460,9 +456,9 @@ public class SteelHorse extends Boss
 			maxForce *= 2;
 			canBoost = false;
 			boosting = true;
-			setLowAnim(AnimationManager.boostAnim);
-			setMidAnim(AnimationManager.boostAnim);
-			setHighAnim(AnimationManager.boostAnim);
+			setLowAnim(com.percipient24.cgc.art.TextureAnimationDrawer.boostAnim);
+			setMidAnim(com.percipient24.cgc.art.TextureAnimationDrawer.boostAnim);
+			setHighAnim(com.percipient24.cgc.art.TextureAnimationDrawer.boostAnim);
 			TimerManager.addTimer(boostClock);
 		}
 	}
@@ -484,9 +480,9 @@ public class SteelHorse extends Boss
 					hp--;
 					body.setType(BodyType.StaticBody);
 					
-					setLowAnim(AnimationManager.crashAnim);
-					setMidAnim(AnimationManager.crashAnim);
-					setHighAnim(AnimationManager.crashAnim);
+					setLowAnim(com.percipient24.cgc.art.TextureAnimationDrawer.crashAnim);
+					setMidAnim(com.percipient24.cgc.art.TextureAnimationDrawer.crashAnim);
+					setHighAnim(com.percipient24.cgc.art.TextureAnimationDrawer.crashAnim);
 					
 					if (hp > 0)
 					{
@@ -513,9 +509,9 @@ public class SteelHorse extends Boss
 				body.setTransform(body.getPosition().cpy().sub(body.getLinearVelocity().cpy().nor().scl(0.8f)), 0);
 				body.setType(BodyType.DynamicBody);
 				
-				setLowAnim(AnimationManager.steelHorseAnim);
-				setMidAnim(AnimationManager.steelHorseAnim);
-				setHighAnim(AnimationManager.steelHorseAnim);
+				setLowAnim(com.percipient24.cgc.art.TextureAnimationDrawer.steelHorseAnim);
+				setMidAnim(com.percipient24.cgc.art.TextureAnimationDrawer.steelHorseAnim);
+				setHighAnim(com.percipient24.cgc.art.TextureAnimationDrawer.steelHorseAnim);
 				
 				pickTarget();
 				offset = (float) (Math.random() * accuracy);
@@ -531,9 +527,9 @@ public class SteelHorse extends Boss
 			public void run()
 			{
 				
-				setLowAnim(AnimationManager.steelHorseAnim);
-				setMidAnim(AnimationManager.steelHorseAnim);
-				setHighAnim(AnimationManager.steelHorseAnim);
+				setLowAnim(com.percipient24.cgc.art.TextureAnimationDrawer.steelHorseAnim);
+				setMidAnim(com.percipient24.cgc.art.TextureAnimationDrawer.steelHorseAnim);
+				setHighAnim(com.percipient24.cgc.art.TextureAnimationDrawer.steelHorseAnim);
 				
 				boosting = false;
 				maxSpeed /= 2;

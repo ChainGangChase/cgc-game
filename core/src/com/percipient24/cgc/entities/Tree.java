@@ -12,19 +12,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.percipient24.cgc.*;
 import com.percipient24.helpers.LayerHandler;
-import com.percipient24.cgc.AnimationManager;
-import com.percipient24.cgc.CGCWorld;
-import com.percipient24.cgc.Camera;
-import com.percipient24.cgc.ChaseApp;
-import com.percipient24.cgc.Data;
 import com.percipient24.cgc.entities.boss.Tank;
 import com.percipient24.cgc.entities.players.Player;
 import com.percipient24.cgc.entities.players.Prisoner;
 import com.percipient24.cgc.entities.players.RookieCop;
 import com.percipient24.cgc.entities.projectiles.TankShell;
 import com.percipient24.cgc.screens.Options;
-import com.percipient24.cgc.SoundManager;
 import com.percipient24.enums.EntityType;
 
 /*
@@ -333,7 +328,7 @@ public class Tree extends GameEntity
 				}
 				else
 				{
-					frame = AnimationManager.treeAnims[3].getKeyFrame(0);
+					frame = com.percipient24.cgc.art.TextureAnimationDrawer.treeAnims[3].getKeyFrame(0);
 					sBatch.draw(frame, baseX, baseY, 
 							getImageHalfWidth(layerNumber), getImageHalfHeight(layerNumber), 
 							frame.getRegionWidth(), frame.getRegionHeight(), 

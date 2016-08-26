@@ -33,7 +33,6 @@ import com.percipient24.cgc.boss.TrainRushBuilder;
 import com.percipient24.cgc.boss.TrenchRunBuilder;
 import com.percipient24.cgc.entities.ChainLink;
 import com.percipient24.cgc.entities.GameEntity;
-import com.percipient24.cgc.entities.Track;
 import com.percipient24.cgc.entities.boss.Boss;
 import com.percipient24.cgc.entities.boss.PallBearer;
 import com.percipient24.cgc.entities.boss.Sheriff;
@@ -124,7 +123,9 @@ public class BossFight extends CGCWorld
 		tManager = ChaseApp.tManager;
 		Tween.registerAccessor(Transition.class, new TransitionAccessor());
 		this.transition = transition;
-		
+
+
+		schemes = new Array<ControllerScheme>(players.size);
 		// "Clean" prisoner chain data and make bodies for living prisoners
 		int start = 3;
 		for (int i = 0; i < players.size; i++)
@@ -158,6 +159,13 @@ public class BossFight extends CGCWorld
 						p.getRightPlayer().setLeftPlayer(null);
 						p.setRightPlayer(null);
 					}
+
+					ControllerScheme old = p.getScheme();
+
+					ControllerScheme cs = new ControllerScheme(p, old.isLeft());
+					cs.setController(old.getController());
+					schemes.add(cs);
+					p.setScheme(cs);
 					
 					p.resetPlayer();
 					((Prisoner) p).sGameWorld(this);
@@ -211,9 +219,9 @@ public class BossFight extends CGCWorld
 								BodyType.DynamicBody, BodyFactory.CAT_TIED_PRISONER, BodyFactory.MASK_BOSS_COP);
 						tempBody.setFixedRotation(true);
 						
-						GunCop gc = new GunCop(this, this, AnimationManager.copStandLowAnims[p.getPID()],
-								AnimationManager.copStandMidAnims[p.getPID()],
-								AnimationManager.copStandHighAnims[p.getPID()],
+						GunCop gc = new GunCop(this, this, com.percipient24.cgc.art.TextureAnimationDrawer.copStandLowAnims[p.getPID()],
+								com.percipient24.cgc.art.TextureAnimationDrawer.copStandMidAnims[p.getPID()],
+								com.percipient24.cgc.art.TextureAnimationDrawer.copStandHighAnims[p.getPID()],
 								EntityType.COP, tempBody, p.getPID(), curGunCop, false);
 						gc.setBody(tempBody);
 						tempBody.setUserData(gc);
@@ -235,9 +243,9 @@ public class BossFight extends CGCWorld
 						
 						if (!tankAssigned)
 						{
-							gc = new GunCop(this, this, AnimationManager.copStandLowAnims[p.getPID()],
-									AnimationManager.copStandMidAnims[p.getPID()],
-									AnimationManager.copStandHighAnims[p.getPID()],
+							gc = new GunCop(this, this, com.percipient24.cgc.art.TextureAnimationDrawer.copStandLowAnims[p.getPID()],
+									com.percipient24.cgc.art.TextureAnimationDrawer.copStandMidAnims[p.getPID()],
+									com.percipient24.cgc.art.TextureAnimationDrawer.copStandHighAnims[p.getPID()],
 									EntityType.COP, tempBody, p.getPID(), 0, true);
 							tempBody.setUserData(gc);
 							gc.addToWorldLayers(lh);
@@ -250,9 +258,9 @@ public class BossFight extends CGCWorld
 						}
 						else
 						{
-							gc = new GunCop(this, this, AnimationManager.copStandLowAnims[p.getPID()],
-									AnimationManager.copStandMidAnims[p.getPID()],
-									AnimationManager.copStandHighAnims[p.getPID()],
+							gc = new GunCop(this, this, com.percipient24.cgc.art.TextureAnimationDrawer.copStandLowAnims[p.getPID()],
+									com.percipient24.cgc.art.TextureAnimationDrawer.copStandMidAnims[p.getPID()],
+									com.percipient24.cgc.art.TextureAnimationDrawer.copStandHighAnims[p.getPID()],
 									EntityType.COP, tempBody, p.getPID(), curGunCop, false);
 							tempBody.setUserData(gc);
 							gc.addToWorldLayers(lh);
@@ -267,9 +275,9 @@ public class BossFight extends CGCWorld
 								BodyType.DynamicBody, BodyFactory.CAT_COP, BodyFactory.MASK_COP);
 						
 						SteelHorseRider shr = new SteelHorseRider(this, 
-								AnimationManager.copStandLowAnims[p.getPID()],
-								AnimationManager.copStandMidAnims[p.getPID()], 
-								AnimationManager.copStandHighAnims[p.getPID()],
+								com.percipient24.cgc.art.TextureAnimationDrawer.copStandLowAnims[p.getPID()],
+								com.percipient24.cgc.art.TextureAnimationDrawer.copStandMidAnims[p.getPID()],
+								com.percipient24.cgc.art.TextureAnimationDrawer.copStandHighAnims[p.getPID()],
 								EntityType.COP, tempBody, p.getPID(), (SteelHorse) boss);
 						tempBody.setUserData(shr);
 						shr.addToWorldLayers(lh);
@@ -282,9 +290,9 @@ public class BossFight extends CGCWorld
 						p.removeFromWorldLayers(lh);
 						tempBody = bf.createPlayerBody(start+(p.getPID()*1.5f), 10, 0.6f, BodyType.KinematicBody,
 								BodyFactory.CAT_CARRIER_COP, BodyFactory.MASK_CARRIER_COP);
-						CarrierCop cc = new CarrierCop(this, AnimationManager.copStandLowAnims[p.getPID()],
-								AnimationManager.copStandMidAnims[p.getPID()],
-								AnimationManager.copStandHighAnims[p.getPID()],
+						CarrierCop cc = new CarrierCop(this, com.percipient24.cgc.art.TextureAnimationDrawer.copStandLowAnims[p.getPID()],
+								com.percipient24.cgc.art.TextureAnimationDrawer.copStandMidAnims[p.getPID()],
+								com.percipient24.cgc.art.TextureAnimationDrawer.copStandHighAnims[p.getPID()],
 								EntityType.COP, tempBody, p.getPID());
 						tempBody.setUserData(cc);
 						cc.addToWorldLayers(lh);
@@ -296,9 +304,9 @@ public class BossFight extends CGCWorld
 						p.removeFromWorldLayers(lh);
 						tempBody = bf.createPlayerBody(start+(p.getPID()*1.5f), 10, 0.6f, BodyType.DynamicBody, 
 								BodyFactory.CAT_COP, BodyFactory.MASK_COP);
-						SpotlightCop sc = new SpotlightCop(this, AnimationManager.copStandLowAnims[p.getPID()],
-								AnimationManager.copStandMidAnims[p.getPID()], 
-								AnimationManager.copStandHighAnims[p.getPID()],
+						SpotlightCop sc = new SpotlightCop(this, com.percipient24.cgc.art.TextureAnimationDrawer.copStandLowAnims[p.getPID()],
+								com.percipient24.cgc.art.TextureAnimationDrawer.copStandMidAnims[p.getPID()],
+								com.percipient24.cgc.art.TextureAnimationDrawer.copStandHighAnims[p.getPID()],
 								EntityType.COP, tempBody, p.getPID(),
 								camera.position.x, camera.position.y);
 						tempBody.setUserData(sc);
@@ -358,18 +366,18 @@ public class BossFight extends CGCWorld
 		camera.update();
 		
 		// Recreate the control schemes
-		schemes = new Array<ControllerScheme>(players.size);
-		for (int i = 0; i < input.controlList.length; i++)
-		{
-			if (input.controlList[i].isUsed())
-			{
-				ControllerScheme cs = new ControllerScheme(players.get(input.controlList[i].getPID()),
-															input.controlList[i].isLeft());
-				cs.setController(input.controlList[i]);
-				schemes.add(cs);
-				players.get(input.controlList[i].getPID()).setScheme(cs);
-			}
-		}
+//		schemes = new Array<ControllerScheme>(players.size);
+//		for (int i = 0; i < input.controlList.length; i++)
+//		{
+//			if (input.controlList[i].isUsed())
+//			{
+//				ControllerScheme cs = new ControllerScheme(players.get(input.controlList[i].getPID()),
+//															input.controlList[i].isLeft());
+//				cs.setController(input.controlList[i]);
+//				schemes.add(cs);
+//				players.get(input.controlList[i].getPID()).setScheme(cs);
+//			}
+//		}
 		
 		for (int i = 0; i < rookieCops.size; i++)
 		{
@@ -423,11 +431,11 @@ public class BossFight extends CGCWorld
 			bodyList.add(b);
 			if (j%2 == 1)
 			{
-				ge = new ChainLink(AnimationManager.chainAnims[0], null, null, EntityType.CHAINLINK, b);
+				ge = new ChainLink(com.percipient24.cgc.art.TextureAnimationDrawer.chainAnims[0], null, null, EntityType.CHAINLINK, b);
 			}
 			else
 			{
-				ge = new ChainLink(AnimationManager.chainAnims[1], null, null, EntityType.CHAINLINK, b);
+				ge = new ChainLink(com.percipient24.cgc.art.TextureAnimationDrawer.chainAnims[1], null, null, EntityType.CHAINLINK, b);
 			}
 			b.setUserData(ge);
 			b.setAngularDamping(1000.0f);
@@ -782,7 +790,7 @@ public class BossFight extends CGCWorld
 		{
 			if (players.get(i).getShowCallout())
 			{	
-				TextureRegion calloutFrame = AnimationManager.calloutAnims[i].getKeyFrame(0);
+				TextureRegion calloutFrame = com.percipient24.cgc.art.TextureAnimationDrawer.calloutAnims[i].getKeyFrame(0);
 				
 				sBatch.draw(calloutFrame, players.get(i).getBody().getPosition().x, 
 							players.get(i).getBody().getPosition().y, -0.5f, -0.5f, 
@@ -794,8 +802,8 @@ public class BossFight extends CGCWorld
 			{
 				if (((RookieCop) players.get(i)).getBarRatio() < 1.0f && !(players.get(i) instanceof SteelHorseRider))
 				{
-					TextureRegion grabBack = AnimationManager.barBackAnim.getKeyFrame(0);
-					TextureRegion grabFill = AnimationManager.grabFillAnim.getKeyFrame(0);
+					TextureRegion grabBack = com.percipient24.cgc.art.TextureAnimationDrawer.barBackAnim.getKeyFrame(0);
+					TextureRegion grabFill = com.percipient24.cgc.art.TextureAnimationDrawer.grabFillAnim.getKeyFrame(0);
 					
 					sBatch.draw(grabBack, players.get(i).getBody().getPosition().x, 
 								players.get(i).getBody().getPosition().y + .2f, -0.5f, -0.5f, 
@@ -809,7 +817,7 @@ public class BossFight extends CGCWorld
 				}
 				if (((RookieCop) players.get(i)).isGrabCooldown())
 				{
-					TextureRegion tempRegion = AnimationManager.dazedAnim.getKeyFrame(0);
+					TextureRegion tempRegion = com.percipient24.cgc.art.TextureAnimationDrawer.dazedAnim.getKeyFrame(0);
 					
 					sBatch.draw(tempRegion, players.get(i).getBody().getPosition().x, 
 							players.get(i).getBody().getPosition().y, 0, 0, 
@@ -832,8 +840,8 @@ public class BossFight extends CGCWorld
 			{
 				if (((Prisoner) players.get(i)).getBarRatio() < 1.0f)
 				{
-					TextureRegion grabBack = AnimationManager.barBackAnim.getKeyFrame(0);
-					TextureRegion staminaFill = AnimationManager.staminaFillAnim.getKeyFrame(0);
+					TextureRegion grabBack = com.percipient24.cgc.art.TextureAnimationDrawer.barBackAnim.getKeyFrame(0);
+					TextureRegion staminaFill = com.percipient24.cgc.art.TextureAnimationDrawer.staminaFillAnim.getKeyFrame(0);
 					
 					sBatch.draw(grabBack, players.get(i).getBody().getPosition().x, 
 								players.get(i).getBody().getPosition().y + .2f, -0.5f, -0.5f, 
@@ -1019,7 +1027,7 @@ public class BossFight extends CGCWorld
 							
 							if (t == null) // If the terrain is background...
 							{
-								terrainFrame = AnimationManager.bgAnims[0].getKeyFrame(0);
+								terrainFrame = com.percipient24.cgc.art.TextureAnimationDrawer.bgAnims[0].getKeyFrame(0);
 								sBatch.draw(terrainFrame, x+1, y, -0.5f, -0.5f, 
 											terrainFrame.getRegionWidth(), 
 											terrainFrame.getRegionHeight(), 
@@ -1085,7 +1093,7 @@ public class BossFight extends CGCWorld
 								}
 								else
 								{
-									terrainFrame = AnimationManager.ouyaWater.getKeyFrame(0);
+									terrainFrame = com.percipient24.cgc.art.TextureAnimationDrawer.ouyaWater.getKeyFrame(0);
 									sBatch.draw(terrainFrame, x+1.5f, y+0.5f, w.getImageHalfWidth(0)*2, w.getImageHalfHeight(0)*2, 
 												terrainFrame.getRegionWidth(), terrainFrame.getRegionHeight(), 
 												c.zoom, c.zoom, 0);
@@ -1099,7 +1107,7 @@ public class BossFight extends CGCWorld
 								
 								if (w.getDirection() > 0 && w.getDirection() < 9) // TODO Set to be >= 0 if we ever have a standing water anim
 								{
-									terrainFrame = AnimationManager.currentAnims[w.getDirection()].getKeyFrame(Water.getCurrentTime());
+									terrainFrame = com.percipient24.cgc.art.TextureAnimationDrawer.currentAnims[w.getDirection()].getKeyFrame(Water.getCurrentTime());
 									sBatch.draw(terrainFrame, x+1.0f, y, -0.5f, -0.5f,
 												terrainFrame.getRegionWidth(), terrainFrame.getRegionHeight(), 
 												c.zoom, c.zoom, 0);
@@ -1164,7 +1172,7 @@ public class BossFight extends CGCWorld
 								}
 								else
 								{
-									terrainFrame = AnimationManager.ouyaMud.getKeyFrame(0);
+									terrainFrame = com.percipient24.cgc.art.TextureAnimationDrawer.ouyaMud.getKeyFrame(0);
 									sBatch.draw(terrainFrame, x+1.5f, y+0.5f, m.getImageHalfWidth(0)*2, m.getImageHalfHeight(0)*2, 
 												terrainFrame.getRegionWidth(), terrainFrame.getRegionHeight(), 
 												c.zoom, c.zoom, 0);
@@ -1228,7 +1236,7 @@ public class BossFight extends CGCWorld
 					{
 						sBatch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 						
-						TextureRegion calloutFrame = AnimationManager.calloutAnims[((Targeter) ge).getOwner()].getKeyFrame(0);
+						TextureRegion calloutFrame = com.percipient24.cgc.art.TextureAnimationDrawer.calloutAnims[((Targeter) ge).getOwner()].getKeyFrame(0);
 						
 						sBatch.draw(calloutFrame, ge.getBody().getPosition().x, 
 									ge.getBody().getPosition().y, -0.5f, -0.5f, 

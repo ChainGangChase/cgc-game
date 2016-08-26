@@ -10,9 +10,9 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.percipient24.cgc.art.TextureAnimationDrawer;
 import com.percipient24.helpers.BodyFactory;
 import com.percipient24.helpers.LayerHandler;
-import com.percipient24.cgc.AnimationManager;
 import com.percipient24.cgc.BossFight;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.cgc.entities.Explosion;
@@ -175,7 +175,7 @@ public class TankShell extends Projectile
 		Body explosionBody = CGCWorld.getBF().createCircle(this.getBody().getWorldCenter().x, 
 				this.getBody().getWorldCenter().y, EXPLOSION_RADIUS * 2, BodyType.StaticBody, 
 				BodyFactory.CAT_EXPLOSIVE, BodyFactory.MASK_EXPLOSIVE);
-		GameEntity ge = new Explosion(AnimationManager.explosionAnim, null, null, EntityType.TANK_SHELL, 
+		GameEntity ge = new Explosion(TextureAnimationDrawer.explosionAnim, null, null, EntityType.TANK_SHELL,
 				explosionBody, EXPLOSION_RADIUS);
 		explosionBody.setUserData(ge);
 		ge.addToWorldLayers(CGCWorld.getLH());

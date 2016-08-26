@@ -56,7 +56,7 @@ public class MapSorter
 	{
 		for (int i = 0; i < maps.size(); i++)
 		{
-			if (!canHandleNumPlayers(i, ChaseApp.characterSelect.getNumPlayers()))
+			if (!canHandleNumPlayers(i, ChaseApp.characterSelect.getActivePlayers()))
 			{
 				maps.remove(i);
 				i--;

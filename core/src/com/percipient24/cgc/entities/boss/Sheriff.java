@@ -11,12 +11,9 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Timer;
+import com.percipient24.cgc.*;
 import com.percipient24.helpers.BodyFactory;
 import com.percipient24.helpers.LayerHandler;
-import com.percipient24.cgc.AnimationManager;
-import com.percipient24.cgc.CGCTimer;
-import com.percipient24.cgc.CGCWorld;
-import com.percipient24.cgc.TimerManager;
 import com.percipient24.cgc.entities.GameEntity;
 import com.percipient24.cgc.entities.RotatableEntity;
 import com.percipient24.cgc.entities.Targeter;
@@ -224,7 +221,7 @@ public class Sheriff extends RotatableEntity {
 				Body b = CGCWorld.getBF().createCircle(body.getWorldCenter().x, 
 						body.getWorldCenter().y, 
 						0.1f, BodyType.DynamicBody, BodyFactory.CAT_INTERACTABLE, BodyFactory.MASK_INTERACTABLE);
-				GameEntity ge = new RiderBullet(null, null, AnimationManager.bulletAnim, EntityType.BULLET,
+				GameEntity ge = new RiderBullet(null, null, com.percipient24.cgc.art.TextureAnimationDrawer.bulletAnim, EntityType.BULLET,
 						b, targeter.getBody().getPosition().cpy(), 
 						new Vector2(targeter.getHighRegion().getRegionWidth() / 2,
 								targeter.getHighRegion().getRegionHeight() / 2), swapped);
@@ -315,7 +312,7 @@ public class Sheriff extends RotatableEntity {
 			bod.getFixtureList().get(0).setSensor(true);
 			bod.setFixedRotation(true);
 	
-			targeter = new Targeter(null, null, AnimationManager.targetingAnims[0], EntityType.TARGETER, bod, CGCWorld.getCamera(), -1);
+			targeter = new Targeter(null, null, com.percipient24.cgc.art.TextureAnimationDrawer.targetingAnims[0], EntityType.TARGETER, bod, CGCWorld.getCamera(), -1);
 			bod.setUserData(targeter);
 	
 			targeter.addToWorldLayers(CGCWorld.getLH());

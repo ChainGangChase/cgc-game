@@ -165,6 +165,10 @@ public class MenuTextureRegion
 	 */
 	public void draw(SpriteBatch sBatch, Vector2 wiggle)
 	{
+		if (this.region == null) {
+			return;
+		}
+
 		if(this.alpha != 1.0f)
 		{
 			sBatch.setColor(1, 1, 1, this.alpha);
@@ -296,7 +300,7 @@ public class MenuTextureRegion
 	 */
 	public int getRegionWidth()
 	{
-		return region.getRegionWidth();
+		return region == null ? 0 : region.getRegionWidth();
 	}
 	
 	/*
@@ -306,7 +310,7 @@ public class MenuTextureRegion
 	 */
 	public int getRegionHeight()
 	{
-		return region.getRegionHeight();
+		return region == null ? 0 : region.getRegionHeight();
 	}
 	
 	/*

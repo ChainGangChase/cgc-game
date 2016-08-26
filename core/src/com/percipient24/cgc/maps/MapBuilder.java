@@ -10,9 +10,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Array;
+import com.percipient24.cgc.art.TextureAnimationDrawer;
 import com.percipient24.helpers.BodyFactory;
 import com.percipient24.helpers.LayerHandler;
-import com.percipient24.cgc.AnimationManager;
 import com.percipient24.cgc.CGCWorld;
 import com.percipient24.cgc.entities.Fence;
 import com.percipient24.cgc.entities.GameEntity;
@@ -190,24 +190,24 @@ public class MapBuilder
 		
 		wall = bf.createRectangle(0, 6, 1, 11, BodyType.StaticBody, 
 				BodyFactory.CAT_WALL, BodyFactory.MASK_WALL);
-		ge = new Wall(AnimationManager.vwallAnims[0], null,
-				AnimationManager.vwallAnims[1], EntityType.WALL, 
+		ge = new Wall(TextureAnimationDrawer.vwallAnims[0], null,
+				TextureAnimationDrawer.vwallAnims[1], EntityType.WALL,
 				wall, true);
 		wall.setUserData(ge);
 		ge.addToWorldLayers(CGCWorld.getLH());
 		
 		wall = bf.createRectangle(19, 6, 1, 11, BodyType.StaticBody, 
 				BodyFactory.CAT_WALL, BodyFactory.MASK_WALL);
-		ge = new Wall(AnimationManager.vwallAnims[0], null,
-				AnimationManager.vwallAnims[1], EntityType.WALL, 
+		ge = new Wall(TextureAnimationDrawer.vwallAnims[0], null,
+				TextureAnimationDrawer.vwallAnims[1], EntityType.WALL,
 				wall, true);
 		wall.setUserData(ge);
 		ge.addToWorldLayers(CGCWorld.getLH());
 		
 		wall = bf.createRectangle(9.5f, 0, 20, 1, BodyType.StaticBody, 
 				BodyFactory.CAT_WALL, BodyFactory.MASK_WALL);
-		ge = new Wall(AnimationManager.hwallAnim, null,
-				AnimationManager.hwallAnim, EntityType.WALL, 
+		ge = new Wall(TextureAnimationDrawer.hwallAnim, null,
+				TextureAnimationDrawer.hwallAnim, EntityType.WALL,
 				wall, false);
 		wall.setUserData(ge);
 		ge.addToWorldLayers(CGCWorld.getLH());
@@ -227,8 +227,8 @@ public class MapBuilder
 
 				Body b = CGCWorld.getBF().createCircle(x, y, 0.9f, BodyType.StaticBody,
 						BodyFactory.CAT_TREE, BodyFactory.MASK_TREE);
-				ge = new Tree(AnimationManager.treeAnims[0], AnimationManager.treeAnims[1],
-						AnimationManager.treeAnims[2], EntityType.TREE, b, x-1, y);
+				ge = new Tree(TextureAnimationDrawer.treeAnims[0], TextureAnimationDrawer.treeAnims[1],
+						TextureAnimationDrawer.treeAnims[2], EntityType.TREE, b, x-1, y);
 				b.setUserData(ge);
 				ge.addToWorldLayers(CGCWorld.getLH());
 			}
@@ -253,16 +253,16 @@ public class MapBuilder
 		wall = bf.createRectangle(0, 6 + 11 * (multiple + prevLength), 
 				1, 11, BodyType.StaticBody, 
 				BodyFactory.CAT_WALL, BodyFactory.MASK_WALL);
-		ge = new Wall(AnimationManager.vwallAnims[0], null,
-				AnimationManager.vwallAnims[1], EntityType.WALL, wall, true);
+		ge = new Wall(TextureAnimationDrawer.vwallAnims[0], null,
+				TextureAnimationDrawer.vwallAnims[1], EntityType.WALL, wall, true);
 		wall.setUserData(ge);
 		ge.addToWorldLayers(CGCWorld.getLH());
 		
 		wall = bf.createRectangle(19, 6 + 11 * (multiple + prevLength), 
 				1, 11, BodyType.StaticBody, 
 				BodyFactory.CAT_WALL, BodyFactory.MASK_WALL);
-		ge = new Wall(AnimationManager.vwallAnims[0], null,
-				AnimationManager.vwallAnims[1], EntityType.WALL, wall, true);
+		ge = new Wall(TextureAnimationDrawer.vwallAnims[0], null,
+				TextureAnimationDrawer.vwallAnims[1], EntityType.WALL, wall, true);
 		wall.setUserData(ge);
 		ge.addToWorldLayers(CGCWorld.getLH());
 		
@@ -281,8 +281,8 @@ public class MapBuilder
 				{
 					Body b = bf.createCircle(x, y, 0.9f, BodyType.StaticBody, 
 							BodyFactory.CAT_TREE, BodyFactory.MASK_TREE);
-					ge = new Tree(AnimationManager.treeAnims[0], AnimationManager.treeAnims[1],
-							AnimationManager.treeAnims[2], EntityType.TREE, b, x-1, y);
+					ge = new Tree(TextureAnimationDrawer.treeAnims[0], TextureAnimationDrawer.treeAnims[1],
+							TextureAnimationDrawer.treeAnims[2], EntityType.TREE, b, x-1, y);
 					b.setUserData(ge);
 					ge.addToWorldLayers(CGCWorld.getLH());
 				}
@@ -297,7 +297,7 @@ public class MapBuilder
 						b = bf.createRectangle(x, y + 0.25f, 0.5f, 0.08333f, BodyType.StaticBody,
 								BodyFactory.CAT_FENCE, BodyFactory.MASK_FENCE);
 						b.setTransform(b.getPosition().x, b.getPosition().y, 90f * MathUtils.degRad);
-						ge = new Fence(AnimationManager.fenceAnims[0], AnimationManager.fenceAnims[1],
+						ge = new Fence(TextureAnimationDrawer.fenceAnims[0], TextureAnimationDrawer.fenceAnims[1],
 								null, EntityType.FENCE, b, x-1, y);
 						b.setUserData(ge);
 						ge.addToWorldLayers(CGCWorld.getLH());
@@ -307,7 +307,7 @@ public class MapBuilder
 					{
 						b = bf.createRectangle(x + 0.25f, y, 0.5f, 0.08333f, BodyType.StaticBody, 
 								BodyFactory.CAT_FENCE, BodyFactory.MASK_FENCE);
-						ge = new Fence(AnimationManager.fenceAnims[0], AnimationManager.fenceAnims[1],
+						ge = new Fence(TextureAnimationDrawer.fenceAnims[0], TextureAnimationDrawer.fenceAnims[1],
 								null, EntityType.FENCE, b, x-1, y);
 						b.setUserData(ge);
 						ge.addToWorldLayers(CGCWorld.getLH());
@@ -318,7 +318,7 @@ public class MapBuilder
 						b = bf.createRectangle(x, y - 0.25f, 0.5f, 0.08333f, BodyType.StaticBody, 
 								BodyFactory.CAT_FENCE, BodyFactory.MASK_FENCE);
 						b.setTransform(b.getPosition().x, b.getPosition().y, 90f * MathUtils.degRad);
-						ge = new Fence(AnimationManager.fenceAnims[0], AnimationManager.fenceAnims[1],
+						ge = new Fence(TextureAnimationDrawer.fenceAnims[0], TextureAnimationDrawer.fenceAnims[1],
 								null, EntityType.FENCE, b, x-1, y);
 						b.setUserData(ge);
 						ge.addToWorldLayers(CGCWorld.getLH());
@@ -328,7 +328,7 @@ public class MapBuilder
 					{
 						b = bf.createRectangle(x - 0.25f, y, 0.5f, 0.08333f, BodyType.StaticBody, 
 								BodyFactory.CAT_FENCE, BodyFactory.MASK_FENCE);
-						ge = new Fence(AnimationManager.fenceAnims[0], AnimationManager.fenceAnims[1],
+						ge = new Fence(TextureAnimationDrawer.fenceAnims[0], TextureAnimationDrawer.fenceAnims[1],
 								null, EntityType.FENCE, b, x-1, y);
 						b.setUserData(ge);
 						ge.addToWorldLayers(CGCWorld.getLH());
@@ -336,7 +336,7 @@ public class MapBuilder
 		
 					b = bf.createCircle(x, y, 0.1f, BodyType.StaticBody, 
 							BodyFactory.CAT_FENCE, BodyFactory.MASK_FENCE);
-					ge = new Fence(AnimationManager.postAnims[0], AnimationManager.postAnims[1],
+					ge = new Fence(TextureAnimationDrawer.postAnims[0], TextureAnimationDrawer.postAnims[1],
 							null, EntityType.POST, b, x-1, y);
 					b.setUserData(ge);
 					ge.addToWorldLayers(CGCWorld.getLH());
@@ -353,7 +353,7 @@ public class MapBuilder
 					
 					b.setTransform(b.getPosition(), gateOrient * (float)Math.PI/2);
 						
-					ge = new Gate(AnimationManager.gateAnim, AnimationManager.gateAnim, 
+					ge = new Gate(TextureAnimationDrawer.gateAnim, TextureAnimationDrawer.gateAnim,
 							null, EntityType.GATE, b, x-1, y);
 					b.setUserData(ge);
 					((Gate) ge).sID(gateID);
@@ -373,7 +373,7 @@ public class MapBuilder
 						b = bf.createSensor(x, y, 1.0f, 1.0f, BodyType.StaticBody, 
 								BodyFactory.CAT_INTERACTABLE, BodyFactory.MASK_INTERACTABLE);
 						
-						ge = new Sensor(AnimationManager.sensorAnim, 
+						ge = new Sensor(TextureAnimationDrawer.sensorAnim,
 								null, null, EntityType.SENSOR, b, x-1, y);
 						b.setUserData(ge);
 						((Sensor) ge).sLockID(playerID);
@@ -389,7 +389,7 @@ public class MapBuilder
 					
 					b = bf.createRectangle(x, y, 1.0f, 1.0f, BodyType.StaticBody, 
 							BodyFactory.CAT_INTERACTABLE, BodyFactory.MASK_INTERACTABLE);
-					ge = new GuardTower(AnimationManager.towerAnims[0], null, AnimationManager.towerAnims[1], EntityType.TOWER, b, x-1, y);
+					ge = new GuardTower(TextureAnimationDrawer.towerAnims[0], null, TextureAnimationDrawer.towerAnims[1], EntityType.TOWER, b, x-1, y);
 					b.setUserData(ge);
 					b.getFixtureList().get(0).setSensor(true);
 					ge.addToWorldLayers(CGCWorld.getLH());
@@ -404,7 +404,7 @@ public class MapBuilder
 					int tl = Integer.parseInt(fields[6]);
 
 					b = bf.createRectangle(x, y, 0.89f, 0.89f, BodyType.StaticBody, 
-							BodyFactory.CAT_TETRAIN, BodyFactory.MASK_TETRAIN);
+							BodyFactory.CAT_TERRAIN, BodyFactory.MASK_TERRAIN);
 					b.getFixtureList().get(0).setSensor(true);
 					
 					if (type == 20)
@@ -435,8 +435,8 @@ public class MapBuilder
 					int id = Integer.parseInt(fields[3]);
 
 					b = bf.createRectangle(x, y, 0.7f, 0.7f, BodyType.StaticBody, 
-							BodyFactory.CAT_TETRAIN, BodyFactory.MASK_TETRAIN);
-					ge = new Bridge(AnimationManager.bridgeAnims[id], null, null, 
+							BodyFactory.CAT_TERRAIN, BodyFactory.MASK_TERRAIN);
+					ge = new Bridge(TextureAnimationDrawer.bridgeAnims[id], null, null,
 							EntityType.BRIDGE, b, x-1, y);
 					b.setUserData(ge);
 					b.getFixtureList().get(0).setSensor(true);
@@ -481,8 +481,8 @@ public class MapBuilder
 		}
 		
 		Body tower = bf.createRectangle(9, 2 + 11 * (multiple + prevLength), 1.0f, 1.0f, 
-				BodyType.StaticBody, BodyFactory.CAT_TETRAIN, BodyFactory.MASK_TETRAIN);
-		ge = new GuardTower(AnimationManager.towerAnims[0], null, AnimationManager.towerAnims[1], EntityType.TOWER, tower, 
+				BodyType.StaticBody, BodyFactory.CAT_TERRAIN, BodyFactory.MASK_TERRAIN);
+		ge = new GuardTower(TextureAnimationDrawer.towerAnims[0], null, TextureAnimationDrawer.towerAnims[1], EntityType.TOWER, tower,
 				9, 2 + 11 * (multiple + prevLength));
 		tower.setUserData(ge);
 		tower.getFixtureList().get(0).setSensor(true);
@@ -491,16 +491,16 @@ public class MapBuilder
 		Body wall = bf.createRectangle(0, 6 + 11 * (multiple + prevLength), 
 				1, 11, BodyType.StaticBody, 
 				BodyFactory.CAT_WALL, BodyFactory.MASK_WALL);
-		ge = new Wall(AnimationManager.vwallAnims[0], null,
-				AnimationManager.vwallAnims[1], EntityType.WALL, wall, true);
+		ge = new Wall(TextureAnimationDrawer.vwallAnims[0], null,
+				TextureAnimationDrawer.vwallAnims[1], EntityType.WALL, wall, true);
 		wall.setUserData(ge);
 		ge.addToWorldLayers(CGCWorld.getLH());
 		
 		wall = bf.createRectangle(19, 6 + 11 * (multiple + prevLength), 
 				1, 11, BodyType.StaticBody, 
 				BodyFactory.CAT_WALL, BodyFactory.MASK_WALL);
-		ge = new Wall(AnimationManager.vwallAnims[0], null,
-				AnimationManager.vwallAnims[1], EntityType.WALL, wall, true);
+		ge = new Wall(TextureAnimationDrawer.vwallAnims[0], null,
+				TextureAnimationDrawer.vwallAnims[1], EntityType.WALL, wall, true);
 		wall.setUserData(ge);
 		ge.addToWorldLayers(CGCWorld.getLH());
 		
@@ -512,16 +512,16 @@ public class MapBuilder
 				wall = bf.createRectangle(0, 6 + 11 * (multiple+prevLength+i+1),
 						1, 11, BodyType.StaticBody,
 						BodyFactory.CAT_WALL, BodyFactory.MASK_WALL);
-				ge = new Wall(AnimationManager.vwallAnims[0], null, 
-						AnimationManager.vwallAnims[1], EntityType.WALL, wall, true);
+				ge = new Wall(TextureAnimationDrawer.vwallAnims[0], null,
+						TextureAnimationDrawer.vwallAnims[1], EntityType.WALL, wall, true);
 				wall.setUserData(ge);
 				ge.addToWorldLayers(CGCWorld.getLH());
 				
 				wall = bf.createRectangle(19, 6 + 11 * (multiple+prevLength+i+1),
 						1, 11, BodyType.StaticBody,
 						BodyFactory.CAT_WALL, BodyFactory.MASK_WALL);
-				ge = new Wall(AnimationManager.vwallAnims[0], null, 
-						AnimationManager.vwallAnims[1], EntityType.WALL, wall, true);
+				ge = new Wall(TextureAnimationDrawer.vwallAnims[0], null,
+						TextureAnimationDrawer.vwallAnims[1], EntityType.WALL, wall, true);
 				wall.setUserData(ge);
 				ge.addToWorldLayers(CGCWorld.getLH());
 			}
@@ -530,7 +530,7 @@ public class MapBuilder
 		Body track = bf.createRectangle(9.5f, 5 + 11 * (multiple + prevLength), 
 				20, 1, BodyType.StaticBody, 
 				BodyFactory.CAT_NON_INTERACTIVE, BodyFactory.MASK_NON_INTERACTIVE);
-		ge = new Track(AnimationManager.trackAnim, null, null,
+		ge = new Track(TextureAnimationDrawer.trackAnim, null, null,
 				EntityType.TRACK, track);
 		track.setUserData(ge);
 		

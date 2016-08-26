@@ -10,20 +10,17 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
+import com.percipient24.cgc.*;
+import com.percipient24.cgc.art.CharacterArt;
+import com.percipient24.cgc.art.Characters;
+import com.percipient24.cgc.entities.terrain.CharacterSelectSensor;
 import com.percipient24.helpers.BodyFactory;
 import com.percipient24.helpers.LayerHandler;
-import com.percipient24.cgc.AnimationManager;
-import com.percipient24.cgc.CGCWorld;
-import com.percipient24.cgc.ChainGame;
-import com.percipient24.cgc.ChaseApp;
-import com.percipient24.cgc.CGCTimer;
-import com.percipient24.cgc.ControllerScheme;
-import com.percipient24.cgc.SoundManager;
-import com.percipient24.cgc.TimerManager;
 import com.percipient24.cgc.entities.ChainLink;
 import com.percipient24.cgc.entities.Coin;
 import com.percipient24.cgc.entities.GameEntity;
@@ -89,6 +86,7 @@ public class Player extends RotatableEntity
 	// Move impulse values
 	public static final Array<Vector2> impulses = new Array<Vector2>(9);
 	protected int direction = 0;
+
 	protected int currentFacing;
 	
 	// Terrain variables
@@ -136,6 +134,19 @@ public class Player extends RotatableEntity
 	protected int firstDirection = -1;
 
 	private int coins = 10;
+
+	private CharacterArt character;
+	public CharacterArt copCharacter;
+	public CharacterSelectSensor seat;
+	public boolean seated = false;
+	private boolean shouldUpdateSeat = false;
+	private float seatX;
+	private float seatY;
+
+	public Player(CharacterArt art, EntityType pEntityType, Body attachedBody, short pID) {
+		this(art.standLowAnim, art.standMidAnim, art.standHighAnim, pEntityType, attachedBody, pID);
+		character = art;
+	}
 	
 	/*
 	 * Creates a new Player object
@@ -291,35 +302,35 @@ public class Player extends RotatableEntity
 			switch (lowState)
 			{
 				case STAND:
-					if (lowStateTime > 8 * AnimationManager.STAND_ANIM_FRAME_TIME)
+					if (lowStateTime > 8 * com.percipient24.cgc.art.TextureAnimationDrawer.STAND_ANIM_FRAME_TIME)
 					{
 						lowStateTime = 0;
 					}
 					lowStateTime += deltaTime;
 					break;
 				case RUN:
-					if (lowStateTime > 8 * AnimationManager.RUN_ANIM_FRAME_TIME)
+					if (lowStateTime > 8 * com.percipient24.cgc.art.TextureAnimationDrawer.RUN_ANIM_FRAME_TIME)
 					{
 						lowStateTime = 0;
 					}
 					lowStateTime += deltaTime; 
 					break;
 				case JUMP:
-					if (lowStateTime > 8 * AnimationManager.JUMP_ANIM_FRAME_TIME)
+					if (lowStateTime > 8 * com.percipient24.cgc.art.TextureAnimationDrawer.JUMP_ANIM_FRAME_TIME)
 					{
 						lowStateTime = 0;
 					}
 					lowStateTime += deltaTime;
 					break;
 				case TIED:
-					if (lowStateTime > 8 * AnimationManager.TIED_ANIM_FRAME_TIME)
+					if (lowStateTime > 8 * com.percipient24.cgc.art.TextureAnimationDrawer.TIED_ANIM_FRAME_TIME)
 					{
 						lowStateTime = 0;
 					}
 					lowStateTime += deltaTime;
 					break;
 				case PUNCH:
-					if (lowStateTime > 6 * AnimationManager.PUNCH_ANIM_FRAME_TIME)
+					if (lowStateTime > 6 * com.percipient24.cgc.art.TextureAnimationDrawer.PUNCH_ANIM_FRAME_TIME)
 					{
 						changeLowAnimationState(AnimationState.STAND);
 					}
@@ -334,35 +345,35 @@ public class Player extends RotatableEntity
 			switch (midState)
 			{
 				case STAND:
-					if (midStateTime > 8 * AnimationManager.STAND_ANIM_FRAME_TIME)
+					if (midStateTime > 8 * com.percipient24.cgc.art.TextureAnimationDrawer.STAND_ANIM_FRAME_TIME)
 					{
 						midStateTime = 0;
 					}
 					midStateTime += deltaTime;
 				break;
 				case RUN:
-					if (midStateTime > 8 * AnimationManager.RUN_ANIM_FRAME_TIME)
+					if (midStateTime > 8 * com.percipient24.cgc.art.TextureAnimationDrawer.RUN_ANIM_FRAME_TIME)
 					{
 						midStateTime = 0;
 					}
 					midStateTime += deltaTime;
 					break;
 				case PUNCH:
-					if (midStateTime > 6 * AnimationManager.PUNCH_ANIM_FRAME_TIME)
+					if (midStateTime > 6 * com.percipient24.cgc.art.TextureAnimationDrawer.PUNCH_ANIM_FRAME_TIME)
 					{
 						changeMidAnimationState(AnimationState.STAND);
 					}
 					midStateTime += deltaTime;
 					break;
 				case HIT:
-					if (midStateTime > AnimationManager.HIT_ANIM_FRAME_TIME)
+					if (midStateTime > com.percipient24.cgc.art.TextureAnimationDrawer.HIT_ANIM_FRAME_TIME)
 					{
 					 	changeMidAnimationState(AnimationState.STAND);
 					}
 					midStateTime += deltaTime;
 					break;
 				case TIED:
-					if (midStateTime > 8 * AnimationManager.TIED_ANIM_FRAME_TIME)
+					if (midStateTime > 8 * com.percipient24.cgc.art.TextureAnimationDrawer.TIED_ANIM_FRAME_TIME)
 					{
 						midStateTime = 0;
 					}
@@ -378,28 +389,28 @@ public class Player extends RotatableEntity
 			switch (highState)
 			{
 				case STAND:
-					if (highStateTime > 8 * AnimationManager.STAND_ANIM_FRAME_TIME)
+					if (highStateTime > 8 * com.percipient24.cgc.art.TextureAnimationDrawer.STAND_ANIM_FRAME_TIME)
 					{
 						highStateTime = 0;
 					}
 					highStateTime += deltaTime;
 					break;
 				case RUN:
-					if (highStateTime > 8 * AnimationManager.RUN_ANIM_FRAME_TIME)
+					if (highStateTime > 8 * com.percipient24.cgc.art.TextureAnimationDrawer.RUN_ANIM_FRAME_TIME)
 					{
 						highStateTime = 0;
 					}
 					highStateTime += deltaTime;
 					break;
 				case PUNCH:
-					if (highStateTime > 6 * AnimationManager.PUNCH_ANIM_FRAME_TIME)
+					if (highStateTime > 6 * com.percipient24.cgc.art.TextureAnimationDrawer.PUNCH_ANIM_FRAME_TIME)
 					{
 						changeHighAnimationState(AnimationState.STAND);
 					}
 					highStateTime += deltaTime;
 					break;
 				case TIED: 
-					if (highStateTime > 8 * AnimationManager.TIED_ANIM_FRAME_TIME)
+					if (highStateTime > 8 * com.percipient24.cgc.art.TextureAnimationDrawer.TIED_ANIM_FRAME_TIME)
 					{
 						highStateTime = 0;
 					}
@@ -448,30 +459,16 @@ public class Player extends RotatableEntity
 				switch(lowState)
 				{
 					case PUNCH:
-						if (lowStateTime > 6 * AnimationManager.PUNCH_ANIM_FRAME_TIME)
+						if (lowStateTime > 6 * com.percipient24.cgc.art.TextureAnimationDrawer.PUNCH_ANIM_FRAME_TIME)
 						{
 							lowState = newState;
-							if (this instanceof Prisoner)
-							{
-								setLowAnim(AnimationManager.prisonerStandLowAnims[playerID]);
-							}
-							else
-							{
-								setLowAnim(AnimationManager.copStandLowAnims[playerID]);
-							}
+							setLowAnim(character.standLowAnim);
 						}
 						break;
 					default:
 						lowState = newState;
-						if (this instanceof Prisoner)
-						{
-							setLowAnim(AnimationManager.prisonerStandLowAnims[playerID]);
-						}
-						else
-						{
-							setLowAnim(AnimationManager.copStandLowAnims[playerID]);
-						}
-						
+						setLowAnim(character.standLowAnim);
+
 						if (reset)
 						{
 							lowStateTime = 0;
@@ -481,14 +478,7 @@ public class Player extends RotatableEntity
 				break;
 			case RUN:
 				lowState = newState;
-				if (this instanceof Prisoner)
-				{
-					setLowAnim(AnimationManager.prisonerRunLowAnims[playerID]);
-				}
-				else
-				{
-					setLowAnim(AnimationManager.copRunLowAnims[playerID]);
-				}
+				setLowAnim(character.runLowAnim);
 				
 				if (reset)
 				{
@@ -497,14 +487,7 @@ public class Player extends RotatableEntity
 				break;
 			case JUMP:
 				lowState = newState;
-				if (this instanceof Prisoner)
-				{
-					setLowAnim(AnimationManager.prisonerJumpAnims[playerID]);
-				}
-				else
-				{
-					setLowAnim(AnimationManager.copJumpAnims[playerID]);
-				}
+				setLowAnim(character.jumpAnim);
 				
 				if (reset)
 				{
@@ -515,7 +498,7 @@ public class Player extends RotatableEntity
 				lowState = newState;
 				if (this instanceof Prisoner)
 				{
-					setLowAnim(AnimationManager.prisonerTiedLowAnims[playerID]);
+					setLowAnim(character.tiedLowAnim);
 				}
 				
 				if (reset)
@@ -527,11 +510,11 @@ public class Player extends RotatableEntity
 				lowState = newState;
 				if (this instanceof Prisoner)
 				{
-					setLowAnim(AnimationManager.prisonerPunchLowAnims[playerID]);
+					setLowAnim(character.punchLowAnim);
 				}
 				else
 				{
-					setLowAnim(AnimationManager.copStandLowAnims[playerID]);
+					setLowAnim(character.copPunchAnim);
 				}
 				
 				if (reset)
@@ -541,6 +524,22 @@ public class Player extends RotatableEntity
 			default:
 				break;
 		}
+	}
+
+	public void sit(float x, float y, CharacterSelectSensor seat) {
+		this.seat = seat;
+		seated = true;
+		shouldUpdateSeat = true;
+		seatX = x;
+		seatY = y;
+		setCharacter(Characters.getNextConStartingAt(character, true));
+		tryToStand();
+	}
+
+	public void standUp() {
+		this.seat.standUp();
+		this.seat = null;
+		seated = false;
 	}
 	
 	/*
@@ -553,20 +552,13 @@ public class Player extends RotatableEntity
 		if (newState == AnimationState.TIED && this instanceof Prisoner)
 		{
 			midState = newState;
-			setMidAnim(AnimationManager.prisonerTiedMidAnims[playerID]);
+			setMidAnim(character.tiedMidAnim);
 			midStateTime = 0;
 		}
 		else if (newState == AnimationState.HIT)
 		{
 			midState = newState;
-			if (this instanceof Prisoner)
-			{
-				setMidAnim(AnimationManager.prisonerHitAnims[playerID]);
-			}
-			else
-			{
-				setMidAnim(AnimationManager.copHitAnims[playerID]);
-			}
+			setMidAnim(character.hitAnim);
 			midStateTime = 0;
 		}
 		// Punching is important enough that only dying and 
@@ -576,11 +568,11 @@ public class Player extends RotatableEntity
 			midState = newState;
 			if (this instanceof Prisoner)
 			{
-				setMidAnim(AnimationManager.prisonerPunchMidAnims[playerID]);
+				setMidAnim(character.punchMidAnim);
 			}
 			else
 			{
-				setMidAnim(AnimationManager.copPunchAnims[playerID]);
+				setMidAnim(character.copPunchAnim);
 			}
 			midStateTime = 0;
 		}
@@ -589,45 +581,24 @@ public class Player extends RotatableEntity
 			switch (midState)
 			{
 				case PUNCH:
-					if (midStateTime > 6 * AnimationManager.PUNCH_ANIM_FRAME_TIME)
+					if (midStateTime > 6 * com.percipient24.cgc.art.TextureAnimationDrawer.PUNCH_ANIM_FRAME_TIME)
 					{
 						midState = newState;
-						if (this instanceof Prisoner)
-						{
-							setMidAnim(AnimationManager.prisonerRunMidAnims[playerID]);
-						}
-						else
-						{
-							setMidAnim(AnimationManager.copRunMidAnims[playerID]);
-						}
+						setMidAnim(character.runMidAnim);
 						midStateTime = lowStateTime;
 					}
 					break;
 				case HIT:
-					if (midStateTime > AnimationManager.HIT_ANIM_FRAME_TIME)
+					if (midStateTime > com.percipient24.cgc.art.TextureAnimationDrawer.HIT_ANIM_FRAME_TIME)
 					{
 						midState = newState;
-						if (this instanceof Prisoner)
-						{
-							setMidAnim(AnimationManager.prisonerRunMidAnims[playerID]);
-						}
-						else
-						{
-							setMidAnim(AnimationManager.copRunMidAnims[playerID]);
-						}
+						setMidAnim(character.runMidAnim);
 						midStateTime = lowStateTime;
 					}
 					break;
 				default:
 					midState = newState;
-					if (this instanceof Prisoner)
-					{
-						setMidAnim(AnimationManager.prisonerRunMidAnims[playerID]);
-					}
-					else
-					{
-						setMidAnim(AnimationManager.copRunMidAnims[playerID]);
-					}
+					setMidAnim(character.runMidAnim);
 					midStateTime = lowStateTime;
 					break;
 			}
@@ -637,45 +608,24 @@ public class Player extends RotatableEntity
 			switch (midState)
 			{
 				case PUNCH:
-					if (midStateTime > 6 * AnimationManager.PUNCH_ANIM_FRAME_TIME)
+					if (midStateTime > 6 * com.percipient24.cgc.art.TextureAnimationDrawer.PUNCH_ANIM_FRAME_TIME)
 					{
 						midState = newState;
-						if (this instanceof Prisoner)
-						{
-							setMidAnim(AnimationManager.prisonerStandMidAnims[playerID]);
-						}
-						else
-						{
-							setMidAnim(AnimationManager.copStandMidAnims[playerID]);
-						}
+						setMidAnim(character.standMidAnim);
 						midStateTime = lowStateTime;
 					}
 					break;
 				case HIT:
-					if (midStateTime > AnimationManager.HIT_ANIM_FRAME_TIME)
+					if (midStateTime > com.percipient24.cgc.art.TextureAnimationDrawer.HIT_ANIM_FRAME_TIME)
 					{
 						midState = newState;
-						if (this instanceof Prisoner)
-						{
-							setMidAnim(AnimationManager.prisonerStandMidAnims[playerID]);
-						}
-						else
-						{
-							setMidAnim(AnimationManager.copStandMidAnims[playerID]);
-						}
+						setMidAnim(character.standMidAnim);
 						midStateTime = lowStateTime;
 					}
 					break;
 				default:
 					midState = newState;
-					if (this instanceof Prisoner)
-					{
-						setMidAnim(AnimationManager.prisonerStandMidAnims[playerID]);
-					}
-					else
-					{
-						setMidAnim(AnimationManager.copStandMidAnims[playerID]);
-					}
+					setMidAnim(character.standMidAnim);
 					midStateTime = lowStateTime;
 					break;
 			}
@@ -694,7 +644,7 @@ public class Player extends RotatableEntity
 			highState = newState;
 			if (this instanceof Prisoner)
 			{
-				setHighAnim(AnimationManager.prisonerTiedHighAnims[playerID]);
+				setHighAnim(character.tiedHighAnim);
 			}
 			highStateTime = lowStateTime;
 		}
@@ -702,12 +652,12 @@ public class Player extends RotatableEntity
 		{
 			highState = newState;
 			if (this instanceof Prisoner)
-			{	
-				setHighAnim(AnimationManager.prisonerPunchHighAnims[playerID]);
+			{
+				setHighAnim(character.punchHighAnim);
 			}
 			else
 			{
-				setHighAnim(AnimationManager.copStandHighAnims[playerID]);
+				setHighAnim(character.standHighAnim);
 			}
 			highStateTime = lowStateTime;
 		}
@@ -716,45 +666,24 @@ public class Player extends RotatableEntity
 			switch (highState)
 			{
 				case PUNCH:
-					if (highStateTime > 6 * AnimationManager.PUNCH_ANIM_FRAME_TIME)
+					if (highStateTime > 6 * com.percipient24.cgc.art.TextureAnimationDrawer.PUNCH_ANIM_FRAME_TIME)
 					{
 						highState = newState;
-						if (this instanceof Prisoner)
-						{
-							setHighAnim(AnimationManager.prisonerRunHighAnims[playerID]);
-						}
-						else
-						{
-							setHighAnim(AnimationManager.copRunHighAnims[playerID]);
-						}
+						setHighAnim(character.runHighAnim);
 						highStateTime = lowStateTime;
 					}
 					break;
 				case HIT:
-					if (highStateTime > AnimationManager.HIT_ANIM_FRAME_TIME)
+					if (highStateTime > com.percipient24.cgc.art.TextureAnimationDrawer.HIT_ANIM_FRAME_TIME)
 					{
 						highState = newState;
-						if (this instanceof Prisoner)
-						{
-							setHighAnim(AnimationManager.prisonerRunHighAnims[playerID]);
-						}
-						else
-						{
-							setHighAnim(AnimationManager.copRunHighAnims[playerID]);
-						}
+						setHighAnim(character.runHighAnim);
 						highStateTime = lowStateTime;
 					}
 					break;
 				default:
 					highState = newState;
-					if (this instanceof Prisoner)
-					{
-						setHighAnim(AnimationManager.prisonerRunHighAnims[playerID]);
-					}
-					else
-					{
-						setHighAnim(AnimationManager.copRunHighAnims[playerID]);
-					}
+					setHighAnim(character.runHighAnim);
 					highStateTime = lowStateTime;
 					break;
 			}
@@ -764,30 +693,16 @@ public class Player extends RotatableEntity
 			switch(highState)
 			{
 				case PUNCH:
-					if (highStateTime > 6 * AnimationManager.PUNCH_ANIM_FRAME_TIME)
+					if (highStateTime > 6 * com.percipient24.cgc.art.TextureAnimationDrawer.PUNCH_ANIM_FRAME_TIME)
 					{
 						highState = newState;
-						if (this instanceof Prisoner)
-						{
-							setHighAnim(AnimationManager.prisonerStandHighAnims[playerID]);
-						}
-						else
-						{
-							setHighAnim(AnimationManager.copStandHighAnims[playerID]);
-						}
+						setHighAnim(character.standHighAnim);
 						highStateTime = lowStateTime;
 					}
 					break;
 				default:
 					highState = newState;
-					if (this instanceof Prisoner)
-					{
-						setHighAnim(AnimationManager.prisonerStandHighAnims[playerID]);
-					}
-					else
-					{
-						setHighAnim(AnimationManager.copStandHighAnims[playerID]);
-					}
+					setHighAnim(character.standHighAnim);
 					highStateTime = lowStateTime;
 					break;
 			}
@@ -1317,6 +1232,10 @@ public class Player extends RotatableEntity
 		return currentFacing;
 	}
 
+	public void setCurrentFacing(int currentFacing) {
+		this.currentFacing = currentFacing;
+	}
+
 	/*
 	 * Adds a Player's key ID to the array of dead key IDs
 	 * 
@@ -1351,6 +1270,17 @@ public class Player extends RotatableEntity
 	{
 		faceButtonsInput(buttonUp, buttonDown, buttonLeft, buttonRight, stickPress, buttonsMashed);
 		move(up, down, left, right, bumper);
+	}
+
+	public void haltPlayer() {
+		controlUpdate(false, false, false, false, false, false, false, false, false, false, false);
+		if (shouldUpdateSeat) {
+			shouldUpdateSeat = false;
+			body.setTransform(seatX, seatY, 0);
+			body.setAngularVelocity(0);
+			body.setLinearVelocity(Vector2.Zero);
+			ChaseApp.alert("trying to sit, dammit");
+		}
 	}
 	
 	/*
@@ -1393,6 +1323,11 @@ public class Player extends RotatableEntity
 			
 			// I just started moving:
 			start = (start == false && moving);
+
+			if (start && body.getType() == BodyDef.BodyType.StaticBody) {
+				body.setType(BodyDef.BodyType.DynamicBody);
+				ChaseApp.alert(body.getType().toString());
+			}
 			
 			// I just stopped moving:
 			stop = (stop == true && moving == false);
@@ -1552,7 +1487,7 @@ public class Player extends RotatableEntity
 	 * @param dt					Time since last frame
 	 */
 	public void updatePlayer(float dt)
-	{	
+	{
 		if (this instanceof RookieCop)
 		{
 			decaySpeedMod += RookieCop.dazedSlowRecharge * dt;
@@ -1672,22 +1607,11 @@ public class Player extends RotatableEntity
 																0.6f, BodyType.DynamicBody, BodyFactory.CAT_DECEASED,
 																BodyFactory.MASK_DECEASED);
 			corpseBody.setFixedRotation(true);
-			if (this instanceof Prisoner)
-			{
-				corpse = new Corpse(this, AnimationManager.prisonerDieLowAnims[playerID], 
-								AnimationManager.prisonerDieMidAnims[playerID], 
-								AnimationManager.prisonerDieHighAnims[playerID], 
-								EntityType.PLAYER, corpseBody, 0.5f, 
-								playerID, deathKnockbackPosition);
-			}
-			else
-			{
-				corpse = new Corpse(this, AnimationManager.copDieLowAnims[playerID],
-								AnimationManager.copDieMidAnims[playerID],
-								AnimationManager.copDieHighAnims[playerID],
-								EntityType.PLAYER, corpseBody, 0.5f,
-								playerID, deathKnockbackPosition);
-			}
+			corpse = new Corpse(this, character.dieLowAnim,
+							character.dieMidAnim,
+							character.dieHighAnim,
+							EntityType.PLAYER, corpseBody, 0.5f,
+							playerID, deathKnockbackPosition);
 			corpseBody.setUserData(corpse);
 			corpse.addToWorldLayers(CGCWorld.getLH());
 			shouldMakeCorpse = false;
@@ -1986,7 +1910,7 @@ public class Player extends RotatableEntity
 			coinBody.setFixedRotation(true);
 			Coin coin = new Coin(
 				this, 
-				AnimationManager.coinAnim,
+				com.percipient24.cgc.art.TextureAnimationDrawer.coinAnim,
 				EntityType.COIN,
 				coinBody,
 				0.5f, 
@@ -2016,7 +1940,7 @@ public class Player extends RotatableEntity
 		SoundManager.playSound("punch person", false);
 		// TODO : weight droppage by difficulty
 		ChaseApp.alert("punched dir", direction);
-		dropCoins(3, direction);
+		//dropCoins(3, direction);
 		//Override in subclass if necessary.
 		body.setLinearDamping(MOVE_DAMP);
 		applyPunchForce(direction, 500);
@@ -2258,4 +2182,11 @@ public class Player extends RotatableEntity
 	{
 		coins = i;
 	}
+
+	public CharacterArt getCharacter() {
+		return character;
+	}
+
+	public void setCharacter(CharacterArt art) { character = art; }
+
 } // End class

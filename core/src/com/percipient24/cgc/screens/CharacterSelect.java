@@ -15,18 +15,36 @@ import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenManager;
 import aurelienribon.tweenengine.equations.Cubic;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.percipient24.cgc.*;
+import com.percipient24.cgc.art.CharacterArt;
+import com.percipient24.cgc.art.Characters;
+import com.percipient24.cgc.art.TextureAnimationHolder;
+import com.percipient24.cgc.entities.GameEntity;
+import com.percipient24.cgc.entities.Sticker;
+import com.percipient24.cgc.entities.Track;
+import com.percipient24.cgc.entities.players.Player;
+import com.percipient24.cgc.entities.players.Prisoner;
+import com.percipient24.cgc.entities.terrain.CharacterSelectSensor;
+import com.percipient24.enums.ControlType;
+import com.percipient24.enums.EntityType;
+import com.percipient24.helpers.BodyFactory;
 import com.percipient24.tweens.*;
 import com.badlogic.gdx.utils.Array;
 import com.percipient24.helpers.StringLayout;
-import com.percipient24.cgc.ChainGame;
-import com.percipient24.cgc.ChaseApp;
-import com.percipient24.cgc.Data;
 import com.percipient24.cgc.net.MapVO;
 import com.percipient24.cgc.overlays.Transition;
 import com.percipient24.cgc.screens.helpers.ControllerDrawer;
@@ -34,7 +52,6 @@ import com.percipient24.cgc.screens.helpers.MenuTextureRegion;
 import com.percipient24.cgc.screens.helpers.MenuTextureRegionComparator;
 import com.percipient24.cgc.screens.helpers.PlayerCard;
 import com.percipient24.cgc.screens.helpers.LanguageKeys;
-import com.percipient24.enums.ControlType;
 import com.percipient24.input.ControlAdapter;
 
 /*
@@ -44,10 +61,11 @@ import com.percipient24.input.ControlAdapter;
  * @author William Ziegler
  * @author Christopher Rider
  */
-public class CharacterSelect extends CGCScreen
+public class CharacterSelect extends CGCWorld
 {
 	private final int MAX_PLAYERS = 8;
-	
+	private final Box2DDebugRenderer debugRenderer;
+
 	// How far apart each character portrait is from each other
 	private float portraitXIncrement;
 	private float convictPortraitY;
@@ -60,17 +78,16 @@ public class CharacterSelect extends CGCScreen
 	private final float BLACK_BANNER_HEIGHT = 0.1f;
 	
 	private boolean forgetPlayers = true;
-	
-	private int numPlayers;
+
+	private int activePlayers;
 	private int numPortraitsToShow;
 	private int[] framesHeld;
 	
 	public static Array<MenuTextureRegion> convictPortraits;
 	private Array<MenuTextureRegion> sortedConvictPortraits;
+
 	public static Array<MenuTextureRegion> copPortraits;
 	private Array<MenuTextureRegion> sortedCopPortraits;
-	public static Array<MenuTextureRegion> convictThumbnails;
-	public static Array<MenuTextureRegion> copThumbnails;
 	
 	public static boolean tutorial = false;
 	
@@ -78,6 +95,8 @@ public class CharacterSelect extends CGCScreen
 	private int numCopChoices;
 	
 	private Array<PlayerCard> playerCards;
+	private Array<CharacterSelectSensor> chairs;
+	public Array<CharacterSelectSensor> activeChairs;
 	
 	private ShapeRenderer shapes;
 	
@@ -104,7 +123,10 @@ public class CharacterSelect extends CGCScreen
 	private ControllerDrawer advanceScreen;
 
 	private StringLayout layout;
-	
+
+	private int test = 0;
+
+
 	/*
 	 * Creates a new CharacterSelect object
 	 * 
@@ -112,7 +134,61 @@ public class CharacterSelect extends CGCScreen
 	 */
 	public CharacterSelect(ChaseApp app)
 	{
-		super(app);
+		super(app, 0, false);
+
+		int availablePlayers = input.controlList.length;
+		schemes = new Array<ControllerScheme>(availablePlayers);
+		CGCWorld.numPlayers = availablePlayers;
+
+		new com.percipient24.cgc.art.TextureAnimationDrawer(app, input);
+		com.percipient24.cgc.art.TextureAnimationDrawer.loadDefaultCharacterAnimations(input);
+
+		// create character bodies
+		int start = 3;
+		for(int i = 0; i < availablePlayers; i++)
+		{
+			Body tempBody = bf.createPlayerBody(start+(i*1.5f), 1, 0.6f, BodyDef.BodyType.DynamicBody,
+					BodyFactory.CAT_PRISONER, BodyFactory.MASK_PRISONER);
+			tempBody.setFixedRotation(true);
+			tempBody.setType(BodyDef.BodyType.StaticBody);
+
+
+			Player tempPlayer = new Prisoner(this, Characters.defaultCon,
+					EntityType.CONVICT, tempBody, (short) i);
+			tempPlayer.copCharacter = Characters.defaultCop;
+
+			tempBody.setUserData(tempPlayer);
+
+			tempPlayer.addToWorldLayers(lh);
+			//tempPlayer.setChainGame(this);
+			players.add(tempPlayer);
+
+			//deadKeyIDs.add(-1);
+		}
+
+		// create control schemes
+		// Set up control schemes for the players
+		for (int i = 0; i < input.controlList.length; i++)
+		{
+			if (input.controlList[i].isConnected())
+			{
+				ControllerScheme cs = new ControllerScheme(players.get(i),
+						input.controlList[i].isLeft());
+				cs.setController(input.controlList[i]);
+				schemes.add(cs);
+				players.get(i).setScheme(cs);
+			}
+		}
+
+		// Start world with no forces
+		for(int i = 0; i < 18; i++)
+		{
+			world.step(WORLD_DELAY, 6, 2);
+			world.clearForces();
+		}
+
+		buildPlayerArea();
+
 		title = ChaseApp.lang.get(LanguageKeys.select_con_cop);
 		titleLayout.updateText(title);
 
@@ -121,8 +197,7 @@ public class CharacterSelect extends CGCScreen
 		convictPortraits = new Array<MenuTextureRegion>();
 		sortedConvictPortraits = new Array<MenuTextureRegion>();
 		copPortraits = new Array<MenuTextureRegion>();
-		convictThumbnails = new Array<MenuTextureRegion>();
-		copThumbnails = new Array<MenuTextureRegion>();
+		sortedCopPortraits = new Array<MenuTextureRegion>();
 		
 		numConvictChoices = ChaseApp.characterAtlas.findRegions("conportrait").size;
 		numCopChoices = ChaseApp.characterAtlas.findRegions("copportrait").size;
@@ -134,30 +209,22 @@ public class CharacterSelect extends CGCScreen
 		
 		leftNumbers = new MenuTextureRegion(ChaseApp.characterAtlas.findRegion("heights"), Vector2.Zero, MenuTextureRegion.MID_LEFT, MenuTextureRegion.LOWER_CENTER);
 		rightNumbers = new MenuTextureRegion(ChaseApp.characterAtlas.findRegion("heights"), Vector2.Zero, MenuTextureRegion.MID_RIGHT, MenuTextureRegion.LOWER_CENTER);
-		
+
 		framesHeld = new int[input.controlList.length];
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
 			framesHeld[i] = 0;
-			tempTextureRegion = ChaseApp.characterAtlas.findRegion("conportrait", 0);
+			tempTextureRegion = Characters.defaultCon.portrait;
 			convictPortraits.add(new MenuTextureRegion(tempTextureRegion,
 					new Vector2(-MenuTextureRegion.TITLE_SAFE_X, 0),
 					MenuTextureRegion.MID_LEFT, MenuTextureRegion.LOWER_LEFT));
 			
 			// TODO change conportrait back to copportrait once we have cop portraits
-			tempTextureRegion = ChaseApp.characterAtlas.findRegion("conportrait", 0);
+			tempTextureRegion = Characters.defaultCop.portrait;
 			copPortraits.add(new MenuTextureRegion(tempTextureRegion,
 					new Vector2(-MenuTextureRegion.TITLE_SAFE_X, 0),
-					MenuTextureRegion.LOWER_LEFT, MenuTextureRegion.LOWER_LEFT));
-			
-			tempTextureRegion = ChaseApp.characterAtlas.findRegion("conthumbnail", 0);
-			convictThumbnails.add(new MenuTextureRegion(tempTextureRegion, 
-					new Vector2(0, 0), 
 					MenuTextureRegion.MID_LEFT, MenuTextureRegion.LOWER_LEFT));
-			tempTextureRegion = ChaseApp.characterAtlas.findRegion("copthumbnail", 0);
-			copThumbnails.add(new MenuTextureRegion(tempTextureRegion, 
-					new Vector2(0, 0), 
-					MenuTextureRegion.MID_LEFT, MenuTextureRegion.LOWER_LEFT));
+
 			playerCards.add(new PlayerCard(-1, null));
 		}
 		
@@ -212,6 +279,65 @@ public class CharacterSelect extends CGCScreen
 		
 		advanceScreen = new ControllerDrawer(MenuTextureRegion.MID_CENTER, MenuTextureRegion.MID_CENTER);
 		advanceScreen.setWiggle(0, 270);
+
+		debugRenderer = new Box2DDebugRenderer();
+		performLayout();
+		respondToAdjustedPlayers();
+	}
+
+	private void buildPlayerArea() {
+		Body wall;
+
+		// left
+		wall = CGCWorld.getBF().createRectangle(-0.333f, 1.5f, 0.333f, 4, BodyDef.BodyType.StaticBody, BodyFactory.CAT_WALL,
+		 		BodyFactory.MASK_WALL);
+
+		// right
+		wall = CGCWorld.getBF().createRectangle(19.333f, 1.5f, 0.333f, 4, BodyDef.BodyType.StaticBody, BodyFactory.CAT_WALL,
+				BodyFactory.MASK_WALL);
+
+		// bottom
+		wall = CGCWorld.getBF().createRectangle(9.5f, -0.333f, 20, 0.333f, BodyDef.BodyType.StaticBody, BodyFactory.CAT_WALL,
+				BodyFactory.MASK_WALL);
+
+		// top
+		wall = CGCWorld.getBF().createRectangle(9.5f, 3.333f, 20, 0.333f, BodyDef.BodyType.StaticBody, BodyFactory.CAT_WALL,
+				BodyFactory.MASK_WALL);
+
+		// dividers
+		for (int i = 0;  i < 9; i++) {
+			wall = CGCWorld.getBF().createRectangle(1.5f + (2 * i), 3.5f, 1.125f, 1.5625f, BodyDef.BodyType.StaticBody, BodyFactory.CAT_WALL,
+					BodyFactory.MASK_WALL);
+		}
+
+		Body floor;
+		GameEntity ge;
+
+		floor = CGCWorld.getBF().createRectangle(9.4f, 2.0f, 20, 5, BodyDef.BodyType.StaticBody, BodyFactory.CAT_NON_INTERACTIVE,
+				BodyFactory.MASK_NON_INTERACTIVE);
+		ge = new Sticker(TextureAnimationHolder.characterSelect, floor);
+		ge.addToWorldLayers(lh);
+
+		chairs = new Array<CharacterSelectSensor>(MAX_PLAYERS);
+		Body tempBody;
+		for (int i = 0; i < MAX_PLAYERS; i++) {
+			tempBody = bf.createPlayerBody(2.5f + (i * 2), 4, 0.6f, BodyDef.BodyType.DynamicBody,
+					BodyFactory.CAT_COP, BodyFactory.MASK_COP);
+			tempBody.setFixedRotation(true);
+			tempBody.setType(BodyDef.BodyType.StaticBody);
+
+
+			Player tempPlayer = new Prisoner(this, Characters.defaultCop,
+					EntityType.COP, tempBody, (short) i);
+			tempPlayer.setAlpha(0);
+			tempPlayer.setCurrentFacing(5);
+
+			tempBody.setUserData(tempPlayer);
+
+			tempPlayer.addToWorldLayers(lh);
+
+			chairs.add(new CharacterSelectSensor(i, 2.5f + (i * 2), tempPlayer));
+		}
 	}
 	
 	/*
@@ -227,19 +353,27 @@ public class CharacterSelect extends CGCScreen
 		float lowerY = 0 - MenuTextureRegion.TITLE_SAFE_Y;
 		
 		setUpPortraitX();
-		
+
+		TextureRegion tempRegion;
+		CharacterSelectSensor chair;
+
 		//Set up the character portraits and selection cursors.
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
+			chair = chairs.get(i);
+			tempRegion = chair.isOccupied ? chair.player.getCharacter().portrait : null;
+
 			// Calculate the Y position for each portrait and set it
 			convictPortraitY = (upperY);
 			convictPortraits.get(i).setY(convictPortraitY);
-			convictPortraits.get(i).setRegion(getConvictPortraitByIndex(playerCards.get(i).getConvictSelection()));
-			
+			convictPortraits.get(i).setRegion(tempRegion);
+
+			tempRegion = chair.isOccupied && chair.isPlayerLocked ? chair.cop.getCharacter().portrait : null;
+
 			// Calculate the Y position for each portrait and set it
 			copPortraitY = (lowerY);
-			copPortraits.get(i).setY(copPortraitY);
-			copPortraits.get(i).setRegion(getCopPortraitByIndex(playerCards.get(i).getCopSelection()));
+			copPortraits.get(i).setY(convictPortraitY);
+			copPortraits.get(i).setRegion(tempRegion);
 		}
 	}
 	
@@ -249,19 +383,20 @@ public class CharacterSelect extends CGCScreen
 	private void setUpPortraitX()
 	{
 		float portraitStartX = 0;
+		float portraitWidth = Characters.defaultCon.portrait.getRegionWidth();
 		// How far apart each character portrait is from the next
-		if (convictPortraits.get(0).getRegionWidth() * numPortraitsToShow > Data.MENU_WIDTH)
+		if (portraitWidth * MAX_PLAYERS > Data.MENU_WIDTH)
 		{
 			portraitStartX = -MenuTextureRegion.TITLE_SAFE_X;
-			portraitXIncrement = (float)(Data.MENU_WIDTH - convictPortraits.get(0).getRegionWidth())
-					/ (float)(numPortraitsToShow-1);
+			portraitXIncrement = (float)(Data.MENU_WIDTH - portraitWidth)
+					/ (float)(MAX_PLAYERS-1);
 		}
 		else
 		{
 			portraitStartX = MenuTextureRegion.TITLE_SAFE_X
 					+ (((Data.MENU_WIDTH) - MenuTextureRegion.TITLE_SAFE_X) / 2f)
-					- (convictPortraits.get(0).getRegionWidth() * numPortraitsToShow) / 2f;
-			portraitXIncrement = convictPortraits.get(0).getRegionWidth();
+					- (portraitWidth * MAX_PLAYERS) / 2f;
+			portraitXIncrement = portraitWidth;
 		}
 		
 		float portraitX;
@@ -274,8 +409,6 @@ public class CharacterSelect extends CGCScreen
 			{
 				tManager.killTarget(convictPortraits.get(i));
 				tManager.killTarget(copPortraits.get(i));
-				tManager.killTarget(convictThumbnails.get(i));
-				tManager.killTarget(copThumbnails.get(i));
 			}
 			
 			portraitX = portraitStartX + i * portraitXIncrement;
@@ -286,19 +419,7 @@ public class CharacterSelect extends CGCScreen
 			.ease(Cubic.INOUT).start(tManager);
 			Tween.to(copPortraits.get(i), MenuTextureRegionAccessor.TRANSLATE_X, 1f).target(portraitX)
 			.ease(Cubic.INOUT).start(tManager);
-			
-			moveThumbnails(i, portraitX + convictPortraits.get(0).getRegionWidth() / 2, !playerCards.get(i).getLockedInConvict());
 		}
-	}
-	
-	/*
-	 * Gets the number of players who are participating in this game
-	 * 
-	 * @return					The number of players participating in this game
-	 */
-	public int getNumPlayers()
-	{
-		return numPlayers;
 	}
 	
 	/*
@@ -318,272 +439,394 @@ public class CharacterSelect extends CGCScreen
 	 */
 	public void handleInput() 
 	{
-		if (!transitioning)
-		{
+//		if (!transitioning)
+//		{
+//			ControlAdapter boss = input.getBoss();
+//			ControlAdapter keyboardLeft = input.getKeyboardLeft();
+//			ControlAdapter keyboardRight = input.getKeyboardRight();
+//
+//			// Adds players to the game if possible
+//			for (int i = 0; i < input.controlList.length; i++)
+//			{
+//				if (!input.controlList[i].isConnected())
+//				{
+//					// if this particular controller is not connected, skip it
+//					continue;
+//				}
+//
+//				if (input.controlList[i].justPressed(ControlType.MENU_ACTION))
+//				{
+//					// if this particular controller just tried to jump in
+//					if (getCardIndex(i) == -1)
+//					{
+//						// and it is not in already, add it
+//						input.controlList[i].changeControlState(ControlType.MENU_ACTION, false);
+//						addNewPlayer(input.controlList[i]);
+//					}
+//					else
+//					{
+//						// and it is in already, remove it unless it's locked in
+//						if (playerCards.get(getCardIndex(i)).getLockedInCop())
+//						{
+//							playerCards.get(getCardIndex(i)).setLockedInCop(false);
+//						}
+//						else if (playerCards.get(getCardIndex(i)).getLockedInConvict())
+//						{
+//							playerCards.get(getCardIndex(i)).setLockedInConvict(false);
+//							moveThumbnails(getCardIndex(i), true);
+//						}
+//						else
+//						{
+//							input.controlList[i].changeControlState(ControlType.MENU_ACTION, false);
+//							removePlayer(getCardIndex(i));
+//						}
+//						continue;
+//					}
+//				}
+//
+//				if (getCardIndex(i) != -1)
+//				{
+//					// if this particular controller is in the game
+//					boolean isHolding = false;
+//
+//					if (input.controlList[i].justPressed(ControlType.SELECT))
+//					{
+//						// and just pressed select
+//						input.controlList[i].changeControlState(ControlType.SELECT, false);
+//
+//						if (boss.equals(input.controlList[i]))
+//						{
+//							// and is the boss
+//							if (allConfirmed())
+//							{
+//								activePlayers = 0;
+//
+//								// and all players have confirmed their selections
+//								for (int j = 0; j < input.controlList.length; j++)
+//								{
+//									// iterate through all controllers ensuring they are connected and have a cardIndex
+//									if (input.controlList[j].isConnected() && getCardIndex(j) != -1)
+//									{
+//										// apply the convict choice
+//										input.controlList[j].setConvictChoice(
+//												playerCards.get(getCardIndex(j)).getConvictSelection());
+//										// apply the copchoice
+//										input.controlList[j].setCopChoice(
+//												playerCards.get(getCardIndex(j)).getCopSelection());
+//										// assign the corresponding controller
+//										input.controlList[j].assignControls(getCardIndex(j), j);
+//										activePlayers++;
+//									}
+//								}
+//
+//								if (tutorial)
+//								{
+//									startTransition();
+//								}
+//								else
+//								{
+//									// MAP SELECT GO
+//									myApp.setScreen(ChaseApp.mapSelect);
+//								}
+//							}
+//							else
+//							{
+//								// not everyone has confirmed, so I must be selecting
+//								if (!playerCards.get(getCardIndex(i)).getLockedInConvict())
+//								{
+//									playerCards.get(getCardIndex(i)).setLockedInConvict(true);
+//									playerCards.get(getCardIndex(i)).setCopSelection(findNextEmptySelection(false));
+//									changePortrait(getCardIndex(i));
+//									moveThumbnails(getCardIndex(i), false);
+//								}
+//								else
+//								{
+//									playerCards.get(getCardIndex(i)).setLockedInCop(true);
+//								}
+//							}
+//						}
+//						else
+//						{
+//							// I'm just a regular player so I must be selecting
+//							if (!playerCards.get(getCardIndex(i)).getLockedInConvict())
+//							{
+//								playerCards.get(getCardIndex(i)).setLockedInConvict(true);
+//								playerCards.get(getCardIndex(i)).setCopSelection(findNextEmptySelection(false));
+//								changePortrait(getCardIndex(i));
+//								moveThumbnails(getCardIndex(i), false);
+//							}
+//							else
+//							{
+//								playerCards.get(getCardIndex(i)).setLockedInCop(true);
+//							}
+//						}
+//					}
+//
+//					if (input.controlList[i].justPressed(ControlType.BACK))
+//					{
+//						// I just pressed Back
+//						if (boss.equals(input.controlList[i]))
+//						{
+//							// and I'm the boss
+//							if (!playerCards.get(getCardIndex(i)).getLockedInConvict())
+//							{
+//								// and I was not yet confirmed
+//								// I must want to go back in the menu
+//								handleB(boss, keyboardLeft, keyboardRight);
+//							}
+//							else if (playerCards.get(getCardIndex(i)).getLockedInCop())
+//							{
+//								// I was confirmed
+//								// so I should cancel my cop selection
+//								playerCards.get(getCardIndex(i)).setLockedInCop(false);
+//							}
+//							else
+//							{
+//								// I was confirmed
+//								// so I should cancel my convict selection
+//								playerCards.get(getCardIndex(i)).setLockedInConvict(false);
+//								moveThumbnails(getCardIndex(i), true);
+//							}
+//						}
+//						else
+//						{
+//							if (playerCards.get(getCardIndex(i)).getLockedInCop())
+//							{
+//								// I was confirmed
+//								// so I should cancel my cop selection
+//								playerCards.get(getCardIndex(i)).setLockedInCop(false);
+//							}
+//							else
+//							{
+//								// I was confirmed
+//								// so I should cancel my convict selection
+//								playerCards.get(getCardIndex(i)).setLockedInConvict(false);
+//								moveThumbnails(getCardIndex(i), true);
+//							}
+//						}
+//
+//						input.controlList[i].changeControlState(ControlType.BACK, false);
+//					}
+//
+//					if (input.controlList[i].justPressed(ControlType.CALLOUT))
+//					{
+//						// wiggle as a callout
+//						calloutWiggle(getCardIndex(i));
+//						input.controlList[i].changeControlState(ControlType.CALLOUT, false);
+//					}
+//
+//					if (!playerCards.get(getCardIndex(i)).getLockedInConvict())
+//					{
+//						if (input.controlList[i].isPressed(ControlType.LEFT))
+//						{
+//							// going left
+//							isHolding = true;
+//							handleHeldMovement(i, false, true);
+//						}
+//						else if (input.controlList[i].isPressed(ControlType.RIGHT))
+//						{
+//							// going right
+//							isHolding = true;
+//							handleHeldMovement(i, true, true);
+//						}
+//
+//						if(isHolding == false)
+//						{
+//							// cancel framesHeld if no direction was held
+//							framesHeld[i] = 0;
+//						}
+//					}
+//					else if (!playerCards.get(getCardIndex(i)).getLockedInCop())
+//					{
+//						if (input.controlList[i].isPressed(ControlType.LEFT))
+//						{
+//							// going left
+//							isHolding = true;
+//							handleHeldMovement(i, false, false);
+//						}
+//						else if (input.controlList[i].isPressed(ControlType.RIGHT))
+//						{
+//							// going right
+//							isHolding = true;
+//							handleHeldMovement(i, true, false);
+//						}
+//
+//						if(isHolding == false)
+//						{
+//							// cancel framesHeld if no direction was held
+//							framesHeld[i] = 0;
+//						}
+//					}
+//				}
+//				else
+//				{
+//					// I'm not participating
+//					if (input.controlList[i] == boss)
+//					{
+//						// but I am the boss
+//						if (input.controlList[i].justPressed(ControlType.BACK))
+//						{
+//							// and I just pressed back
+//							handleB(boss, keyboardLeft, keyboardRight);
+//							input.controlList[i].changeControlState(ControlType.BACK, false);
+//						}
+//					}
+//				}
+//			}
+//		}
+		//super.handleInput();
+		if (!transitioning) {
+
 			ControlAdapter boss = input.getBoss();
 			ControlAdapter keyboardLeft = input.getKeyboardLeft();
 			ControlAdapter keyboardRight = input.getKeyboardRight();
-			
-			// Adds players to the game if possible
-			for (int i = 0; i < input.controlList.length; i++)
+
+			boolean shouldUpdatePortraits = false;
+			for(int i = 0; i < schemes.size; i++)
 			{
-				if (!input.controlList[i].isConnected())
-				{
-					// if this particular controller is not connected, skip it
-					continue;
-				}
-				
-				if (input.controlList[i].justPressed(ControlType.MENU_ACTION))
-				{
-					// if this particular controller just tried to jump in
-					if (getCardIndex(i) == -1)
-					{
-						// and it is not in already, add it
-						input.controlList[i].changeControlState(ControlType.MENU_ACTION, false);
-						addNewPlayer(input.controlList[i]);
-					}
-					else
-					{
-						// and it is in already, remove it unless it's locked in
-						if (playerCards.get(getCardIndex(i)).getLockedInCop())
-						{
-							playerCards.get(getCardIndex(i)).setLockedInCop(false);
-						}
-						else if (playerCards.get(getCardIndex(i)).getLockedInConvict())
-						{
-							playerCards.get(getCardIndex(i)).setLockedInConvict(false);
-							moveThumbnails(getCardIndex(i), true);
-						}
-						else
-						{
-							input.controlList[i].changeControlState(ControlType.MENU_ACTION, false);
-							removePlayer(getCardIndex(i));
-						}
-						continue;
+				ControllerScheme scheme = schemes.get(i);
+
+				if (boss == scheme.getController()) {
+					if (!scheme.getPlayer().seated &&
+							scheme.getController().justPressed(ControlType.BACK)) {
+						handleB(boss, keyboardLeft, keyboardRight);
+					} else if (
+						scheme.getPlayer().seated &&
+						scheme.getPlayer().seat.isReady() &&
+						scheme.getController().justPressed(ControlType.SELECT)) {
+						attemptStartGame();
 					}
 				}
-				
-				if (getCardIndex(i) != -1)
-				{
-					// if this particular controller is in the game
-					boolean isHolding = false;
-					
-					if (input.controlList[i].justPressed(ControlType.SELECT))
-					{
-						// and just pressed select
-						input.controlList[i].changeControlState(ControlType.SELECT, false);
-						
-						if (boss.equals(input.controlList[i]))
-						{
-							// and is the boss
-							if (allConfirmed())
-							{
-								numPlayers = 0;
-								
-								// and all players have confirmed their selections
-								for (int j = 0; j < input.controlList.length; j++)
-								{
-									// iterate through all controllers ensuring they are connected and have a cardIndex
-									if (input.controlList[j].isConnected() && getCardIndex(j) != -1)
-									{	
-										// apply the convict choice
-										input.controlList[j].setConvictChoice(
-												playerCards.get(getCardIndex(j)).getConvictSelection());
-										// apply the copchoice
-										input.controlList[j].setCopChoice(
-												playerCards.get(getCardIndex(j)).getCopSelection());
-										// assign the corresponding controller
-										input.controlList[j].assignControls(getCardIndex(j), j);
-										numPlayers++;
-									}
-								}
-								
-								if (tutorial)
-								{
-									startTransition();
-								}
-								else
-								{
-									// MAP SELECT GO
-									myApp.setScreen(ChaseApp.mapSelect);
-								}
-							}
-							else
-							{
-								// not everyone has confirmed, so I must be selecting
-								if (!playerCards.get(getCardIndex(i)).getLockedInConvict())
-								{
-									playerCards.get(getCardIndex(i)).setLockedInConvict(true);
-									playerCards.get(getCardIndex(i)).setCopSelection(findNextEmptySelection(false));
-									changePortrait(getCardIndex(i));
-									moveThumbnails(getCardIndex(i), false);
-								}
-								else
-								{
-									playerCards.get(getCardIndex(i)).setLockedInCop(true);
-								}
-							}
-						}
-						else
-						{
-							// I'm just a regular player so I must be selecting
-							if (!playerCards.get(getCardIndex(i)).getLockedInConvict())
-							{
-								playerCards.get(getCardIndex(i)).setLockedInConvict(true);
-								playerCards.get(getCardIndex(i)).setCopSelection(findNextEmptySelection(false));
-								changePortrait(getCardIndex(i));
-								moveThumbnails(getCardIndex(i), false);
-							}
-							else
-							{
-								playerCards.get(getCardIndex(i)).setLockedInCop(true);
-							}
-						}
-					}
-					
-					if (input.controlList[i].justPressed(ControlType.BACK))
-					{
-						// I just pressed Back
-						if (boss.equals(input.controlList[i]))
-						{
-							// and I'm the boss
-							if (!playerCards.get(getCardIndex(i)).getLockedInConvict())
-							{
-								// and I was not yet confirmed
-								// I must want to go back in the menu
-								handleB(boss, keyboardLeft, keyboardRight);
-							}
-							else if (playerCards.get(getCardIndex(i)).getLockedInCop())
-							{
-								// I was confirmed
-								// so I should cancel my cop selection
-								playerCards.get(getCardIndex(i)).setLockedInCop(false);
-							}
-							else
-							{
-								// I was confirmed
-								// so I should cancel my convict selection
-								playerCards.get(getCardIndex(i)).setLockedInConvict(false);
-								moveThumbnails(getCardIndex(i), true);
-							}
-						}
-						else
-						{
-							if (playerCards.get(getCardIndex(i)).getLockedInCop())
-							{
-								// I was confirmed
-								// so I should cancel my cop selection
-								playerCards.get(getCardIndex(i)).setLockedInCop(false);
-							}
-							else
-							{
-								// I was confirmed
-								// so I should cancel my convict selection
-								playerCards.get(getCardIndex(i)).setLockedInConvict(false);
-								moveThumbnails(getCardIndex(i), true);
-							}
-						}
-	
-						input.controlList[i].changeControlState(ControlType.BACK, false);
-					}
-					
-					if (input.controlList[i].justPressed(ControlType.CALLOUT))
-					{
-						// wiggle as a callout
-						calloutWiggle(getCardIndex(i));
-						input.controlList[i].changeControlState(ControlType.CALLOUT, false);
-					}
-					
-					if (!playerCards.get(getCardIndex(i)).getLockedInConvict())
-					{
-						if (input.controlList[i].isPressed(ControlType.LEFT))
-						{
-							// going left
-							isHolding = true;
-							handleHeldMovement(i, false, true);
-						}
-						else if (input.controlList[i].isPressed(ControlType.RIGHT))
-						{
-							// going right
-							isHolding = true;
-							handleHeldMovement(i, true, true);
-						}
-						
-						if(isHolding == false)
-						{
-							// cancel framesHeld if no direction was held
-							framesHeld[i] = 0;
-						}
-					}
-					else if (!playerCards.get(getCardIndex(i)).getLockedInCop())
-					{
-						if (input.controlList[i].isPressed(ControlType.LEFT))
-						{
-							// going left
-							isHolding = true;
-							handleHeldMovement(i, false, false);
-						}
-						else if (input.controlList[i].isPressed(ControlType.RIGHT))
-						{
-							// going right
-							isHolding = true;
-							handleHeldMovement(i, true, false);
-						}
-						
-						if(isHolding == false)
-						{
-							// cancel framesHeld if no direction was held
-							framesHeld[i] = 0;
-						}
-					}
+
+				if (!scheme.getPlayer().seated) {
+					schemes.get(i).drivePlayer();
+				} else {
+					schemes.get(i).haltPlayer();
+					shouldUpdatePortraits = handleSeatedInput(schemes.get(i)) || shouldUpdatePortraits;
 				}
-				else
-				{
-					// I'm not participating
-					if (input.controlList[i] == boss)
-					{
-						// but I am the boss
-						if (input.controlList[i].justPressed(ControlType.BACK))
-						{
-							// and I just pressed back
-							handleB(boss, keyboardLeft, keyboardRight);
-							input.controlList[i].changeControlState(ControlType.BACK, false);
-						}
-					}
+			}
+			if (shouldUpdatePortraits) {
+				respondToAdjustedPlayers();
+			}
+		}
+
+	}
+
+	public boolean handleSeatedInput(ControllerScheme scheme) {
+		Player player = scheme.getPlayer();
+		CharacterArt character = player.getCharacter();
+		ControlAdapter controller = scheme.getController();
+		CharacterSelectSensor chair = player.seat;
+		boolean changedCharacter = false;
+
+		if (!chair.isPlayerLocked) {
+			if (controller.justPressed(ControlType.RIGHT)) {
+				player.setCharacter(Characters.getNextConStartingAt(player.getCharacter(), false));
+				changedCharacter = true;
+			}
+			if (controller.justPressed(ControlType.LEFT)) {
+				player.setCharacter(Characters.getPrevConStartingAt(player.getCharacter(), false));
+				changedCharacter = true;
+			}
+			if (controller.justPressed(ControlType.DOWN_FACE) ||
+				controller.justPressed(ControlType.SELECT)) {
+				chair.lockPlayerSelection();
+			}
+		} else if (!chair.isCopLocked) {
+			if (controller.justPressed(ControlType.RIGHT)) {
+				ChaseApp.alert("Here's the damn cop select", chair.cop.getCharacter().index);
+				player.copCharacter = Characters.getNextCopStartingAt(player.copCharacter, false);
+				chair.cop.setCharacter(player.copCharacter);
+				changedCharacter = true;
+			}
+			if (controller.justPressed(ControlType.LEFT)) {
+				player.copCharacter = Characters.getPrevCopStartingAt(player.copCharacter, false);
+				chair.cop.setCharacter(player.copCharacter);
+				changedCharacter = true;
+			}
+			if (controller.justPressed(ControlType.DOWN_FACE) ||
+				controller.justPressed(ControlType.SELECT)) {
+				chair.lockCopSelection();
+			}
+			if (controller.justPressed(ControlType.RIGHT_FACE) ||
+				controller.justPressed(ControlType.BACK)) {
+				chair.unlockPlayerSelection();
+			}
+		} else if (chair.isReady()) {
+			if (controller.justPressed(ControlType.RIGHT_FACE) ||
+				controller.justPressed(ControlType.BACK)) {
+				chair.unlockCopSelection();
+			}
+		}
+
+		if (controller.justPressed(ControlType.DOWN)) {
+			player.standUp();
+			changedCharacter = true;
+		}
+		chair.cop.haltPlayer();
+		controller.update();
+		return changedCharacter;
+	}
+
+		public int getActivePlayers() {
+		return activePlayers;
+	}
+
+	private void attemptStartGame() {
+		boolean ready = true;
+		activeChairs = new Array<CharacterSelectSensor>();
+		activePlayers = 0;
+		for (int i = 0; i < chairs.size; i++) {
+			CharacterSelectSensor chair = chairs.get(i);
+			if (!chair.isReady()) {
+				ready = false;
+			} else {
+				if (chair.isOccupied) {
+					activePlayers++;
+					activeChairs.add(chair);
 				}
 			}
 		}
-		super.handleInput();
+
+		if (ready) {
+			if (tutorial) {
+				startTransition();
+			} else {
+				myApp.setScreen(ChaseApp.mapSelect);
+			}
+		}
 	}
-	
-	/*
-	 * A convenience function to cut down on repetition in handleInput
-	 * 
-	 * @param i						The index of the controller in question
-	 * @param isPositive			Direction of movement through the array (true is positive, false is negative)
-	 * @param isConvict				Whether to adjust the selection for the convict (true) or the cop (false)
-	 * 
-	 */
-	private void handleHeldMovement(int i, boolean isPositive, boolean isConvict)
-	{
-		framesHeld[i]++;
-		if (framesHeld[i] == 1)
+
+	public void renderPhysics(float delta) {
+
+		camera.setParallaxPoint(camera.position.x, camera.position.y);
+		sBatch.setProjectionMatrix(camera.combined);
+		sBatch.begin();
+		GameEntity ge;
+		int drawn = 0;
+		for (int i = 0; i < lh.getLayers().size; i++) // Loop through every layer
 		{
-			moveSelection(getCardIndex(i), isPositive, isConvict);
-			changePortrait(getCardIndex(i));
+			// Draw anything on this layer that isn't in the grid
+			for (int j = 0; j < lh.getLayer(i).getEntities().size; j++) {
+				ge = lh.getLayer(i).getEntities().get(j);
+
+				if (ge != null && ge.hasAnimation()) {
+					if (ge instanceof Track)//keeps train tracks from animating in the main game... for now...
+					{
+						ge.draw(sBatch, 0, i);
+					} else {
+						ge.draw(sBatch, delta, i);
+					}
+					drawn++;
+					if (drawn == MAX_IMAGES_PER_DRAW) {
+						drawn = 0;
+						sBatch.flush();
+					}
+				}
+			} // End non-grid drawing
 		}
-		else if (framesHeld[i] > 90 &&
-				framesHeld[i] % 5 == 0)
-		{
-			moveSelection(getCardIndex(i), isPositive, isConvict);
-			changePortrait(getCardIndex(i));
-		}
-		else if (framesHeld[i] > 10 &&
-				framesHeld[i] % 10 == 0)
-		{
-			moveSelection(getCardIndex(i), isPositive, isConvict);
-			changePortrait(getCardIndex(i));
-		}
+
+		sBatch.end();
 	}
 	
 	/*
@@ -593,7 +836,25 @@ public class CharacterSelect extends CGCScreen
 	 */
 	public void render(float delta)
 	{
-		super.render(delta);
+		handleInput();
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		sBatch.begin();
+
+		if(shouldDrawBackground)
+		{
+			background.draw(sBatch);
+		}
+
+		ChaseApp.titleFont.getData().setScale(1.0f);
+		ChaseApp.titleFont.draw(
+			sBatch,
+			titleLayout.getLayout(),
+			MenuTextureRegion.MENU_ANCHORS[MenuTextureRegion.UPPER_LEFT].x,
+			MenuTextureRegion.MENU_ANCHORS[MenuTextureRegion.UPPER_LEFT].y);
+
+		ChaseApp.menuFont.getData().setScale(FONT_MAIN);
 		
 		tManager.update(delta);
 		
@@ -623,109 +884,46 @@ public class CharacterSelect extends CGCScreen
 		// Draw the convict portraits
 		for (int i = 0; i < sortedConvictPortraits.size; i++)
 		{
-			PlayerCard tempCard = findCardBySortedConvict(i);
-			
-			if (tempCard.isUsed())
-			{
-				drawPortrait = sortedConvictPortraits.get(i);
-			
-				if (tempCard.getConvictSelection() != -1)
-				{
-					if (tempCard.getLockedInConvict())
-					{
-						//Dim convict portraits slightly if the player has
-						//locked in their convict choice.
-						sBatch.setColor(0.8f, 0.8f, 0.8f, 1.0f);
-						drawPortrait.draw(sBatch);
-						sBatch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-					}
-					else
-					{
-						drawPortrait.draw(sBatch);
-					}
-				}
-			}
+			drawPortrait = sortedConvictPortraits.get(i);
+			drawPortrait.draw(sBatch);
 		}
 		
 		sBatch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 		//Draw the cop portraits
 		for (int i = 0; i < sortedCopPortraits.size; i++)
 		{
-			PlayerCard tempCard = findCardBySortedCop(i);
-			
-			if (tempCard.getCopSelection() != -1 && tempCard.getLockedInConvict())
-			{	
-				drawPortrait = sortedCopPortraits.get(i);
-				if (tempCard.getLockedInCop())
-				{
-					//Dim cop portraits slightly if the player has
-					//locked in their cop choice.
-					sBatch.setColor(0.8f, 0.8f, 0.8f, 1.0f);
-					drawPortrait.draw(sBatch);
-					sBatch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-				}
-				else
-				{
-					drawPortrait.draw(sBatch);
-				}
-			}
+			drawPortrait = sortedCopPortraits.get(i);
+			drawPortrait.draw(sBatch);
 		}
-		
+
+		sBatch.end();
+
+		renderPhysics(delta);
+
 		sBatch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-		// Draw the thumbnails
-		for (int i = 0; i < playerCards.size; i++)
-		{			
-			if (playerCards.get(i).getConvictSelection() != -1)
-			{
-				if (playerCards.get(i).getLockedInConvict())
-				{
-					//If the player has locked in their convict,
-					//dim the convict thumbnail and show the cop one
-					sBatch.setColor(0.8f, 0.8f, 0.8f, 1.0f);
-					convictThumbnails.get(i).draw(sBatch);
-					sBatch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-					
-					//If the cop is locked in too, dim the cop one
-					//Otherwise, show the cop in full color
-					if (playerCards.get(i).getLockedInCop())
-					{
-						sBatch.setColor(0.8f, 0.8f, 0.8f, 1.0f);
-						copThumbnails.get(i).draw(sBatch);
-						sBatch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-					}
-					else
-					{
-						copThumbnails.get(i).draw(sBatch);
-					}
-				}
-				//If the player has not locked their convict,
-				//Just show the convict thumbnail in full color
-				else
-				{
-					convictThumbnails.get(i).draw(sBatch);
-				}
-			}
-		}
-		sBatch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-		
-		leftJoin.draw(sBatch, delta);
-		rightJoin.draw(sBatch, delta);
-		
-		leftCancel.draw(sBatch, delta);
-		rightCancel.draw(sBatch, delta);
-		
-		leftSelect.draw(sBatch, delta);
-		rightSelect.draw(sBatch, delta);
-		
-		leftWho.draw(sBatch, delta);
-		rightWho.draw(sBatch, delta);
+		sBatch.setProjectionMatrix(ChaseApp.menuCam.combined);
+		sBatch.begin();
+
+		// draw input prompts
+//		leftJoin.draw(sBatch, delta);
+//		rightJoin.draw(sBatch, delta);
+//
+//		leftCancel.draw(sBatch, delta);
+//		rightCancel.draw(sBatch, delta);
+//
+//		leftSelect.draw(sBatch, delta);
+//		rightSelect.draw(sBatch, delta);
+//
+//		leftWho.draw(sBatch, delta);
+//		rightWho.draw(sBatch, delta);
 		
 		sBatch.end();
 		
 		String upperString;
 		String lowerString;
-		
-		ChaseApp.menuFont.setColor(ChaseApp.selectedOrange);
+
+		// draw global prompt banner
+		/*ChaseApp.menuFont.setColor(ChaseApp.selectedOrange);
 		if (noneUsed())
 		{
 			upperString = ChaseApp.lang.get(LanguageKeys.no_controllers);
@@ -836,7 +1034,7 @@ public class CharacterSelect extends CGCScreen
 				sBatch.end();
 				sBatch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 			}
-		}
+		}*/
 		ChaseApp.menuFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 		ChaseApp.menuFont.getData().setScale(CGCScreen.FONT_SIDE);
 		
@@ -845,8 +1043,29 @@ public class CharacterSelect extends CGCScreen
 			transition.render(delta);
 			sBatch.setProjectionMatrix(ChaseApp.menuCam.combined);
 		}
+
+		// Step through world physics
+		if (!paused)
+		{
+			world.step(WORLD_DELAY, 6, 2);
+			world.clearForces();
+		}
+
+		sBatch.begin();
+		debugRenderer.render(world, camera.combined);
+		sBatch.end();
 	}
-	
+
+	@Override
+	public void endGameWorld(boolean won) {
+
+	}
+
+	@Override
+	public void spawnCops() {
+
+	}
+
 	/*
 	 * Show this screen
 	 * 
@@ -862,22 +1081,7 @@ public class CharacterSelect extends CGCScreen
 		
 		if (forgetPlayers)
 		{
-			for (int i = 0; i < MAX_PLAYERS; i++)
-			{
-				removePlayer(0);
-			}
-			
-			numPlayers = 0;
-			numPortraitsToShow = 1;
-			
-			for (int i = 0; i < input.controlList.length; i++)
-			{
-				if (input.controlList[i] == input.getBoss())
-				{
-					addNewPlayer(input.controlList[i]);
-					break;
-				}
-			}
+			// do something to clear everything
 		}
 		
 		forgetPlayers = true;
@@ -963,416 +1167,25 @@ public class CharacterSelect extends CGCScreen
 		
 		return false;
 	}
-	
-	/*
-	 * Helper method to move player selections through the convict and cop arrays
-	 * 
-	 * @param cardIndex				The index of the PlayerCard for this cursor
-	 * @boolean isPositive			Whether to move in the positive/negative (true/false) direction
-	 * @param isConvict				Whether to adjust the selection for the convict (true) or the cop (false)
-	 * 
-	 */
-	private void moveSelection(int cardIndex, boolean isPositive, boolean isConvict)
-	{
-		if (isConvict)
-		{
-			if (isPositive)
-			{
-				if (playerCards.get(cardIndex).getConvictSelection() == numConvictChoices - 1)
-				{
-					playerCards.get(cardIndex).setConvictSelection(0);
-				}
-				else
-				{
-					playerCards.get(cardIndex).adjustSelection(1, isConvict);
-				}
-			}
-			else
-			{
-				if (playerCards.get(cardIndex).getConvictSelection() == 0)
-				{
-					playerCards.get(cardIndex).setConvictSelection(numConvictChoices - 1);
-				}
-				else
-				{
-					playerCards.get(cardIndex).adjustSelection(-1, isConvict);
-				}
-			}
-			
-			if (isSelectionTaken(playerCards.get(cardIndex).getConvictSelection(), cardIndex, isConvict))
-			{
-				moveSelection(cardIndex, isPositive, isConvict);
-			}
+
+	public void respondToAdjustedPlayers() {
+		MenuTextureRegion con;
+		MenuTextureRegion cop;
+		CharacterSelectSensor chair;
+
+		for (int i = 0; i < MAX_PLAYERS; i++) {
+			chair = chairs.get(i);
+			con = convictPortraits.get(i);
+			cop = copPortraits.get(i);
+
+			con.setRegion(chair.isOccupied ? chair.player.getCharacter().portrait : null);
+			cop.setRegion(chair.isPlayerLocked ? chair.cop.getCharacter().portrait : null);
 		}
-		else
-		{
-			if (isPositive)
-			{
-				if (playerCards.get(cardIndex).getCopSelection() == numCopChoices - 1)
-				{
-					playerCards.get(cardIndex).setCopSelection(0);
-				}
-				else
-				{
-					playerCards.get(cardIndex).adjustSelection(1, isConvict);
-				}
-			}
-			else
-			{
-				if (playerCards.get(cardIndex).getCopSelection() == 0)
-				{
-					playerCards.get(cardIndex).setCopSelection(numCopChoices - 1);
-				}
-				else
-				{
-					playerCards.get(cardIndex).adjustSelection(-1, isConvict);
-				}
-			}
-			
-			if (isSelectionTaken(playerCards.get(cardIndex).getCopSelection(), cardIndex, isConvict))
-			{
-				moveSelection(cardIndex, isPositive, isConvict);
-			}
-		}
-	}
-	
-	/*
-	 * Adds a new player to the game
-	 * 
-	 * @param controller			The controller the player is using
-	 */
-	private void addNewPlayer(ControlAdapter controller)
-	{
-		int tempCardIndex = findNextEmptyCard();
-		int emptyConvictSelection = findNextEmptySelection(true);
-		int emptyCopSelection = -1;
-		
-		if (tempCardIndex != -1)
-		{
-			playerCards.get(tempCardIndex).setAdapter(controller);
-			playerCards.get(tempCardIndex).setConvictSelection(emptyConvictSelection);
-			playerCards.get(tempCardIndex).setCopSelection(emptyCopSelection);
-			
-			framesHeld[tempCardIndex] = 0;
-			
-			convictPortraits.get(tempCardIndex).setRegion(
-					getConvictPortraitByIndex(playerCards.get(tempCardIndex).getConvictSelection()));
-			copPortraits.get(tempCardIndex).setRegion(
-					getCopPortraitByIndex(playerCards.get(tempCardIndex).getCopSelection()));
-			convictThumbnails.get(tempCardIndex).setRegion(
-					getConvictThumbnailByIndex(playerCards.get(tempCardIndex).getConvictSelection()));
-			copThumbnails.get(tempCardIndex).setRegion(
-					getCopThumbnailByIndex(playerCards.get(tempCardIndex).getCopSelection()));
-			
-			if (numPortraitsToShow < MAX_PLAYERS)
-			{
-				numPortraitsToShow++;
-			}
-			setUpPortraitX();
-			sortedConvictPortraits = sortPortraitsByHeight(convictPortraits, false);
-			sortedCopPortraits = sortPortraitsByHeight(copPortraits, false);
-		}
-	}
-	
-	/*
-	 * Removes a player from the game
-	 * 
-	 * @param removeNum				The PlayerCard number of the player to remove
-	 */
-	private void removePlayer(int removeNum)
-	{
-		if (playerCards.get(removeNum).getAdapter() != null)
-		{
-			playerCards.get(removeNum).getAdapter().assignControls(-1, -1);
-		}
-		playerCards.removeIndex(removeNum);
-		playerCards.add(new PlayerCard(-1, null));
-		
-		for (int i = 0; i < playerCards.size; i++)
-		{
-			TextureRegion tempRegion = convictPortraits.get(i).getRegion();
-			changePortrait(i);
-			if (convictPortraits.get(i).getRegion() != tempRegion && i != 7)
-			{
-				convictPortraits.get(i).setX(convictPortraits.get(i + 1).getX());
-				copPortraits.get(i).setX(convictPortraits.get(i + 1).getX());
-				convictThumbnails.get(i).setX(convictPortraits.get(i + 1).getX()
-						+ convictPortraits.get(0).getRegionWidth() / 2
-						- convictThumbnails.get(0).getRegionWidth() / 2);
-				copThumbnails.get(i).setX(convictPortraits.get(i + 1).getX()
-						+ convictPortraits.get(0).getRegionWidth() / 2
-						- copThumbnails.get(0).getRegionWidth() / 2);
-			}
-		}
-		
-		int tempIndex = removeNum;
-		while (tempIndex < 7)
-		{
-			framesHeld[tempIndex] = framesHeld[tempIndex + 1];
-			tempIndex++;
-		}
-		framesHeld[tempIndex] = 0;
-		
-		if (numPortraitsToShow > 1 && findNextEmptyCard() != 7)
-		{
-			numPortraitsToShow--;
-		}
-		
-		setUpPortraitX();
+
 		sortedConvictPortraits = sortPortraitsByHeight(convictPortraits, false);
 		sortedCopPortraits = sortPortraitsByHeight(copPortraits, false);
 	}
-	
-	/*
-	 * Finds the index of the lowest-index unused PlayerCard
-	 * 
-	 * @return						The index of the unused PlayerCard (-1 if all cards are used)
-	 */
-	public int findNextEmptyCard()
-	{
-		for (int i = 0; i < playerCards.size; i++)
-		{
-			if (playerCards.get(i).getAdapter() == null)
-			{
-				return i;
-			}
-		}
-		
-		return -1;
-	}
-	
-	/*
-	 * Finds the index of the lowest-index unused selection
-	 * 
-	 * @param isConvict				Whether to look for the next unused convict (true) or cop (false)
-	 * @return						The index of the unused selection (-1 if all selections are used)
-	 */
-	public int findNextEmptySelection(boolean isConvict)
-	{
-		// The number to look for
-		for (int i = 0; i < playerCards.size; i++)
-		{
-			boolean numberTaken = false;
-			// The cards to look through
-			for (int j = 0; j < playerCards.size; j++)
-			{
-				if (isConvict)
-				{
-					if (playerCards.get(j).getConvictSelection() == i)
-					{
-						numberTaken = true;
-					}
-				}
-				else
-				{
-					if (playerCards.get(j).getCopSelection() == i)
-					{
-						numberTaken = true;
-					}
-				}
-			}
-			
-			if (!numberTaken)
-			{
-				return i;
-			}
-		}
-		
-		return -1;
-	}
-	
-	/*
-	 * Determines if a selection is being taken by another player 
-	 * 
-	 * @param check					The selection to check for vacancy
-	 * @param currentPlayer			The player who is looking for vacancy
-	 * @param isConvict				Whether to check convict selections (true) or cop selections (false)
-	 * @return						Whether or not the selection is taken by another player
-	 */
-	private boolean isSelectionTaken(int check, int currentPlayer, boolean isConvict)
-	{
-		for (int i = 0; i < MAX_PLAYERS; i++)
-		{
-			if (isConvict)
-			{
-				if (i != currentPlayer && playerCards.get(i).getConvictSelection() == check)
-				{
-					return true;
-				}
-			}
-			else
-			{
-				if (i != currentPlayer && playerCards.get(i).getCopSelection() == check)
-				{
-					return true;
-				}
-			}
-		}
-		
-		return false;
-	}
-	
-	/*
-	 * Finds a convict portrait in the character atlas file
-	 * 
-	 * @param index					The number of the portrait to find
-	 * @return						The TextureRegion of the portrait (portrait 0 with invalid index)		
-	 */
-	private TextureRegion getConvictPortraitByIndex(int index)
-	{
-		AtlasRegion textureRegion = ChaseApp.characterAtlas.findRegion("conportrait", index);
-		
-		if (textureRegion != null)
-		{
-			return textureRegion;
-		}
-		else
-		{
-			return ChaseApp.characterAtlas.findRegion("conportrait", 0);
-		}
-	}
-	
-	/*
-	 * Finds a cop portrait in the character atlas file
-	 * 
-	 * @param index					The number of the portrait to find
-	 * @return						The TextureRegion of the portrait (portrait 0 with invalid index)		
-	 */
-	private TextureRegion getCopPortraitByIndex(int index)
-	{
-		// TODO change this back to copportrait once we have cop portraits
-		AtlasRegion textureRegion = ChaseApp.characterAtlas.findRegion("conportrait", index);
-		
-		if (textureRegion != null)
-		{
-			return textureRegion;
-		}
-		else
-		{
-			return ChaseApp.characterAtlas.findRegion("copportrait", 0);
-		}
-	}
-	
-	/*
-	 * Finds the PlayerCard corresponding to a sorted convict portrait
-	 * 
-	 * @param index					The index of the sorted convict portrait
-	 * @return						The PlayerCard corresponding to the portrait index (or null with invalid index)		
-	 */
-	private PlayerCard findCardBySortedConvict(int index)
-	{
-		for (int i = 0; i < playerCards.size; i++)
-		{
-			if (sortedConvictPortraits.get(index) == convictPortraits.get(i))
-			{
-				return playerCards.get(i);
-			}
-		}
-		
-		return null;
-	}
-	
-	/*
-	 * Finds the PlayerCard corresponding to a sorted cop portrait
-	 * 
-	 * @param index					The index of the sorted cop portrait
-	 * @return						The PlayerCard corresponding to the portrait index (or null with invalid index)	
-	 */
-	private PlayerCard findCardBySortedCop(int index)
-	{
-		for (int i = 0; i < playerCards.size; i++)
-		{
-			if (sortedCopPortraits.get(index) == copPortraits.get(i))
-			{
-				return playerCards.get(i);
-			}
-		}
-		
-		return playerCards.get(0);
-	}
-	
-	/*
-	 * Finds a convict thumbnail in the character atlas file
-	 * 
-	 * @param index					The number of the thumbnail to find		
-	 * @return						The TextureRegion of the thumbnail (thumbnail 0 with invalid index)	
-	 */
-	private TextureRegion getConvictThumbnailByIndex(int index)
-	{
-		AtlasRegion textureRegion = ChaseApp.characterAtlas.findRegion("conthumbnail", index);
-		
-		if (textureRegion != null)
-		{
-			return textureRegion;
-		}
-		else
-		{
-			return ChaseApp.characterAtlas.findRegion("conthumbnail", 0);
-		}
-	}
-	
-	/*
-	 * Finds a cop thumbnail in the character atlas file
-	 * 
-	 * @param index					The number of the thumbnail to find
-	 * @return						The TextureRegion of the thumbnail (thumbnail 0 with invalid index)		
-	 */
-	private TextureRegion getCopThumbnailByIndex(int index)
-	{
-		AtlasRegion textureRegion = ChaseApp.characterAtlas.findRegion("copthumbnail", index);
-		
-		if (textureRegion != null)
-		{
-			return textureRegion;
-		}
-		else
-		{
-			return ChaseApp.characterAtlas.findRegion("copthumbnail", 0);
-		}
-	}
-	
-	/*
-	 * Moves the thumbnails to the correct place relative to a player's active portrait
-	 * 
-	 * @param playerIndex			The player whose thumbnails to move
-	 * @param isConvict				Whether to place the thumbnails on the convict (true) or cop (false) portrait
-	 */
-	private void moveThumbnails(int playerIndex, boolean isConvict)
-	{	
-		float theY;
-		
-		if (isConvict)
-		{
-			convictThumbnails.get(playerIndex).setY(convictPortraits.get(playerIndex).getY()
-					- convictThumbnails.get(playerIndex).getRegionHeight() / 4);
-		}
-		else
-		{
-			theY = convictPortraits.get(playerIndex).getY()
-					- convictThumbnails.get(playerIndex).getRegionHeight() / 4;
-			convictThumbnails.get(playerIndex).setY(theY);
-			copThumbnails.get(playerIndex).setY(theY - copThumbnails.get(playerIndex).getRegionHeight());
-		}
-	}
-	
-	/*
-	 * Moves the thumbnails to the correct place relative to a player's active portrait
-	 * 
-	 * @param playerIndex			The player whose thumbnails to move
-	 * @param destinationX			The X position to move to
-	 * @param isConvict				Whether to place the thumbnails on the convict (true) or cop (false) portrait
-	 */
-	private void moveThumbnails(int playerIndex, float destinationX, boolean isConvict)
-	{
-		destinationX = destinationX - convictThumbnails.get(playerIndex).getRegionWidth() / 2;
-		Tween.to(convictThumbnails.get(playerIndex), MenuTextureRegionAccessor.TRANSLATE_X, 1f).target(destinationX)
-		.ease(Cubic.INOUT).start(tManager);
-		Tween.to(copThumbnails.get(playerIndex), MenuTextureRegionAccessor.TRANSLATE_X, 1f).target(destinationX)
-		.ease(Cubic.INOUT).start(tManager);
-		
-		moveThumbnails(playerIndex, isConvict);
-	}
-	
+
 	/*
 	 * Helper method that sorts portraits by height
 	 * 
@@ -1382,54 +1195,18 @@ public class CharacterSelect extends CGCScreen
 	 */
 	private Array<MenuTextureRegion> sortPortraitsByHeight(Array<MenuTextureRegion> toSort, boolean ascending)
 	{
-		int arraySize = 0;
-		Array<MenuTextureRegion> returnArray = new Array<MenuTextureRegion>();
-		
-		for (int i = 0; i < toSort.size; i++)
-		{
-			if (playerCards.get(i).isUsed())
-			{
-				arraySize++;
-			}
-		}
-		
-		MenuTextureRegion[] regionArray = new MenuTextureRegion[arraySize];
-		
-		for (int i = 0; i < arraySize; i++)
-		{
+		MenuTextureRegion[] regionArray = new MenuTextureRegion[toSort.size];
+		for (int i = 0; i < regionArray.length; i++) {
 			regionArray[i] = toSort.get(i);
 		}
+		Array<MenuTextureRegion> result = new Array<MenuTextureRegion>(toSort.size);
 		
 		Arrays.sort(regionArray, new MenuTextureRegionComparator(ascending));
-		
-		for (int i = 0; i < regionArray.length; i++)
-		{
-			returnArray.add(regionArray[i]);
+		for (int i = 0; i < regionArray.length; i++) {
+			result.add(regionArray[i]);
 		}
 		
-		return returnArray;
-	}
-	
-	/*
-	 * Changes a player's portraits and associated thumbnails
-	 * 
-	 * @param playerNumber 		The number of the player who needs new portraits
-	 */
-	private void changePortrait(int playerNumber)
-	{
-		convictPortraits.get(playerNumber).setRegion(
-			getConvictPortraitByIndex(playerCards.get(playerNumber).getConvictSelection()));
-		convictThumbnails.get(playerNumber).setRegion(
-			getConvictThumbnailByIndex(playerCards.get(playerNumber).getConvictSelection()));
-		
-		sortedConvictPortraits = sortPortraitsByHeight(convictPortraits, false);
-	
-		copPortraits.get(playerNumber).setRegion(
-				getCopPortraitByIndex(playerCards.get(playerNumber).getCopSelection()));
-		copThumbnails.get(playerNumber).setRegion(
-				getCopThumbnailByIndex(playerCards.get(playerNumber).getCopSelection()));
-		
-		sortedCopPortraits = sortPortraitsByHeight(copPortraits, false);
+		return result;
 	}
 	
 	/*
@@ -1450,8 +1227,6 @@ public class CharacterSelect extends CGCScreen
 		{
 			tManager.killTarget(convictPortraits.get(portraitNumber));
 			tManager.killTarget(copPortraits.get(portraitNumber));
-			tManager.killTarget(convictThumbnails.get(portraitNumber));
-			tManager.killTarget(copThumbnails.get(portraitNumber));
 			
 			float portraitStartX;
 			
@@ -1471,12 +1246,6 @@ public class CharacterSelect extends CGCScreen
 			
 			convictPortraits.get(portraitNumber).setX(portraitX);
 			copPortraits.get(portraitNumber).setX(convictPortraits.get(portraitNumber).getX());
-			convictThumbnails.get(portraitNumber).setX(portraitX 
-					+ convictPortraits.get(portraitNumber).getRegionWidth() / 2
-					- convictThumbnails.get(portraitNumber).getRegionWidth() / 2);
-			copThumbnails.get(portraitNumber).setX(portraitX 
-					+ convictPortraits.get(portraitNumber).getRegionWidth() / 2
-					- copThumbnails.get(portraitNumber).getRegionWidth() / 2);
 		}
 		
 		Timeline.createSequence()
@@ -1496,24 +1265,6 @@ public class CharacterSelect extends CGCScreen
 		.push
 		(Tween.to(copPortraits.get(portraitNumber), MenuTextureRegionAccessor.WIGGLE_X, .05f).targetRelative(-25))
 		.start(tManager);
-		
-		Timeline.createSequence()
-		.push
-		(Tween.to(convictThumbnails.get(portraitNumber), MenuTextureRegionAccessor.WIGGLE_X, .05f).targetRelative(-25))
-		.push
-		(Tween.to(convictThumbnails.get(portraitNumber), MenuTextureRegionAccessor.WIGGLE_X, .05f).targetRelative(50))
-		.push
-		(Tween.to(convictThumbnails.get(portraitNumber), MenuTextureRegionAccessor.WIGGLE_X, .05f).targetRelative(-25))
-		.start(tManager);
-		
-		Timeline.createSequence()
-		.push
-		(Tween.to(copThumbnails.get(portraitNumber), MenuTextureRegionAccessor.WIGGLE_X, .05f).targetRelative(-25))
-		.push
-		(Tween.to(copThumbnails.get(portraitNumber), MenuTextureRegionAccessor.WIGGLE_X, .05f).targetRelative(50))
-		.push
-		(Tween.to(copThumbnails.get(portraitNumber), MenuTextureRegionAccessor.WIGGLE_X, .05f).targetRelative(-25))
-		.start(tManager);
 	}
 	
 	/*
@@ -1528,41 +1279,11 @@ public class CharacterSelect extends CGCScreen
 			{
 				tManager.killTarget(convictPortraits.get(i));
 				tManager.killTarget(copPortraits.get(i));
-				tManager.killTarget(convictThumbnails.get(i));
-				tManager.killTarget(copThumbnails.get(i));
 			}
 			
 			convictPortraits.get(i).setX(-convictPortraits.get(i).getRegionWidth() * 2);
 			copPortraits.get(i).setX(-copPortraits.get(i).getRegionWidth() * 2);
-			convictThumbnails.get(i).setX(-convictPortraits.get(i).getRegionWidth() * 2);
-			copThumbnails.get(i).setX(-convictPortraits.get(i).getRegionWidth() * 2);
 		}
-	}
-	
-	/*
-	 * Finds the index of the PlayerCard which is using a certain ControlAdapter
-	 * 
-	 * @param adapterIndex			The index of the ControlAdapter
-	 * @return						The index of the PlayerCard using the ControlAdapter (-1 if no card uses it)
-	 */
-	private int getCardIndex(int adapterIndex)
-	{
-		for (int i = 0; i < playerCards.size; i++)
-		{
-			if (!playerCards.get(i).isUsed())
-			{
-				break;
-			}
-			else
-			{
-				if (playerCards.get(i).getAdapter().equals(input.controlList[adapterIndex]))
-				{
-					return i;
-				}
-			}
-		}
-		
-		return -1;
 	}
 	
 	/*
